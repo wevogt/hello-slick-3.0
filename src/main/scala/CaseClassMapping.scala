@@ -2,7 +2,7 @@
 import java.sql.Date
 import slick.profile.SqlProfile.ColumnOption.NotNull
 
-import scala.concurrent.Await
+import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 //import slick.driver.H2Driver.api._
@@ -15,10 +15,10 @@ object CaseClassMapping extends App {
   val fxrates = TableQuery[FxRates]
   val currencies = TableQuery[Currencies]
 
-//  val db = Database.forConfig("h2mem1")
+  //  val db = Database.forConfig("h2mem1")
   val db = Database.forConfig("pgtest")
 
-/*
+  /*
   try {
     Await.result(db.run(DBIO.seq(
       // create the schema
@@ -40,9 +40,7 @@ object CaseClassMapping extends App {
 */
 
 
-
-
-/*
+  /*
   try {
     println("FxRates:")
       Await.result(db.run(fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).result), Duration.Inf).foreach {
@@ -53,20 +51,39 @@ object CaseClassMapping extends App {
 */
 
 
-
-
   try {
-    println("Currencies:")
-    //Await.result(db.run(currencies.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.desc).result), Duration.Inf).foreach {
-      Await.result(db.run(currencies.result), Duration.Inf).foreach {
-        curr => println(curr)
+
+    val setupFuture: Future[Unit] = db.io()
+    val f = setupFuture.flatMap { _ =>
+      println("Currencies:")
+      //Await.result(db.run(currencies.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.desc).result), Duration.Inf).foreach {
+      val currenciesQuery: Query[Rep[String], String, Seq] =
+        currencies.filter(_.fxType === 'D').map(_.objectidc)
+
+      println("Statement: \n" +
+        currenciesQuery.result.statements)
+
+
+      db.run(currenciesQuery.result).map(println)
+
+    }.flatMap { _ =>
+
+      println("FxRates:")
+      //val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_)
+      val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_.isoCode)
+
+      println("Statement: \n" +
+        ratesQuery.result.statements)
+
+      db.run((ratesQuery.result).map(println))
+
     }
+
+    println("... finished")
+
+    Await.result(f, Duration.Inf)
   } finally db.close
 
-
-  //db.run(currencies.result).isCompleted
-
-  println("... finished")
 }
 
 case class User(name: String, id: Option[Int] = None)
