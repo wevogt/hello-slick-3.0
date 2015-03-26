@@ -1,5 +1,6 @@
 
 import java.sql.Date
+import java.util.Calendar
 import slick.profile.SqlProfile.ColumnOption.NotNull
 
 import scala.concurrent.{Future, Await}
@@ -7,6 +8,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 //import slick.driver.H2Driver.api._
 import slick.driver.PostgresDriver.api._
+
 
 object CaseClassMapping extends App {
 
@@ -50,32 +52,63 @@ object CaseClassMapping extends App {
   } finally db.close
 */
 
+  val today: java.sql.Date  = new Date(System.currentTimeMillis())
+  val fxTypes: List[Char] = List('D','M')
+
 
   try {
 
     val setupFuture: Future[Unit] = db.io()
     val f = setupFuture.flatMap { _ =>
       println("Currencies:")
-      //Await.result(db.run(currencies.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.desc).result), Duration.Inf).foreach {
       val currenciesQuery: Query[Rep[String], String, Seq] =
-        currencies.filter(_.fxType === 'D').map(_.objectidc)
+        currencies
+          //.filter(_.fxType === 'D')
+          //.filter(fxTypes.foreach(_.1 == _.fxType))
+          .filter(_.startDate <= today)
+          .filter(_.decimalDigits >= 1)
+          .sortBy(_.objectidc.desc)
+          .map(_.objectidc)
 
       println("Statement: \n" +
         currenciesQuery.result.statements)
 
-
       db.run(currenciesQuery.result).map(println)
 
     }.flatMap { _ =>
+      println("\nCurrenciesCount:")
+      val currenciesCountQuery: Rep[Option[Int]] =
+        currencies
+          //.filter(_.fxType === 'D')
+          .filter(_.startDate <= today)
+          .map(_.objectidc).countDistinct
 
-      println("FxRates:")
+      println("Statement: \n" +
+        currenciesCountQuery.result.statements)
+
+      db.run(currenciesCountQuery.result).map(println)
+
+    }.flatMap { _ =>
+      println("\nFxRates:")
       //val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_)
-      val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_.isoCode)
+      val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(90).map(_.isoCode)
 
       println("Statement: \n" +
         ratesQuery.result.statements)
 
       db.run((ratesQuery.result).map(println))
+
+    }.flatMap { _ =>
+
+      /* Computed Values */
+
+      // Create a new computed column that calculates the max price
+      val maxFxdateColumn: Rep[Option[Date]] = fxrates.map(_.fxdate).max
+
+      println("Generated SQL for max fxdate column:\n" + maxFxdateColumn.result.statements)
+
+      // Execute the computed value query
+      db.run(maxFxdateColumn.result).map(println)
 
     }
 
