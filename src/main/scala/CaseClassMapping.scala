@@ -1,11 +1,13 @@
 
 import java.sql.Date
 import java.util.Calendar
-import slick.profile.SqlProfile.ColumnOption.NotNull
+import slick.profile.SqlProfile.ColumnOption.{Nullable, NotNull}
 
 import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
+import scala.language.postfixOps
+
 //import slick.driver.H2Driver.api._
 import slick.driver.PostgresDriver.api._
 
@@ -55,18 +57,19 @@ object CaseClassMapping extends App {
   val today: java.sql.Date  = new Date(System.currentTimeMillis())
   val fxTypes: List[Char] = List('D','M')
 
+  println("starting at " + new java.sql.Timestamp(System.currentTimeMillis()))
 
   try {
 
     val setupFuture: Future[Unit] = db.io()
     val f = setupFuture.flatMap { _ =>
-      println("Currencies:")
+      println("\nall Currency.Iso-Codes (= objectidc):")
       val currenciesQuery: Query[Rep[String], String, Seq] =
         currencies
-          //.filter(_.fxType === 'D')
-          //.filter(fxTypes.foreach(_.1 == _.fxType))
+          .filter( t => t.fxType === 'D' || t.fxType === 'M')     // OR
           .filter(_.startDate <= today)
-          .filter(_.decimalDigits >= 1)
+          .filter(_.endDate isNull)
+          //.filter(_.decimalDigits >= 1)
           .sortBy(_.objectidc.desc)
           .map(_.objectidc)
 
@@ -76,17 +79,37 @@ object CaseClassMapping extends App {
       db.run(currenciesQuery.result).map(println)
 
     }.flatMap { _ =>
-      println("\nCurrenciesCount:")
-      val currenciesCountQuery: Rep[Option[Int]] =
+      // Beispiel für aktuell gültige ISO-Codes
+      // Soll:    Distinct und SET als Ergebnis
+      // Problem: EndDate ist meist NULL (optional) oder darf > today sein
+      println("\ndistinct CurrenciesCount:")
+      //val currenciesCountQuery: Rep[Future[Seq[String]]] =
+      val currenciesCountQuery: Query[Rep[String], String, Seq] =
         currencies
-          //.filter(_.fxType === 'D')
+          //          .filter(_.fxType between ('D', 'M'))
+          //.filter(t => t.fxType === 'D' || t.fxType === 'M') // OR
+          //          .filter( t: slick.lifted.Rep[_] => fxTypes.contains(t.fxType) )     // OR
           .filter(_.startDate <= today)
-          .map(_.objectidc).countDistinct
+          .filter(_.endDate isNull)
+          //          .filter( t => Some(t.endDate) > today || t.endDate === null)
+          .sortBy(_.objectidc)
+          .map(c => c.objectidc)
 
       println("Statement: \n" +
         currenciesCountQuery.result.statements)
 
-      db.run(currenciesCountQuery.result).map(println)
+      db.run(currenciesCountQuery.length.result).map(println)
+      db.run(currenciesCountQuery.to[Set].result).map(println)
+      db.run(currenciesCountQuery.to[IndexedSeq].result).map(println)
+
+    }.flatMap { _ =>
+      println("\nCurrencyDetail:")
+
+      val currencyDetailQuery = currencies.filter(t => t.fxType === 'D' || t.fxType === 'M').sortBy(_.objectidc).map(c => (c.objectidc, c.textDE))
+
+      println("Statement: \n" + currencyDetailQuery.result.statements)
+
+      db.run((currencyDetailQuery.result).map(println))
 
     }.flatMap { _ =>
       println("\nFxRates:")
@@ -96,7 +119,32 @@ object CaseClassMapping extends App {
       println("Statement: \n" +
         ratesQuery.result.statements)
 
-      db.run((ratesQuery.result).map(println))
+      db.run(ratesQuery.result).map(println)
+
+    }.flatMap { _ =>
+      println("\nall FxRates (ohne Stream):")
+      //val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(_)
+      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(r => (r.isoCode, r.rate, r.fxdate))
+//      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(_)
+
+      println("Statement: \n" +
+        allRatesQuery.result.statements)
+
+      db.run(allRatesQuery.result).map(println)
+
+    }.flatMap { _ =>
+      println("\nall FxRates (mit Streaming):")
+      //val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(_)
+      val allRatesQuery = fxrates.filter(_.isoCode === "USD").sortBy(_.isoCode).sortBy(_.fxdate.desc).map(r => (r.isoCode, r.rate, r.fxdate))
+      //      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(_)
+
+      println("Statement: \n" +
+        allRatesQuery.result.statements)
+
+      val p = db.stream(allRatesQuery.result)
+
+      // Stream-Consument
+      p.foreach { s => println(s"Element: $s") }
 
     }.flatMap { _ =>
 
@@ -105,17 +153,19 @@ object CaseClassMapping extends App {
       // Create a new computed column that calculates the max price
       val maxFxdateColumn: Rep[Option[Date]] = fxrates.map(_.fxdate).max
 
-      println("Generated SQL for max fxdate column:\n" + maxFxdateColumn.result.statements)
+      println("\nGenerated SQL for max fxdate column:\n" + maxFxdateColumn.result.statements)
 
       // Execute the computed value query
       db.run(maxFxdateColumn.result).map(println)
 
     }
 
-    println("... finished")
-
     Await.result(f, Duration.Inf)
+
   } finally db.close
+
+  println("finished at " + new java.sql.Timestamp(System.currentTimeMillis()))
+  println("\n... finished")
 
 }
 
@@ -155,7 +205,8 @@ class Currencies(tag: Tag) extends Table[Currency](tag, "GREAT_CURRENCY") {
   def textEN = column[String]("TEXT_EN")
   def textES = column[String]("TEXT_ES")
   def startDate = column[Date]("START_DATE")
-  def endDate = column[Date]("END_DATE")
+//  def endDate = column[Option[Date]]("END_DATE")  // kann NULL sein
+  def endDate = column[Date]("END_DATE", Nullable)  // kann NULL sein
   def fxType = column[Char]("FXTYPE")
 
   def * = (objectidc, decimalDigits, textDE, textEN, textES, startDate, endDate.?, fxType) <> (Currency.tupled, Currency.unapply)
