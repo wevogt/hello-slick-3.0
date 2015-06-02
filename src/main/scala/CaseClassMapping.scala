@@ -123,9 +123,8 @@ object CaseClassMapping extends App {
 
     }.flatMap { _ =>
       println("\nall FxRates (ohne Stream):")
-      //val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(_)
+//      val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(r => (r.isoCode, r.rate, r.fxdate))
       val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(r => (r.isoCode, r.rate, r.fxdate))
-//      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(_)
 
       println("Statement: \n" +
         allRatesQuery.result.statements)
@@ -133,9 +132,9 @@ object CaseClassMapping extends App {
       db.run(allRatesQuery.result).map(println)
 
     }.flatMap { _ =>
-      println("\nall FxRates (mit Streaming):")
+      println("\nall FxRates (mit Streaming db.stream(...)):")
       //val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(_)
-      val allRatesQuery = fxrates.filter(_.isoCode === "USD").sortBy(_.isoCode).sortBy(_.fxdate.desc).map(r => (r.isoCode, r.rate, r.fxdate))
+      val allRatesQuery = fxrates.filter(_.isoCode === "USD").sortBy(_.isoCode).sortBy(_.fxdate.desc).map(r => (r.isoCode, r.rate, r.fxtype, r.fxdate))
       //      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(_)
 
       println("Statement: \n" +
