@@ -12,38 +12,13 @@ import scala.language.postfixOps
 //import slick.driver.H2Driver.api._
 import slick.driver.PostgresDriver.api._
 
+object CurrencyMapping extends App {
 
-object CaseClassMapping extends App {
-
-  // the base query for the Users table
-  val users = TableQuery[Users]
   val fxrates = TableQuery[FxRates]
   val currencies = TableQuery[Currencies]
 
   //  val db = Database.forConfig("h2mem1")
   val db = Database.forConfig("pgtest")
-
-  /*
-  try {
-    Await.result(db.run(DBIO.seq(
-      // create the schema
-      /*
-            users.schema.create,
-
-            // insert two User instances
-            users += User("John Doe"),
-            users += User("Fred Smith"),
-            users += User("Norma Jean"),
-            users += User("James Dean"),
-      */
-
-      // print the users (select * from USERS)
-      users.result.map(println)
-
-    )), Duration.Inf)
-  } finally db.close
-*/
-
 
   /*
   try {
@@ -80,7 +55,7 @@ object CaseClassMapping extends App {
       db.run(currenciesQuery.result).map(println)
 
     }.flatMap { _ =>
-      // Beispiel für aktuell gültige ISO-Codes
+      // Beispiel f�r aktuell g�ltige ISO-Codes
       // Soll:    Distinct und SET als Ergebnis
       // Problem: EndDate ist meist NULL (optional) oder darf > today sein
       println("\ndistinct CurrenciesCount:")
@@ -169,46 +144,3 @@ object CaseClassMapping extends App {
 
 }
 
-/*
-case class User(name: String, id: Option[Int] = None)
-
-class Users(tag: Tag) extends Table[User](tag, "USERS") {
-  // Auto Increment the id primary key column
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
-  // The name can't be null
-  def name = column[String]("NAME", NotNull)
-  // the * projection (e.g. select * ...) auto-transforms the tupled
-  // column values to / from a User
-  def * = (name, id.?) <> (User.tupled, User.unapply)
-}
-
-// Beispiel aus GREAT
-case class FxRate(fxtype: Char, fxdate: Date, isoCode: String, rate: Double){
-  override def toString() = "FXRate: " + fxtype + "\t" + fxdate + "\t" + isoCode + "\t" + rate
-}
-
-class FxRates(tag: Tag) extends Table[FxRate](tag, "GREAT_FX_RATES") {
-  def fxtype = column[Char]("FXTYPE")
-  def fxdate = column[Date]("FXDATE")
-  def isoCode = column[String]("ISO_CODE")
-  def rate = column[Double]("RATE")
-
-  def * = (fxtype, fxdate, isoCode, rate) <> (FxRate.tupled, FxRate.unapply)
-}
-
-// Teilprojektion aus GREAT-Tabelle GREAT_CURRENCY
-case class Currency(objectidc: String, decimalDigits: Int, textDE: String, textEN: String, textES: String, startDate: Date, endDate: Option[Date], fxType: Char )
-
-class Currencies(tag: Tag) extends Table[Currency](tag, "GREAT_CURRENCY") {
-  def objectidc = column[String]("OBJECTIDC")
-  def decimalDigits = column[Int]("NUM_DECIMAL_DIGITS")
-  def textDE = column[String]("TEXT_DE")
-  def textEN = column[String]("TEXT_EN")
-  def textES = column[String]("TEXT_ES")
-  def startDate = column[Date]("START_DATE")
-//  def endDate = column[Option[Date]]("END_DATE")  // kann NULL sein
-  def endDate = column[Date]("END_DATE", Nullable)  // kann NULL sein
-  def fxType = column[Char]("FXTYPE")
-
-  def * = (objectidc, decimalDigits, textDE, textEN, textES, startDate, endDate.?, fxType) <> (Currency.tupled, Currency.unapply)
-}*/
