@@ -1,6 +1,6 @@
 name := """hello-slick-3.0"""
 
-mainClass in Compile := Some("HelloSlick")
+/*mainClass in Compile := Some("HelloSlick") */
 
 scalaVersion := "2.11.6"
 

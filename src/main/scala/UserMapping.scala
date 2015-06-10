@@ -15,10 +15,10 @@ import slick.driver.PostgresDriver.api._
  */
 object UserMapping extends App {
 
-  // the base query for the Users table
-  val users = TableQuery[Users]
   //  val db = Database.forConfig("h2mem1")
   val db = Database.forConfig("pgtest")
+  // the base query for the Users table
+  val users = TableQuery[Users]
 
   try {
     Await.result(db.run(DBIO.seq(

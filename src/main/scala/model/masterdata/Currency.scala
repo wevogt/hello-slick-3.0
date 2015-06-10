@@ -2,7 +2,7 @@ package model.masterdata
 
 import java.sql.Date
 
-import slick.profile.SqlProfile.ColumnOption.Nullable
+//import slick.profile.SqlProfile.ColumnOption.Nullable
 //import slick.driver.H2Driver.api._
 import slick.driver.PostgresDriver.api._
 
@@ -20,9 +20,9 @@ class Currencies(tag: Tag) extends Table[Currency](tag, "GREAT_CURRENCY") {
   def textEN = column[String]("TEXT_EN")
   def textES = column[String]("TEXT_ES")
   def startDate = column[Date]("START_DATE")
-  //  def endDate = column[Option[Date]]("END_DATE")  // kann NULL sein
-  def endDate = column[Date]("END_DATE", Nullable)  // kann NULL sein
+  def endDate = column[Option[Date]]("END_DATE")  // kann NULL sein
+  //def endDate = column[Date]("END_DATE", Nullable)  // kann NULL sein
   def fxType = column[Char]("FXTYPE")
 
-  def * = (objectidc, decimalDigits, textDE, textEN, textES, startDate, endDate.?, fxType) <> (Currency.tupled, Currency.unapply)
+  def * = (objectidc, decimalDigits, textDE, textEN, textES, startDate, endDate, fxType) <> (Currency.tupled, Currency.unapply)
 }
