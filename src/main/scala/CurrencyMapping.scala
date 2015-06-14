@@ -44,7 +44,7 @@ object CurrencyMapping extends App {
         currencies
           .filter( t => t.fxType === 'D' || t.fxType === 'M')     // OR
           .filter(_.startDate <= today)
-          .filter(_.endDate isNull)
+          .filter(_.endDate isEmpty)
           //.filter(_.decimalDigits >= 1)
           .sortBy(_.objectidc.desc)
           .map(_.objectidc)
@@ -66,7 +66,7 @@ object CurrencyMapping extends App {
           //.filter(t => t.fxType === 'D' || t.fxType === 'M') // OR
           //          .filter( t: slick.lifted.Rep[_] => fxTypes.contains(t.fxType) )     // OR
           .filter(_.startDate <= today)
-          .filter(_.endDate isNull)
+          .filter(_.endDate isEmpty)
           //          .filter( t => Some(t.endDate) > today || t.endDate === null)
           .sortBy(_.objectidc)
           .map(c => c.objectidc)
@@ -85,7 +85,7 @@ object CurrencyMapping extends App {
 
       println("Statement: \n" + currencyDetailQuery.result.statements)
 
-      db.run((currencyDetailQuery.result).map(println))
+      db.run(currencyDetailQuery.result.map(println))
 
     }.flatMap { _ =>
       println("\nFxRates:")

@@ -11,3 +11,5 @@ libraryDependencies ++= List(
   "org.postgresql" % "postgresql" % "9.3-1100-jdbc41",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
+
+scalacOptions ++= Seq("-deprecation", "-feature")

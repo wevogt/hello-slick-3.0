@@ -33,6 +33,12 @@ class Users(tag: Tag) extends Table[User](tag, "USERS") {
   def findById(id: Long): Future[Option[User]] =
     db.run(users.filter(_.id === id).result.headOption)
 */
+
+  def findById(id: Int): DBIO[Option[User]] = {
+    val q = (for (e <- users if e.id === id) yield e)
+    println(q.result.statements)
+    q.result.headOption
+  }
 }
 
 
