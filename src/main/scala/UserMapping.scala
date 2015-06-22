@@ -18,7 +18,15 @@ object UserMapping extends App {
   //  val db = Database.forConfig("h2mem1")
   val db = Database.forConfig("pgtest")
   // the base query for the Users table
-  val users = TableQuery[Users]
+  val users = TableQuery[UserTable]
+
+  val us = User
+  //us.id = 7
+  //us.filter(_.id === 7).map(println)
+  //val norma: User =  us.getById(7)
+  val norma =  Users.getById(7)
+
+  println("Norma ?: " + norma)
 
   try {
     Await.result(db.run(DBIO.seq(
