@@ -24,9 +24,14 @@ object UserMapping extends App {
   //us.id = 7
   //us.filter(_.id === 7).map(println)
   //val norma: User =  us.getById(7)
-  val norma =  Users.getById(7)
 
-  println("Norma ?: " + norma)
+  println("all users: " + Some(Users.countUsers))
+
+  val norma :Future[Option[User]] =  Users.getById(7)
+
+  println("Norma = : " + norma.toString)
+
+  val allUsers = Users.getAll().map(println)
 
   try {
     Await.result(db.run(DBIO.seq(
