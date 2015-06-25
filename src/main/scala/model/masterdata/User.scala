@@ -21,7 +21,6 @@ import slick.driver.PostgresDriver.api._
  */
 
 
-/*
 object User {
   //def apply(name: String, id: Option[Int] = None): User = new User(name, id)
   def create(name: String, id: Option[Int] = None):User = {
@@ -30,7 +29,6 @@ object User {
   // aus DB lesen, ggf. auch aus einen Cache
   //def getById(id: Int):User = users.findById(id)
 }
-*/
 
 case class User(
    name: String,
@@ -45,12 +43,12 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
   // column values to / from a User
-  def * = (name, id.?) <> (User.tupled, User.unapply)
+  //def * = (name, id.?) <> (User.tupled, User.unapply)
 
   // wenn das Entity als CompanionObject definiert ist
-  //def * = (name, id.?) <> ((User.apply _).tupled, User.unapply)
+  def * = (name, id.?) <> ((User.apply _).tupled, User.unapply _)
 
-  // sollte immer gehen, aber unflexibel und umst‰ndlich
+  // sollte immer gehen, aber unflexibel und umst√§ndlich
   //def * = (name, id.?) <> (String, Option[Int])
   //def * : ProvenShape[(String, Option[Int])] = (name,id.?)
 
