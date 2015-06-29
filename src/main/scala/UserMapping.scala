@@ -20,14 +20,15 @@ object UserMapping extends App {
   // the base query for the Users table
   val users = TableQuery[UserTable]
 
-  val us = User
+  val us = User.create("Robin", Some(100))
   //us.id = 7
   //us.filter(_.id === 7).map(println)
   //val norma: User =  us.getById(7)
 
   println("all users: " + Some(Users.countUsers))
 
-  val norma :Future[Option[User]] =  Users.getById(7)
+  val norma :Future[User] =  Users.getById(1)
+  //val norma :Future[Option[User]] =  Users.findById(7)
 
   println("Norma = : " + norma.toString)
 
