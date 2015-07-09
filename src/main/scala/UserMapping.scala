@@ -28,7 +28,7 @@ object UserMapping extends App {
   println("count all users: " + Users.countUsers)
   //println("count all users: " + Some(Users.countUsers))
 
-  val norma :Future[User] =  Users.getById(1)
+  val norma :Future[Option[User]] =  Users.getById(1)
   //val norma :Future[Option[User]] =  Users.findById(7)
 
   println("Norma = : " + norma.toString)
