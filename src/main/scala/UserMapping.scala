@@ -20,7 +20,7 @@ object UserMapping extends App {
   // the base query for the Users table
   val users = TableQuery[UserTable]
 
-  val us = User
+  val us = User.create("Robin", Some(100))
   //us.id = 7
   //us.filter(_.id === 7).map(println)
   //val norma: User =  us.getById(7)
@@ -28,8 +28,8 @@ object UserMapping extends App {
   println("count all users: " + Users.countUsers)
   //println("count all users: " + Some(Users.countUsers))
 
-  val norma :Future[Option[User]] =  Users.getById(7)
-  // Evaluate-Expression im Debugger: Some(norma).get.value.asInstanceOf[Some[User]].x.asInstanceOf[Success].get.asInstanceOf[Some].x.asInstanceOf[User].name
+  val norma :Future[User] =  Users.getById(1)
+  //val norma :Future[Option[User]] =  Users.findById(7)
 
   println("Norma = : " + norma.toString)
 

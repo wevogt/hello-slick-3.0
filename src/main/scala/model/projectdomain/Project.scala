@@ -41,7 +41,7 @@ object Projects extends TableQuery(new ProjectTable(_)) {
   //  val db = Database.forConfig("h2mem1")
   val db = Database.forConfig("pgtest")
   // the base query for the Users table
-  val projects = TableQuery[ProjectTable]
+  lazy val projects = TableQuery[ProjectTable]
 
 
   val findById = this.findBy(_.id)
