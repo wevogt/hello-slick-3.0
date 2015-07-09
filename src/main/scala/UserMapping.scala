@@ -25,13 +25,18 @@ object UserMapping extends App {
   //us.filter(_.id === 7).map(println)
   //val norma: User =  us.getById(7)
 
-  println("all users: " + Some(Users.countUsers))
+  println("count all users: " + Users.countUsers)
+  //println("count all users: " + Some(Users.countUsers))
 
   val norma :Future[Option[User]] =  Users.getById(7)
+  // Evaluate-Expression im Debugger: Some(norma).get.value.asInstanceOf[Some[User]].x.asInstanceOf[Success].get.asInstanceOf[Some].x.asInstanceOf[User].name
 
   println("Norma = : " + norma.toString)
 
-  val allUsers = Users.getAll().map(println)
+  //val allUsers = Await.result(Users.getAll().map(println), Duration.Inf)
+  val allUsers = Users.getAll()
+
+  println("all users: " + allUsers.result.getDumpInfo)
 
   try {
     Await.result(db.run(DBIO.seq(
