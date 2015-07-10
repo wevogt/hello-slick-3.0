@@ -1,6 +1,10 @@
 package model.masterdata
 
 import play.api.libs.json.Json
+import slick.dbio.Effect.Read
+import slick.dbio.SuccessAction
+import slick.jdbc.meta.MTable
+import slick.profile.FixedSqlStreamingAction
 import slick.{dbio, lifted}
 import slick.lifted.ProvenShape
 import slick.model.Table._
@@ -12,6 +16,7 @@ import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 //import slick.driver.H2Driver.api._
+
 import slick.driver.PostgresDriver.api._
 
 /**
@@ -25,6 +30,7 @@ import slick.driver.PostgresDriver.api._
 
 object User {
   implicit val format = Json.format[User]
+
   //def apply(name: String, id: Option[Int] = None): User = new User(name, id)
   def create(name: String, id: Option[Int] = None): User = {
     User(name, id)
@@ -35,9 +41,9 @@ object User {
 }
 
 case class User(
-   name: String,
-   id: Option[Int] = None
-)
+                 name: String,
+                 id: Option[Int] = None
+                 )
 
 class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
   // The name can't be null
@@ -51,7 +57,7 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
   //def * = (name, id.?) <> (User.tupled, User.unapply)
 
   // wenn das Entity als CompanionObject definiert ist
-  def * = (name, id.?) <> ((User.apply _).tupled, User.unapply _)
+  def * = (name, id.?) <>((User.apply _).tupled, User.unapply _)
 
   // sollte immer gehen, aber unflexibel und umständlich
   //def * = (name, id.?) <> (String, Option[Int])
@@ -63,34 +69,53 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
   */
 }
 
-  object Users extends TableQuery(new UserTable(_)) {
-    lazy val users = TableQuery[UserTable]
-    val db = Database.forConfig("pgtest")
+object Users extends TableQuery(new UserTable(_)) {
+  lazy val users = TableQuery[UserTable]
+  val db = Database.forConfig("pgtest")
 
+  val findById = this.findBy(_.id)
 
-    val findById = this.findBy(_.id)
-
-/*
-    def getById(id: Int): Future[User] = {
-      val q = users.filter(_.id === id).result
-      db.run(q.head)
-    }
-*/
-    //def getById(id: Int):User = db.filter(_.id === id).map()    
-
-  def getById(id: Int): Future[Option[User]] = {
-    val q = (for (e <- users if e.id === id) yield e)
-    val action = q.result
-    println("\tStatement: \n\t\t" + action.statements.head)
-    db.run(action.headOption)
-    //f.onSuccess {case s => println(s"Result: $s")}
-    //      println(q.result.statements)
-    //q.result.headOption
-    //db.run(users.filter(_.id === id).result.headOption)
+  val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>
+    val names = Vector(users.baseTableRow.tableName)
+    names.intersect(tables.map(_.name.name)) == names
   }
+  val create: DBIO[Unit] = (users.schema).create
+  val createIfNotExist: DBIO[Unit] = tablesExist.flatMap(exist => if (!exist) create else SuccessAction {})
+  val insertUsers: DBIO[Option[Int]] = users.map(u => (u.name)) ++= Seq(("John Doe"), ("Fred Smith"), ("Norma Jean"), ("James Dean"), ("Lucky Luke"))
+  val setup =  db.run(createIfNotExist >> insertUsers)
 
+  /*
+      def getById(id: Int): Future[User] = {
+        val q = users.filter(_.id === id).result
+        db.run(q.head)
+      }
+      //def getById(id: Int):User = db.filter(_.id === id).map()
+
+    def getById(id: Int) :Future[User] = {
+      val q = for (u <- users if u.id === id) yield u
+      val action :DBIO[User] = q.result.head
+      //println("\tStatement: \n\t\t" + action.statements.head)
+      db.run(action)
+      //val future: Future[User] = db.run(action)
+      //Await.result(future,Duration.Inf)
+      //future.onSuccess {case s => map(println).result}
+      //future.onSuccess {case s => println(s"Result: $s")}
+      //      println(q.result.statements)
+      //q.result.headOption
+  //    db.run(users.filter(_.id === id).result.headOption).mapTo[User]
+    }
+  */
+
+  def getById(id: Int): Option[User] =
+    Await.result(db.run(users.filter(_.id === id).result.headOption), Duration.Inf)
+
+  // gibt alle User in einer soriteren Liste zurueck
+  def getAll(): List[User] = Await.result(db.run(users.sortBy(_.id).to[List].result), Duration.Inf)
+
+  //def getAll(): Set[User] = Await.result(db.run(users.sortBy(_.id).to[Set].result), Duration.Inf)
+  //def getAll(): Unit = Await.result(db.run(DBIO.seq(users.result)), Duration.Inf)
+  //def getAll(): Unit = Await.result(db.run(DBIO.seq(users.result.map(println))), Duration.Inf)
   //def getAll(): Future[Set[User]] = db.run(users.to[Set].result)
-  def getAll(): Unit = Await.result(db.run(DBIO.seq(users.result.map(println))), Duration.Inf)
 
   def countUsers(): Int = Await.result(db.run(users.length.result), Duration.Inf)
 

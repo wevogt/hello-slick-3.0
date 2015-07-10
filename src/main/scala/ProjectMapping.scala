@@ -22,18 +22,11 @@ object ProjectMapping extends App {
 
   //Projects.createInitial
   // ToDo wie kann man den create abh�ngig machen ob die Tabelle schon besteht
-  if (Projects.exists == false)  Projects.createInitial
+  if (Projects.exists equals false)  Projects.createInitial
 
   //var p100 = Project(Some(100), )
-  var p100  = Projects.findById(100)
+  var p100  = Projects.findById(1)
   println("neues Projekt = " + p100)
 
-/*
-  // finding Norma Jean
-  val normaId: Long  = 7
-  try {
-//    Await.result(users findById(normaId), Duration.Inf).get
-    Await.result(users.filter(_.id === normaId), Duration.Inf).get
-  } finally db.close
-*/
+  println("\nget project by Id=2; " + Projects.getById(2).get)
 }

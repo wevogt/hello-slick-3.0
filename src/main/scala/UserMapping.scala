@@ -20,24 +20,26 @@ object UserMapping extends App {
   // the base query for the Users table
   val users = TableQuery[UserTable]
 
-  val us = User.create("Robin", Some(100))
-  //us.id = 7
-  //us.filter(_.id === 7).map(println)
-  //val norma: User =  us.getById(7)
+  val uRobin = User.create("Robin Hood", Some(100))
 
   println("count all users: " + Users.countUsers)
-  //println("count all users: " + Some(Users.countUsers))
 
-  val norma :Future[Option[User]] =  Users.getById(1)
-  //val norma :Future[Option[User]] =  Users.findById(7)
+  val norma :User =  Users.getById(3).getOrElse(uRobin)
+  println("\nUser = " + norma.name)
 
-  println("Norma = : " + norma.toString)
+  val nobody :User =  Users.getById(11).getOrElse(uRobin)
+  println("\nUserNobody = " + nobody.name +"\n")
 
-  //val allUsers = Await.result(Users.getAll().map(println), Duration.Inf)
+
   val allUsers = Users.getAll()
 
-  println("all users: " + allUsers.result.getDumpInfo)
+  for ( u:User <- allUsers) {
+    println("User-Id: " + u.id.get + ", Name: " + u.name)
+  }
 
+//  println("\nall users: " + allUsers.result.getDumpInfo)
+
+/*
   try {
     Await.result(db.run(DBIO.seq(
       // create the schema
@@ -56,6 +58,7 @@ object UserMapping extends App {
 
     )), Duration.Inf)
   } finally db.close
+*/
 
 /*
   // finding Norma Jean

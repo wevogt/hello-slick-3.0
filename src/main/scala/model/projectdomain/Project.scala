@@ -44,7 +44,7 @@ object Projects extends TableQuery(new ProjectTable(_)) {
   lazy val projects = TableQuery[ProjectTable]
 
 
-  val findById = this.findBy(_.id)
+  val findById = projects.findBy(_.id)
 
   def createInitial =   try {
     Await.result(db.run(DBIO.seq(
@@ -62,5 +62,8 @@ object Projects extends TableQuery(new ProjectTable(_)) {
 
     )), Duration.Inf)
   } finally db.close
+
+  def getById(id :Int) : Option[Project] =
+    Await.result(db.run(projects.filter(_.id === id).result.headOption), Duration.Inf)
 
 }
