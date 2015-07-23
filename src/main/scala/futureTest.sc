@@ -1,8 +1,8 @@
 // zu Kap. "Welcome to the Future"  The Neophyte's Guide to Scala
 
-// erster sequentieller schematischer Ablaufversuch für einen Cappucion
+// erster sequentieller schematischer Ablaufversuch fï¿½r einen Cappucion
 
-import scala.concurrent.Promise
+import scala.concurrent.{Await, Promise}
 import scala.util.Try
 type CoffeeBeans = String
 type GroundCoffee = String
@@ -10,7 +10,7 @@ type GroundCoffee = String
 // gemahlender Kaffee
 case class Water(temperature: Int)
 type Milk = String
-type FrothedMilk = String // aufgeschäumte Milch
+type FrothedMilk = String // aufgeschï¿½umte Milch
 type Espresso = String
 type Cappucino = String
 // dummy implementations of the individuals steps:
@@ -18,7 +18,7 @@ def grindSeq(beans: CoffeeBeans): GroundCoffee = s"ground coffee of $beans"
 def heatWaterSeq(water: Water): Water = water.copy(temperature = 85)
 def frothMilkSeq(milk: Milk): FrothedMilk = s"frothed $milk"
 def brewSeq(coffee: GroundCoffee, heatedWater: Water): Espresso = "espresso"
-def combine(espreso: Espresso, frothedMilk: FrothedMilk): Cappucino = "cappucino"
+def combine(espreso: Espresso, frothedMilk: FrothedMilk): Cappucino = "picco cappucino"
 // some exceptions for things might go wrong in the individual steps
 // (we'll need som of them later, use the others when experimenting with tho code):
 case class GrindingException(msg: String) extends Exception(msg)
@@ -73,6 +73,7 @@ def brew(coffee: GroundCoffee, heatedWater: Water): Future[Espresso] = Future {
 // going through these steps concurrently!
 def prepareCappucino(): Future[Cappucino] = {
   val groundCoffee = grind("arabica beans")
+  //val groundCoffee = grind("baked beans")
   val heatedWater = heatWater(Water(25))
   val frothedMilk = frothMilk("milk")
   for {
@@ -83,6 +84,8 @@ def prepareCappucino(): Future[Cappucino] = {
   } yield combine(espresso, foam)
 }
 
-val myCappi = prepareCappucino().isCompleted
-import scala.util.{Success, Failure}
+val myCappi = prepareCappucino()
+val myCapp = Await.result(myCappi,Duration.Inf)
+println("preggo una " + myCapp)
+//import scala.util.{Success, Failure}
 //future {grind("baked beans")}
