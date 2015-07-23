@@ -20,7 +20,6 @@ def inputStreamForURL(url: String): Try[InputStream] =
 val in = inputStreamForURL("http://www.siemens.com")
 in.foreach(println)
 
-
 import scala.io.Source
 def getURLContent(url: String): Try[Iterator[String]] =
   for {
