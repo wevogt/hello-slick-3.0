@@ -36,7 +36,6 @@ val myCappiSeq = prepareCappucinoSeq()
 //
 // with Scala-Future -> concurrently
 //
-import scala.concurrent.future
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
