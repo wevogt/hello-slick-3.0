@@ -9,7 +9,7 @@ type GroundCoffee = String
 // gemahlender Kaffee
 case class Water(temperature: Int)
 type Milk = String
-type FrothedMilk = String // aufgeschäumte Milch
+type FrothedMilk = String // aufgeschï¿½umte Milch
 type Espresso = String
 type Cappucino = String
 // dummy implementations of the individuals steps:
@@ -43,28 +43,28 @@ import scala.concurrent.duration._
 import scala.util.Random
 //
 def grind(beans: CoffeeBeans): Future[GroundCoffee] = Future {
-  println("start grinding...")
+  println("start, grinding...")
   Thread.sleep(Random.nextInt(2000))
   if (beans == "baked beans") throw GrindingException("are you joking?")
-  println("finished grinding...")
+  println("finished grinding")
   s"ground coffee of $beans"
 }
 def heatWater(water: Water): Future[Water] = Future {
-  println("heating the water now")
+  println("start, heating the water now")
   Thread.sleep(Random.nextInt(2000))
-  println("hot, it's hot!")
+  println("finished heating water!")
   water.copy(temperature = 85)
 }
 def frothMilk(milk: Milk): Future[FrothedMilk] = Future {
-  println("milk frothing system engaged!")
+  println("start, milk frothing system engaged!")
   Thread.sleep(Random.nextInt(2000))
   println("shutting down milk frothing system")
   s"frothed $milk"
 }
 def brew(coffee: GroundCoffee, heatedWater: Water): Future[Espresso] = Future {
-  println("happy brewing :)")
+  println("start, happy brewing :)")
   Thread.sleep(Random.nextInt(2000))
-  println("it's brewed!")
+  println("finished brewing!")
   "espresso"
 }
 
@@ -75,8 +75,8 @@ def prepareCappucino(): Future[Cappucino] = {
   //val groundCoffee = grind("baked beans")
   val heatedWater = heatWater(Water(25))
   val frothedMilk = frothMilk("Landliebe-Milch")
-  println("... " + Await.result(groundCoffee, Duration.Inf))
-  println("... foam of " + Await.result(frothedMilk, Duration.Inf))
+  //println("... " + Await.result(groundCoffee, Duration.Inf))
+  //println("... foam of " + Await.result(frothedMilk, Duration.Inf))
   for {
     ground <- groundCoffee
     water <- heatedWater
