@@ -24,7 +24,7 @@ case class Project(
                     projectState: String,
                     bugdet: Option[Double] = None
   ) {
-  override def toString() = "Project: " + id + "\tname=" + name + "\tZustand=" + projectState
+  override def toString() = "Project: id=" + id.getOrElse("undefied") + "\tname=" + name + "\tZustand=" + projectState + "\tBudget=" + bugdet.getOrElse(0)
 }
 
 class ProjectTable(tag: Tag) extends Table[Project](tag, "PROJECTS") {
@@ -53,7 +53,7 @@ object Projects extends TableQuery(new ProjectTable(_)) {
 
       // insert two Project instances
       projects += Project(Some(100), "P100", "active"),
-      projects += Project(Some(200), "P200", "closed"),
+      projects += Project(Some(200), "P200", "closed", Some(99.0) ),
       projects += Project(Some(300), "P300", "initial"),
       projects += Project(Some(400), "P400", "paused")
 
