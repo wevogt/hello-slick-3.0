@@ -10,7 +10,8 @@ libraryDependencies ++= List(
   "com.h2database" % "h2" % "1.3.175",
   "org.postgresql" % "postgresql" % "9.3-1100-jdbc41",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test",
-  "com.typesafe.play" %% "play" % "2.4.0"
+  "com.typesafe.play" %% "play" % "2.4.0",
+  "javax.mail" % "mail" % "1.4.7"
 )
 
 scalacOptions ++= Seq("-deprecation", "-feature")
