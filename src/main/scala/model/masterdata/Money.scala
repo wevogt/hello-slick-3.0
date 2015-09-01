@@ -9,6 +9,7 @@ case class Money (var amount :BigDecimal = 0, curr :Currency)  {
 
   //override def toString :String => println(f"$amount%.2f $curr.objectidc")
 
+  // ToDo wie kann man die Formatierung abh. von curr.decimalDigits machen ?
   override def toString :String = f"$amount%.2f ${curr.objectidc}"
   //println(f"$name is $age years old, and weighs $weight%.2f pounds.")
 }

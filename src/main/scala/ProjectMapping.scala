@@ -21,7 +21,7 @@ object ProjectMapping extends App {
   val p = Project
 
   //Projects.createInitial
-  // ToDo wie kann man den create abh�ngig machen ob die Tabelle schon besteht
+  // ToDo wie kann man den create abhaengig machen davon ob die Tabelle schon besteht
   if (Projects.exists equals false)  Projects.createInitial
 
   //var p100 = Project(Some(100), )
