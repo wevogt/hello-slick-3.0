@@ -23,4 +23,5 @@ val fuenf :Money = Money(5, EUR)
 hundert + fuenf
 val minusFuenf = Money(-5, EUR)
 hundert + minusFuenf
+val zehnMio = Money(10000000, EUR)
 
