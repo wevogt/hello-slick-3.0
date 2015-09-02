@@ -5,7 +5,10 @@ package model.masterdata
  */
 case class Money (var amount :BigDecimal = 0, curr :Currency)  {
 
-  def + (m :Money) = Money(amount.bigDecimal.add(m.amount.bigDecimal), m.curr)
+  def + (m :Money) = Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
+  def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
+
+  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal), curr)
 
   //override def toString :String => println(f"$amount%.2f $curr.objectidc")
 
