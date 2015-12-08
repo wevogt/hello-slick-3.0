@@ -1,4 +1,6 @@
-import slick.driver.H2Driver.api._
+//import slick.driver.H2Driver.api._
+import slick.driver.HsqldbDriver.api._
+
 import slick.lifted.{ProvenShape, ForeignKeyQuery}
 
 // A Suppliers table with 6 columns: id, name, street, city, state, zip

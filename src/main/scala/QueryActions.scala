@@ -1,4 +1,5 @@
-import slick.driver.H2Driver.api._
+//import slick.driver.H2Driver.api._
+import slick.driver.HsqldbDriver.api._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
