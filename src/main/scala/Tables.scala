@@ -1,5 +1,5 @@
-//import slick.driver.H2Driver.api._
-import slick.driver.HsqldbDriver.api._
+import slick.driver.H2Driver.api._
+//import slick.driver.HsqldbDriver.api._
 
 import slick.lifted.{ProvenShape, ForeignKeyQuery}
 
