@@ -12,6 +12,7 @@ object Creator {
     def apply(s: String): Option[A] = parse(s)
   }
 
+  implicit val charCreator: Creator[Char] = instance(s => Try(s.toList(0)).toOption)
   implicit val stringCreate: Creator[String] = instance(Some(_))
   implicit val intCreate: Creator[Int] = instance(s => Try(s.toInt).toOption)
   implicit val doubleCreate: Creator[Double] =
