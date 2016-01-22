@@ -1,13 +1,8 @@
 package utils.reflection
 
 import java.text.SimpleDateFormat
-import java.sql.Date
 
-import io.circe._
-import io.circe.generic.auto._
-import io.circe.parse._
-import io.circe.syntax._
-import model.masterdata.FxRate
+
 /**
   * Created by werner on 19.01.16.
   *
@@ -21,7 +16,7 @@ trait RowParser[A] {
 case class Person(name: String, age: Double)
 case class Book(title: String, author: String, year: Int)
 case class Country(name: String, population: Int, area: Double)
-
+case class FxRate(fxtype: Char, fxdate: String, isoCode: String, rate: Double)
 
 object SimpleStringParser extends App {
 
@@ -51,8 +46,18 @@ object SimpleStringParser extends App {
 
   val fxrateParser: RowParser[FxRate] = new RowParser[FxRate] {
     def apply(s: String): FxRate = s.split(";").toList match {
-      case List(fxtype, fxdate, isoCode, rate) => FxRate(fxtype.charAt(1),
-        new Date(simpleDateFormat.parse(fxdate)), isoCode, rate.toDouble)
+      case List(fxtype, fxdate, isoCode, rate) => FxRate(fxtype.charAt(0),
+        fxdate, isoCode, rate.toDouble)
     }
   }
+  println(fxrateParser("M;30.12.2016;USD;1.19"))
+
+  /*
+    val fxrateParser: RowParser[FxRate] = new RowParser[FxRate] {
+      def apply(s: String): FxRate = s.split(";").toList match {
+        case List(fxtype, fxdate, isoCode, rate) => FxRate(fxtype.charAt(1),
+          new Date(simpleDateFormat.parse(fxdate)), isoCode, rate.toDouble)
+      }
+    }
+  */
 }
