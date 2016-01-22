@@ -32,7 +32,7 @@ def getURLContent(url: String): Try[Iterator[String]] =
 
 import scala.util.Success
 import scala.util.Failure
-getURLContent("http://www.siemens.com") match {
+getURLContent("http://www.danielwestheide.com") match {
   case Success(lines) =>
     lines.foreach(println)
   case Failure(ex) =>

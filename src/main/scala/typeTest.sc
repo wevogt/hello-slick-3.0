@@ -27,8 +27,10 @@ hundert + minusFuenf
 val zehnMio = Money(10000000, EUR)
 val nullEuro = Money(curr=USD)
 (nullEuro + fuenf + hundert + zehnMio) * -2
-hundert * 3.14155
+val fraction = hundert * 3.14155712987654
+fraction.amount
 hundert * 3.14152
 hundert * -0.8
 hundert - minusFuenf
 minusFuenf - minusFuenf
+minusFuenf.amount

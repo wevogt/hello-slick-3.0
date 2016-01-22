@@ -23,5 +23,5 @@ class FxRates(tag: Tag) extends Table[FxRate](tag, "GREAT_FX_RATES") {
 
   def rate = column[Double]("RATE")
 
-  def * = (fxtype, fxdate, isoCode, rate) <>(FxRate.tupled, FxRate.unapply)
+  def * = (fxtype, fxdate, isoCode, rate) <> (FxRate.tupled, FxRate.unapply)
 }
