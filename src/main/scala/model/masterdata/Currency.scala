@@ -13,7 +13,7 @@ import slick.driver.PostgresDriver.api._
 // Teilprojektion aus GREAT-Tabelle GREAT_CURRENCY
 case class Currency(objectidc: String, decimalDigits: Int, textDE: String, textEN: String, textES: String, startDate: Date, endDate: Option[Date], fxType: Char ) {
 
-  val defaultCurrency = new Currency("EUR", 2, "?", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D')
+//  val defaultCurrency = new Currency("EUR", 2, "?", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D')
 }
 
 class Currencies(tag: Tag) extends Table[Currency](tag, "GREAT_CURRENCY") {
