@@ -88,6 +88,12 @@ object CurrencyMapping extends App {
       db.run(currencyDetailQuery.result.map(println))
 
     }.flatMap { _ =>
+      val rates = fxrates
+       db.run(rates.length.result).map(println)
+
+      //println("all FXRates: " + cnt)
+
+    }.flatMap { _ =>
       println("\nFxRates:")
       //val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_)
       val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(90).map(_.isoCode)
