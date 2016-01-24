@@ -17,8 +17,9 @@ types.foreach( _ =='M')
 
 
 //Beispiel f. arithmetischen Datentyp (Money has amount and Currency)
-val EUR = Currency("EUR", 2, "Euro", "Euro", "euro", today,  None, 'M')
-val USD = Currency("USD", 2, "US$", "Dollar", "Dollar", today,  None, 'M')
+val EUR = Currency("EUR", 2, "?", "Euro", "euro", today,  None, 'M')
+val USD = Currency("USD", 4, "US$", "Dollar", "Dollar", today,  None, 'M')
+val AED = Currency("AED", 0, "AE$", "AED-Dollar", "AEDDollar", today,  None, 'D')
 val hundert :Money = Money(100.00, EUR)
 val fuenf :Money = Money(5, EUR)
 hundert + fuenf
@@ -26,6 +27,7 @@ val minusFuenf = Money(-5, EUR)
 hundert + minusFuenf
 val zehnMio = Money(10000000, EUR)
 val nullEuro = Money(curr=USD)
+val mixAEDDollar = Money(1.222, AED)
 (nullEuro + fuenf + hundert + zehnMio) * -2
 val fraction = hundert * 3.14155712987654
 fraction.amount
@@ -34,3 +36,7 @@ hundert * -0.8
 hundert - minusFuenf
 minusFuenf - minusFuenf
 minusFuenf.amount
+// Defaults per Money-Konstruktor :-)
+val defaultMoney = Money()
+val defaultUSD = Money(curr=USD)
+

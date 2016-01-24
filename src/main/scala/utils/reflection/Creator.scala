@@ -2,6 +2,8 @@ package utils.reflection
 
 import scala.util.Try
 import shapeless._
+import java.text.SimpleDateFormat
+import java.sql.Date
 
 trait Creator[A] { def apply(s: String): Option[A] }
 
@@ -17,6 +19,9 @@ object Creator {
   implicit val intCreate: Creator[Int] = instance(s => Try(s.toInt).toOption)
   implicit val doubleCreate: Creator[Double] =
     instance(s => Try(s.toDouble).toOption)
+
+  var simpleDateFormat: SimpleDateFormat = new SimpleDateFormat("dd.mm.yyyy")
+  implicit val dateCreate: Creator[Date] = instance(s => Try(new java.sql.Date(simpleDateFormat.parse(s).getTime())).toOption)
 
   implicit val hnilCreator: Creator[HNil] =
     instance(s => if (s.isEmpty) Some(HNil) else None)
