@@ -1,8 +1,14 @@
 
 import scala.util.Try
-import java.net.URL
+import java.net.{URL, URLConnection}
 
 def parseURL(url: String): Try[URL] = Try(new URL(url))
+
+def setConnectionWithBrowser(url :URL): URLConnection = {
+  val connection :URLConnection = url.openConnection()
+  connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)");
+  connection
+}
 
 parseURL("http://danielwestheide.com")
 parseURL("garbage")
@@ -24,7 +30,7 @@ import scala.io.Source
 def getURLContent(url: String): Try[Iterator[String]] =
   for {
       url <- parseURL(url)
-      connection <- Try(url.openConnection())
+      connection <- Try(setConnectionWithBrowser(url))
       is <- Try(connection.getInputStream)
       source = Source.fromInputStream(is)
   } yield source.getLines()
@@ -32,7 +38,10 @@ def getURLContent(url: String): Try[Iterator[String]] =
 
 import scala.util.Success
 import scala.util.Failure
-getURLContent("http://www.danielwestheide.com") match {
+//getURLContent("http://www.kindgirls.com/gallery/babes/khyanna_65873/6545/") match {
+getURLContent("http://adultboard.net/threads/met-art-com-niemira-dilawa-02-07-2016.12781") match {
+//getURLContent("http://gif-jpg.com/img-577805f5d3cbc.html") match {
+//getURLContent("http://www.danielwestheide.com") match {
   case Success(lines) =>
     lines.foreach(println)
   case Failure(ex) =>
