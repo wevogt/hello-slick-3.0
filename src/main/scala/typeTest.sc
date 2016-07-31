@@ -1,7 +1,9 @@
 //import java.sql.Date
 import java.util.{Calendar, Date}
 
-import model.masterdata.{Money, Currency}
+import model.masterdata.{Currency, Money}
+
+import scala.collection.mutable
 
 
 val today: java.sql.Date  = new java.sql.Date(System.currentTimeMillis())
@@ -40,3 +42,14 @@ minusFuenf.amount
 val defaultMoney = Money()
 val defaultUSD = Money(curr=USD)
 
+object UnifiedTypes extends App {
+  val set = new mutable.LinkedHashSet[Any]
+  set += "This is a string"
+  set += 732
+  set += 'c'
+  set += true
+  set += main _     // add a new function
+  val iter: Iterator[Any] = set.iterator
+  while (iter.hasNext) {println(iter.next().toString)}
+}
+UnifiedTypes

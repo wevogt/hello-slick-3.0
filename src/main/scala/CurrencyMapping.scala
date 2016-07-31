@@ -32,6 +32,9 @@ object CurrencyMapping extends App {
 
   val today: java.sql.Date  = new Date(System.currentTimeMillis())
   val fxTypes: List[Char] = List('D','M')
+  val dailyRate = fxTypes.head
+  val monthlyRate = fxTypes.tail.head
+  val showMaxRecords :Int = 100
 
   println("starting at " + new java.sql.Timestamp(System.currentTimeMillis()))
 
@@ -39,10 +42,10 @@ object CurrencyMapping extends App {
 
     val setupFuture: Future[Unit] = db.io()
     val f = setupFuture.flatMap { _ =>
-      println("\nall Currency.Iso-Codes (= objectidc):")
+      println("\nall valid Currency.Iso-Codes (= objectidc):")
       val currenciesQuery: Query[Rep[String], String, Seq] =
         currencies
-          .filter( t => t.fxType === 'D' || t.fxType === 'M')     // OR
+          .filter( t => t.fxType ===  dailyRate || t.fxType === monthlyRate )     // OR
           .filter(_.startDate <= today)
           .filter(_.endDate isEmpty)
           //.filter(_.decimalDigits >= 1)
@@ -58,7 +61,7 @@ object CurrencyMapping extends App {
       // Beispiel f�r aktuell g�ltige ISO-Codes
       // Soll:    Distinct und SET als Ergebnis
       // Problem: EndDate ist meist NULL (optional) oder darf > today sein
-      println("\ndistinct CurrenciesCount:")
+      println("\ndistinct valid Currencies:")
       //val currenciesCountQuery: Rep[Future[Seq[String]]] =
       val currenciesCountQuery: Query[Rep[String], String, Seq] =
         currencies
@@ -79,9 +82,9 @@ object CurrencyMapping extends App {
       db.run(currenciesCountQuery.to[IndexedSeq].result).map(println)
 
     }.flatMap { _ =>
-      println("\nCurrencyDetail:")
+      println("\nCurrency and Currencyname:")
 
-      val currencyDetailQuery = currencies.filter(t => t.fxType === 'D' || t.fxType === 'M').sortBy(_.objectidc).map(c => (c.objectidc, c.textDE))
+      val currencyDetailQuery = currencies.filter(t => t.fxType === dailyRate || t.fxType === monthlyRate).sortBy(_.objectidc).map(c => (c.objectidc, c.textDE))
 
       println("Statement: \n" + currencyDetailQuery.result.statements)
 
@@ -94,9 +97,9 @@ object CurrencyMapping extends App {
       //println("all FXRates: " + cnt)
 
     }.flatMap { _ =>
-      println("\nFxRates:")
+      println(s"\n$showMaxRecords FxRates-ISO-Codes:")
       //val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_)
-      val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(90).map(_.isoCode)
+      val ratesQuery = fxrates.filter(_.fxtype=== dailyRate).sortBy(_.isoCode).sortBy(_.fxdate.asc).take(showMaxRecords).map(_.isoCode)
 
       println("Statement: \n" +
         ratesQuery.result.statements)
@@ -104,9 +107,9 @@ object CurrencyMapping extends App {
       db.run(ratesQuery.result).map(println)
 
     }.flatMap { _ =>
-      println("\nall FxRates (ohne Stream):")
+      println(s"\n$showMaxRecords FxRates (ohne Stream):")
 //      val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(r => (r.isoCode, r.rate, r.fxdate))
-      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(r => (r.isoCode, r.rate, r.fxdate))
+      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(showMaxRecords).map(r => (r.isoCode, r.rate, r.fxdate))
 
       println("Statement: \n" +
         allRatesQuery.result.statements)
@@ -114,9 +117,9 @@ object CurrencyMapping extends App {
       db.run(allRatesQuery.result).map(println)
 
     }.flatMap { _ =>
-      println("\nall FxRates (mit Streaming db.stream(...)):")
+      println(s"\n$showMaxRecords FxRates (mit Streaming db.stream(...)):")
       //val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(_)
-      val allRatesQuery = fxrates.filter(_.isoCode === "USD").sortBy(_.isoCode).sortBy(_.fxdate.desc).map(r => (r.isoCode, r.rate, r.fxtype, r.fxdate))
+      val allRatesQuery = fxrates.filter(_.isoCode === "USD").take(showMaxRecords).sortBy(_.isoCode).sortBy(_.fxdate.desc).map(r => (r.isoCode, r.rate, r.fxtype, r.fxdate))
       //      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(_)
 
       println("Statement: \n" +
@@ -130,7 +133,6 @@ object CurrencyMapping extends App {
     }.flatMap { _ =>
 
       /* Computed Values */
-
       // Create a new computed column that calculates the max price
       val maxFxdateColumn: Rep[Option[Date]] = fxrates.map(_.fxdate).max
 
@@ -142,6 +144,8 @@ object CurrencyMapping extends App {
     }
 
     Await.result(f, Duration.Inf)
+
+//    ToDo: aktuellster Umrechungskurs pro Waehrung, wie in Bilanz, wenn 'D' und 'M' existieren, dann Monatsschlusskurs nehmen!!!
 
   } finally db.close
 
