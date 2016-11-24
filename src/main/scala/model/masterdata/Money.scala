@@ -11,6 +11,9 @@ import java.sql.Date
 // mit spez. Konstruktor der als Default 0,00 ? zulässt
 case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EUR", 2, "?", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
 
+  val locale = new java.util.Locale("de", "DE")
+  val formatter = java.text.NumberFormat.getCurrencyInstance
+
   val cformat = java.text.NumberFormat.getCurrencyInstance
   val format = java.text.NumberFormat.getNumberInstance
 

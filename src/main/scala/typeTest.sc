@@ -53,3 +53,10 @@ object UnifiedTypes extends App {
   while (iter.hasNext) {println(iter.next().toString)}
 }
 UnifiedTypes
+
+
+val locale = new java.util.Locale("de", "DE")
+val cFormatter = java.text.NumberFormat.getCurrencyInstance
+val nFormatter = java.text.NumberFormat.getNumberInstance(locale)
+nFormatter.format(10000)
+cFormatter.format(10000)
