@@ -1,16 +1,22 @@
-import scala.concurrent.{Future, Await}
+//import org.h2.engine.Database
+
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import slick.backend.DatabasePublisher
+import slick.basic.DatabasePublisher
+import slick.dbio.DBIO
+import slick.jdbc.H2Profile.api._
 //import slick.driver.H2Driver.api._
-import slick.driver.PostgresDriver.api._
+import slick.lifted.TableQuery
+//import slick.driver.PostgresDriver.api._
 //import slick.driver.HsqldbDriver.api._
 
 // The main application
 object HelloSlick extends App {
-  //val db = Database.forConfig("h2mem1")
+
+  val db = Database.forConfig("h2mem1")
   //val db = Database.forConfig("hsqlslickdb")
-  val db = Database.forConfig("pgtest")
+  //val db = Database.forConfig("pgtest")
   try {
 
     // The query interface for the Suppliers table

@@ -2,22 +2,21 @@
 import model.masterdata._
 import java.sql.Date
 import java.util.Calendar
-import slick.profile.SqlProfile.ColumnOption.{Nullable, NotNull}
 
 import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.language.postfixOps
 
-//import slick.driver.H2Driver.api._
-import slick.driver.PostgresDriver.api._
+//import slick.jdbc.H2Profile.api._
+import slick.jdbc.PostgresProfile.api._
 
 object CurrencyMapping extends App {
 
   val fxrates = TableQuery[FxRates]
   val currencies = TableQuery[Currencies]
 
-  //  val db = Database.forConfig("h2mem1")
+  //val db = Database.forConfig("h2mem1")
   val db = Database.forConfig("pgtest")
 
   /*

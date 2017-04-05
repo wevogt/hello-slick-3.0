@@ -1,22 +1,22 @@
 import model.masterdata._
 //import org.scalatest.fixture
-import slick.profile.SqlProfile.ColumnOption.{Nullable, NotNull}
 
 import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.language.postfixOps
 
+import slick.jdbc.H2Profile.api._
 //import slick.driver.H2Driver.api._
-import slick.driver.PostgresDriver.api._
+//import slick.driver.PostgresDriver.api._
 
 /**
  * Created by mhsvw001 on 09.06.2015.
  */
 object UserMapping extends App {
 
-  //  val db = Database.forConfig("h2mem1")
-  val db = Database.forConfig("pgtest")
+  val db = Database.forConfig("h2mem1")
+  //val db = Database.forConfig("pgtest")
   // the base query for the Users table
   val users = TableQuery[UserTable]
 

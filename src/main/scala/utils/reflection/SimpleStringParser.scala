@@ -5,7 +5,7 @@ import java.sql.Date
 
 import io.circe._
 import io.circe.generic.auto._
-import io.circe.parse._
+//import io.circe.parse._
 import io.circe.syntax._
 
 import scala.util.Try
@@ -43,9 +43,9 @@ object SimpleStringParser extends App {
 
   var simpleDateFormat: SimpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
 
-  val personParser: RowParser[Person] = new RowParser[Person] {
-    def apply(s: String): Person = s.split(",").toList match {
-      case List(name, age) => Person(name, age.toDouble)
+  val personParser: SaferRowParser[Person] = new SaferRowParser[Person] {
+    def apply(s: String): Option[Person] = s.split(",").toList match {
+      case List(name, age) => Some(Person(name, age.toDouble))
     }
   }
   println(personParser("Amy,54.2"))

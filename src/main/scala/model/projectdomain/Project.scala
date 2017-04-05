@@ -2,21 +2,27 @@ package model.projectdomain
 
 import play.api._
 import play.api.libs.json._
-import slick.profile.SqlProfile.ColumnOption.NotNull
+import slick.sql.SqlProfile.ColumnOption.NotNull
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration.Duration._
 
-//import slick.driver.H2Driver.api._
-import slick.driver.PostgresDriver.api._
+import slick.jdbc.H2Profile.api._
+//import slick.driver.PostgresDriver.api._
 
 /**
  * Created by mhsvw001 on 25.06.2015.
  */
+
 object Project extends ((Option[Int], String, String, Option[Double]) => Project) {
-  implicit val format = Json.format[Project]
+
+  //implicit val format = Json.format[Project]
+
+  def create(id: Option[Int], name: String, state: String, budget :Option[Double]) :Project =
+  Project(id, name,state, budget)
 }
+
 
 case class Project(
                     id: Option[Int] = None,
@@ -38,13 +44,13 @@ class ProjectTable(tag: Tag) extends Table[Project](tag, "PROJECTS") {
 }
 
 object Projects extends TableQuery(new ProjectTable(_)) {
-  //  val db = Database.forConfig("h2mem1")
-  val db = Database.forConfig("pgtest")
+  val db = Database.forConfig("h2mem1")
+  //val db = Database.forConfig("pgtest")
   // the base query for the Users table
   lazy val projects = TableQuery[ProjectTable]
 
 
-  val findById = projects.findBy(_.id)
+  val findById = this.findBy(_.id)
 
   def createInitial =   try {
     Await.result(db.run(DBIO.seq(
@@ -63,7 +69,7 @@ object Projects extends TableQuery(new ProjectTable(_)) {
     )), Duration.Inf)
   } finally db.close
 
-  def getById(id :Int) : Option[Project] =
+  def getById(id :Int) :Option[Project] =
     Await.result(db.run(projects.filter(_.id === id).result.headOption), Duration.Inf)
 
 }

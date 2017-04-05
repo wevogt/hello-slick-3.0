@@ -50,7 +50,8 @@ object UnifiedTypes extends App {
   set += true
   set += main _     // add a new function
   val iter: Iterator[Any] = set.iterator
-  while (iter.hasNext) {println(iter.next().toString)}
+  iter.foreach(e => println("Unified Type: " + e))
+  //while (iter.hasNext) {println(iter.next().toString)}
 }
 UnifiedTypes
 

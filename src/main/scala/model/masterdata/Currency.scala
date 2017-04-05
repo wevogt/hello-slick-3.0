@@ -3,8 +3,8 @@ package model.masterdata
 import java.sql.Date
 
 //import slick.profile.SqlProfile.ColumnOption.Nullable
-//import slick.driver.H2Driver.api._
-import slick.driver.PostgresDriver.api._
+//import slick.jdbc.H2Profile.api._
+import slick.jdbc.PostgresProfile.api._
 
 /**
  * Created by werner on 09.06.15.

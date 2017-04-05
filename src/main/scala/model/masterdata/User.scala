@@ -4,20 +4,16 @@ import play.api.libs.json.Json
 import slick.dbio.Effect.Read
 import slick.dbio.SuccessAction
 import slick.jdbc.meta.MTable
-import slick.profile.FixedSqlStreamingAction
-import slick.{dbio, lifted}
-import slick.lifted.ProvenShape
-import slick.model.Table._
-import slick.profile.SqlProfile.ColumnOption.NotNull
+import slick.sql.SqlProfile.ColumnOption.NotNull
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-//import slick.driver.H2Driver.api._
+import slick.jdbc.H2Profile.api._
 
-import slick.driver.PostgresDriver.api._
+//import slick.driver.PostgresDriver.api._
 
 /**
  * Created by mhsvw001 on 09.06.2015.
@@ -29,7 +25,8 @@ import slick.driver.PostgresDriver.api._
 
 
 object User {
-  implicit val format = Json.format[User]
+
+  //implicit val format = Json.format[User]
 
   //def apply(name: String, id: Option[Int] = None): User = new User(name, id)
   def create(name: String, id: Option[Int] = None): User = {
@@ -71,7 +68,8 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
 
 object Users extends TableQuery(new UserTable(_)) {
   lazy val users = TableQuery[UserTable]
-  val db = Database.forConfig("pgtest")
+  //val db = Database.forConfig("pgtest")
+  val db = Database.forConfig("h2mem1")
 
   val findById = this.findBy(_.id)
 
