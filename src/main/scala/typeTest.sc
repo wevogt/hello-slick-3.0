@@ -1,5 +1,5 @@
 //import java.sql.Date
-import java.util.{Calendar, Date}
+import java.util.Calendar
 
 import model.masterdata.{Currency, Money}
 
@@ -19,7 +19,7 @@ types.foreach( _ =='M')
 
 
 //Beispiel f. arithmetischen Datentyp (Money has amount and Currency)
-val EUR = Currency("EUR", 2, "?", "Euro", "euro", today,  None, 'M')
+val EUR = Currency("EUR", 2, "€", "Euro", "euro", today,  None, 'M')
 val USD = Currency("USD", 4, "US$", "Dollar", "Dollar", today,  None, 'M')
 val AED = Currency("AED", 0, "AE$", "AED-Dollar", "AEDDollar", today,  None, 'D')
 val hundert :Money = Money(100.00, EUR)

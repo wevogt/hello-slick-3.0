@@ -1,16 +1,15 @@
 package utils.reflection
 
 import java.text.SimpleDateFormat
-import java.sql.Date
 
-import io.circe._
-import io.circe.generic.auto._
-//import io.circe.parse._
-import io.circe.syntax._
-
-import scala.util.Try
+//import io.circe._
+//import io.circe.generic.auto._
+////import io.circe.parse._
+//import io.circe.syntax._
 
 import model.masterdata.FxRate
+
+import scala.util.Try
 /**
   * Created by werner on 19.01.16.
   *
@@ -62,6 +61,7 @@ object SimpleStringParser extends App {
   println(hamlet)                             // mit trait SaferRowParser erzeugt dieser Datensatz keine Exception
   println()                                   // mit trait SaferRowParser erzeugt dieser Datensatz keine Exception
 
+  println(personParser("Nora Jean, 60"))
 /*
   val fxrateParser: RowParser[FxRate] = new RowParser[FxRate] {
     def apply(s: String): FxRate = s.split(";").toList match {        // Trennzeichen ";"

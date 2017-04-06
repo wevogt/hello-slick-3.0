@@ -1,17 +1,14 @@
 package model.masterdata
 
-import play.api.libs.json.Json
-import slick.dbio.Effect.Read
 import slick.dbio.SuccessAction
+import slick.jdbc.H2Profile.api._
 import slick.jdbc.meta.MTable
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
-
-import slick.jdbc.H2Profile.api._
 
 //import slick.driver.PostgresDriver.api._
 
@@ -67,6 +64,7 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
 }
 
 object Users extends TableQuery(new UserTable(_)) {
+  // the base query for the Users table
   lazy val users = TableQuery[UserTable]
   //val db = Database.forConfig("pgtest")
   val db = Database.forConfig("h2mem1")
@@ -81,6 +79,7 @@ object Users extends TableQuery(new UserTable(_)) {
   val createIfNotExist: DBIO[Unit] = tablesExist.flatMap(exist => if (!exist) create else SuccessAction {})
   val insertUsers: DBIO[Option[Int]] = users.map(u => (u.name)) ++= Seq(("John Doe"), ("Fred Smith"), ("Norma Jean"), ("James Dean"), ("Lucky Luke"))
   val setup =  db.run(createIfNotExist >> insertUsers)
+  Thread.sleep(500)
 
   /*
       def getById(id: Int): Future[User] = {

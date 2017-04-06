@@ -14,10 +14,11 @@ libraryDependencies ++= List(
   "org.scalatest" % "scalatest_2.11" % "3.0.1" % "test",
   "com.typesafe.play" % "play_2.11" % "2.5.13",
   "com.typesafe.play" % "play-json_2.11" % "2.5.13",
-  "javax.mail" % "mail" % "1.4.7",
-  "io.circe" % "circe-core_2.11" % "0.7.0",
-  "io.circe" % "circe-generic_2.11" % "0.7.0",
-  "io.circe" % "circe-parser_2.11" % "0.7.0"
+//  "io.circe" % "circe-core_2.12" % "0.7.0",
+//  "io.circe" % "circe-generic_2.12" % "0.7.0",
+//  "io.circe" % "circe-parser_2.12" % "0.7.0",
+  "com.chuusai" %% "shapeless" % "2.3.2",
+  "javax.mail" % "mail" % "1.4.7"
 
 )
 

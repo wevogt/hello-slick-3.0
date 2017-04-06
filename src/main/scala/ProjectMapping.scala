@@ -1,11 +1,8 @@
 import model.projectdomain._
 //import org.scalatest.fixture
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
-import scala.language.postfixOps
-
 import slick.jdbc.H2Profile.api._
+
+import scala.language.postfixOps
 //import slick.driver.PostgresDriver.api._
 
 /**
@@ -16,11 +13,13 @@ object ProjectMapping extends App {
   val db = Database.forConfig("h2mem1")
   //val db = Database.forConfig("pgtest")
   // the base query for the Users table
-  //val projects = TableQuery[ProjectTable]
+  val projects = TableQuery[ProjectTable]
 
-  val p = Project
+  println("count all users: " + Projects.countProjects)
 
-  Projects.createInitial
+  //val p = Project
+
+  //Projects.createInitial
   // ToDo wie kann man den create abhaengig machen davon ob die Tabelle schon besteht
   //if (Projects.exists equals false)  Projects.createInitial
 

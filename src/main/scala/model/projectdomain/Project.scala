@@ -1,14 +1,13 @@
 package model.projectdomain
 
-import play.api._
-import play.api.libs.json._
+import slick.dbio.SuccessAction
+import slick.jdbc.H2Profile.api._
+import slick.jdbc.meta.MTable
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
 import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import scala.concurrent.duration.Duration._
-
-import slick.jdbc.H2Profile.api._
 //import slick.driver.PostgresDriver.api._
 
 /**
@@ -44,32 +43,48 @@ class ProjectTable(tag: Tag) extends Table[Project](tag, "PROJECTS") {
 }
 
 object Projects extends TableQuery(new ProjectTable(_)) {
-  val db = Database.forConfig("h2mem1")
-  //val db = Database.forConfig("pgtest")
-  // the base query for the Users table
+  // the base query for the Projects table
   lazy val projects = TableQuery[ProjectTable]
-
+  //val db = Database.forConfig("pgtest")
+  val db = Database.forConfig("h2mem1")
 
   val findById = this.findBy(_.id)
 
-  def createInitial =   try {
-    Await.result(db.run(DBIO.seq(
-      // create the schema
-      projects.schema.create,
+  val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>
+    val names = Vector(projects.baseTableRow.tableName)
+    names.intersect(tables.map(_.name.name)) == names
+  }
+  val create: DBIO[Unit] = (projects.schema).create
+  val createIfNotExist: DBIO[Unit] = tablesExist.flatMap(exist => if (!exist) create else SuccessAction {})
+  // wg. autoIncrement, werden die ID's hier ignoriert
+  val insertProjects: DBIO[Option[Int]] = projects.map(p => (p.id, p.name, p.projectState)) ++= Seq( (100, "P100", "active"), (200, "P200", "closed"), (300, "P300", "initial"), (400, "P400", "paused"))
+  val setup =  db.run(createIfNotExist >> insertProjects)
 
-      // insert two Project instances
-      projects += Project(Some(100), "P100", "active"),
-      projects += Project(Some(200), "P200", "closed", Some(99.0) ),
-      projects += Project(Some(300), "P300", "initial"),
-      projects += Project(Some(400), "P400", "paused")
+  Thread.sleep(500)   // ToDo: warten bis Tabelle angelegt und initale Datensaetze eingefuegt, besser waere "Await.result ...", wie ???
 
-      // print the users (select * from USERS)
-     // projects.result.map(println)
 
-    )), Duration.Inf)
-  } finally db.close
+  /*
+    def createInitial =   try {
+      Await.result(db.run(DBIO.seq(
+        // create the schema
+        projects.schema.create,
+
+        // insert two Project instances
+        projects += Project(Some(100), "P100", "active"),
+        projects += Project(Some(200), "P200", "closed", Some(99.0) ),
+        projects += Project(Some(300), "P300", "initial"),
+        projects += Project(Some(400), "P400", "paused")
+
+        // print the users (select * from USERS)
+       // projects.result.map(println)
+
+      )), Duration.Inf)
+    } finally db.close
+  */
 
   def getById(id :Int) :Option[Project] =
     Await.result(db.run(projects.filter(_.id === id).result.headOption), Duration.Inf)
+
+  def countProjects(): Int = Await.result(db.run(projects.length.result), Duration.Inf)
 
 }
