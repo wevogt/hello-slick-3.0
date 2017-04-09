@@ -39,6 +39,8 @@ object SimpleStringParser extends App {
   val finland = Creator.create[Country]("Finland,4500000,338424")
 
   val usd = Creator.create[FxRate]("M,30.12.2015,USD,1.19")       // Trennzeichen ","
+  val amd = Creator.create[FxRate] ("M;30.08.02 00:00:00;AMD;549.6396")
+
 
   var simpleDateFormat: SimpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
 
@@ -62,6 +64,7 @@ object SimpleStringParser extends App {
   println()                                   // mit trait SaferRowParser erzeugt dieser Datensatz keine Exception
 
   println(personParser("Nora Jean, 60"))
+  
 /*
   val fxrateParser: RowParser[FxRate] = new RowParser[FxRate] {
     def apply(s: String): FxRate = s.split(";").toList match {        // Trennzeichen ";"
@@ -80,6 +83,7 @@ object SimpleStringParser extends App {
   println(fxrateParser("D;31.12.2016;USD;1.07"))
 */
   println(usd)
+  println(amd)
   //  println(fxrateParser(";;;"))              // gerneriert Fehler ohne SaferRowParser
   //  println(fxrateParser(""))                 // gerneriert Fehler ohne SaferRowParser
 

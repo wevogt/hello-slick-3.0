@@ -42,14 +42,13 @@ class ProjectTable(tag: Tag) extends Table[Project](tag, "PROJECTS") {
   def * = (id.?, name, projectState, budget) <> ((Project.apply _).tupled, Project.unapply _)
 }
 
-object Projects extends TableQuery(new ProjectTable(_)) {
+object ProjectDAO extends TableQuery(new ProjectTable(_)) {
   // the base query for the Projects table
   lazy val projects = TableQuery[ProjectTable]
   //val db = Database.forConfig("pgtest")
   val db = Database.forConfig("h2mem1")
 
-  val findById = this.findBy(_.id)
-
+/*
   val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>
     val names = Vector(projects.baseTableRow.tableName)
     names.intersect(tables.map(_.name.name)) == names
@@ -61,6 +60,7 @@ object Projects extends TableQuery(new ProjectTable(_)) {
   val setup =  db.run(createIfNotExist >> insertProjects)
 
   Thread.sleep(500)   // ToDo: warten bis Tabelle angelegt und initale Datensaetze eingefuegt, besser waere "Await.result ...", wie ???
+*/
 
 
   /*
@@ -82,8 +82,16 @@ object Projects extends TableQuery(new ProjectTable(_)) {
     } finally db.close
   */
 
+  val findById = this.findBy(_.id)
+
   def getById(id :Int) :Option[Project] =
     Await.result(db.run(projects.filter(_.id === id).result.headOption), Duration.Inf)
+
+  def findProjectByName(projectName: String) :Option[Project] =
+    Await.result(db.run(projects.filter(_.name === projectName).result.headOption), Duration.Inf)
+
+  // gibt alle User in einer soriteren Liste zurueck
+  def getAll(): List[Project] = Await.result(db.run(projects.sortBy(_.id).to[List].result), Duration.Inf)
 
   def countProjects(): Int = Await.result(db.run(projects.length.result), Duration.Inf)
 

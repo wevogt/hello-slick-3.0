@@ -6,7 +6,7 @@ import slick.jdbc.H2Profile.api._
 import slick.jdbc.meta._
 
 class TablesSuite extends FunSuite with BeforeAndAfter with ScalaFutures {
-  implicit override val patienceConfig = PatienceConfig(timeout = Span(5, Seconds))
+  implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
   val suppliers = TableQuery[Suppliers]
   val coffees = TableQuery[Coffees]
@@ -14,33 +14,36 @@ class TablesSuite extends FunSuite with BeforeAndAfter with ScalaFutures {
   var db: Database = _
 
   def createSchema() =
-    db.run((suppliers.schema ++ coffees.schema).create).futureValue
+    db.run((suppliers.schema ++ coffees.schema).create)
   
   def insertSupplier(): Int =
     db.run(suppliers += (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199")).futureValue
   
-  before { db = Database.forConfig("h2mem1") }
+  before {
+    db = Database.forConfig("h2mem1")
+    createSchema()
+  }
   
   test("Creating the Schema works") {
-    createSchema()
+    //createSchema()
     
     val tables = db.run(MTable.getTables).futureValue
 
-    assert(tables.size == 2)
+    assert(tables.size >= 2)
     assert(tables.count(_.name.name.equalsIgnoreCase("suppliers")) == 1)
     assert(tables.count(_.name.name.equalsIgnoreCase("coffees")) == 1)
   }
 
   test("Inserting a Supplier works") {
-    createSchema()
+    //createSchema()
     
     val insertCount = insertSupplier()
     assert(insertCount == 1)
   }
   
   test("Query Suppliers works") {
-    createSchema()
-    insertSupplier()
+    //createSchema()
+    //insertSupplier()
     val results = db.run(suppliers.result).futureValue
     assert(results.size == 1)
     assert(results.head._1 == 101)

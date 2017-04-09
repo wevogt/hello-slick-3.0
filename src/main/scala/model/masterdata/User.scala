@@ -5,9 +5,9 @@ import slick.jdbc.H2Profile.api._
 import slick.jdbc.meta.MTable
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration._
 import scala.language.postfixOps
 
 //import slick.driver.PostgresDriver.api._
@@ -29,9 +29,6 @@ object User {
   def create(name: String, id: Option[Int] = None): User = {
     User(name, id)
   }
-
-  // aus DB lesen, ggf. auch aus einen Cache
-  //def getById(id: Int):User = users.findById(id)
 }
 
 case class User(
@@ -39,7 +36,7 @@ case class User(
                  id: Option[Int] = None
                  )
 
-class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
+class ProjectTable(tag: Tag) extends Table[User](tag, "USERS") {
   // The name can't be null
   def name = column[String]("NAME", NotNull)
 
@@ -57,54 +54,40 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
   //def * = (name, id.?) <> (String, Option[Int])
   //def * : ProvenShape[(String, Option[Int])] = (name,id.?)
 
-  /*
-    def findById(id: Long): Future[Option[User]] =
-      db.run(users.filter(_.id === id).result.headOption)
-  */
 }
 
-object Users extends TableQuery(new UserTable(_)) {
+object UserDAO extends TableQuery(new ProjectTable(_)) {
   // the base query for the Users table
-  lazy val users = TableQuery[UserTable]
+  lazy val users = TableQuery[ProjectTable]
   //val db = Database.forConfig("pgtest")
   val db = Database.forConfig("h2mem1")
 
-  val findById = this.findBy(_.id)
-
+/*
   val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>
     val names = Vector(users.baseTableRow.tableName)
     names.intersect(tables.map(_.name.name)) == names
   }
-  val create: DBIO[Unit] = (users.schema).create
-  val createIfNotExist: DBIO[Unit] = tablesExist.flatMap(exist => if (!exist) create else SuccessAction {})
-  val insertUsers: DBIO[Option[Int]] = users.map(u => (u.name)) ++= Seq(("John Doe"), ("Fred Smith"), ("Norma Jean"), ("James Dean"), ("Lucky Luke"))
+
+  def create: DBIO[Unit] = (users.schema).create
+  //def create: Future[Unit] = db.run((users.schema).create)
+
+  def createIfNotExist: DBIO[Unit] = tablesExist.flatMap(exist => if (!exist) create else SuccessAction {})
+
+  def insertUsers: DBIO[Option[Int]] = users.map(u => (u.name)) ++= Seq(("John Doe"), ("Fred Smith"), ("Norma Jean"), ("James Dean"), ("Lucky Luke"))
+  //val setup =  Await.result(db.run(createIfNotExist >> insertUsers), Duration(5, SECONDS))
+  //val setup =  Await.result(db.run(createIfNotExist), Duration.Inf)
   val setup =  db.run(createIfNotExist >> insertUsers)
-  Thread.sleep(500)
+  //val setup =  db.run(createIfNotExist)
+  Thread.sleep(2000)
+*/
 
-  /*
-      def getById(id: Int): Future[User] = {
-        val q = users.filter(_.id === id).result
-        db.run(q.head)
-      }
-      //def getById(id: Int):User = db.filter(_.id === id).map()
-
-    def getById(id: Int) :Future[User] = {
-      val q = for (u <- users if u.id === id) yield u
-      val action :DBIO[User] = q.result.head
-      //println("\tStatement: \n\t\t" + action.statements.head)
-      db.run(action)
-      //val future: Future[User] = db.run(action)
-      //Await.result(future,Duration.Inf)
-      //future.onSuccess {case s => map(println).result}
-      //future.onSuccess {case s => println(s"Result: $s")}
-      //      println(q.result.statements)
-      //q.result.headOption
-  //    db.run(users.filter(_.id === id).result.headOption).mapTo[User]
-    }
-  */
+  def findById = users.findBy(_.id)
 
   def getById(id: Int): Option[User] =
     Await.result(db.run(users.filter(_.id === id).result.headOption), Duration.Inf)
+
+  def findUserByName(userName: String) :Option[User] =
+    Await.result(db.run(users.filter(_.name === userName).result.headOption), Duration.Inf)
 
   // gibt alle User in einer soriteren Liste zurueck
   def getAll(): List[User] = Await.result(db.run(users.sortBy(_.id).to[List].result), Duration.Inf)
