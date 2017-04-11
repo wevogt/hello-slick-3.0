@@ -11,31 +11,27 @@ import slick.jdbc.meta._
 class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
-  val projects = TableQuery[ProjectTable]
-
   var db: Database = _
+  val projects = TableQuery[ProjectTable]
+  val initialTestObjects = Seq(
+    Project(Some(100), "P100", "active"),
+    Project(Some(200), "P200", "closed", Some(99.0) ),
+    Project(Some(300), "P300", "initial"),
+    Project(Some(400), "P400", "paused")
+  )
 
-  def createSchema() =
+  def setupTestData() =
     //db.run((projects.schema).create).futureValue
-    db.run((projects.schema).create)
-
-  def insertProjects(): Option[Int] =
-    db.run(projects ++= Seq(
-      Project(Some(100), "P100", "active"),
-      Project(Some(200), "P200", "closed", Some(99.0) ),
-      Project(Some(300), "P300", "initial"),
-      Project(Some(400), "P400", "paused")
-    )).futureValue
-
+    db.run(
+      projects.schema.create >> (projects ++= initialTestObjects)
+    )
 
   before {
     db = Database.forConfig("h2mem1")
-    createSchema()
+    setupTestData()
   }
 
   test("Creating the Schema should works") {
-    //createSchema()
-
     val tables = db.run(MTable.getTables).futureValue
 
     assert(tables.size >= 1)
@@ -43,19 +39,14 @@ class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures 
   }
 
   test("Inserting a Projects should works") {
-    //createSchema()
-
-    val insertCount = insertProjects()
-    assert(insertCount == Some(4))
+    val insertCount = ProjectService.getAllProjects.size
+    assert(insertCount == 4)
 
     val hal42: Option[Project] = ProjectService.getProjectById(1)
-    assert(hal42.get.id == Some(1))
+    assert(hal42.getOrElse(Project(Some(99), "Not Found", "closed")).id == Some(1))
   }
 
   test("Query Projects should works") {
-//    createSchema()
-//    insertProjects()
-
     val results = db.run(projects.result).futureValue
     assert(results.size == 4)
     assert(results.head.name === "P100")
