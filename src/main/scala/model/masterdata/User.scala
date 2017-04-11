@@ -1,12 +1,9 @@
 package model.masterdata
 
-import slick.dbio.SuccessAction
 import slick.jdbc.H2Profile.api._
-import slick.jdbc.meta.MTable
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -36,7 +33,7 @@ case class User(
                  id: Option[Int] = None
                  )
 
-class ProjectTable(tag: Tag) extends Table[User](tag, "USERS") {
+class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
   // The name can't be null
   def name = column[String]("NAME", NotNull)
 
@@ -56,9 +53,9 @@ class ProjectTable(tag: Tag) extends Table[User](tag, "USERS") {
 
 }
 
-object UserDAO extends TableQuery(new ProjectTable(_)) {
+object UserDAO extends TableQuery(new UserTable(_)) {
   // the base query for the Users table
-  lazy val users = TableQuery[ProjectTable]
+  lazy val users = TableQuery[UserTable]
   //val db = Database.forConfig("pgtest")
   val db = Database.forConfig("h2mem1")
 
