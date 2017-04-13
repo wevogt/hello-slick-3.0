@@ -1,23 +1,23 @@
 
-import model.masterdata._
 import java.sql.Date
-import java.util.Calendar
 
-import scala.concurrent.{Future, Await}
+import model.masterdata._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-//import slick.jdbc.H2Profile.api._
-import slick.jdbc.PostgresProfile.api._
+import slick.jdbc.H2Profile.api._
+//import slick.jdbc.PostgresProfile.api._
 
 object CurrencyMapping extends App {
 
   val fxrates = TableQuery[FxRates]
   val currencies = TableQuery[Currencies]
 
-  //val db = Database.forConfig("h2mem1")
-  val db = Database.forConfig("pgtest")
+  val db = Database.forConfig("h2mem1")
+  //val db = Database.forConfig("pgtest")
 
   /*
   try {
@@ -30,12 +30,14 @@ object CurrencyMapping extends App {
 */
 
   val today: java.sql.Date  = new Date(System.currentTimeMillis())
+  val nowTime: java.sql.Time = new java.sql.Time(System.currentTimeMillis())
   val fxTypes: List[Char] = List('D','M')
   val dailyRate = fxTypes.head
   val monthlyRate = fxTypes.tail.head
   val showMaxRecords :Int = 100
 
-  println("starting at " + new java.sql.Timestamp(System.currentTimeMillis()))
+  println("precise starting time at " + new java.sql.Timestamp(System.currentTimeMillis()))
+  println(s"Today starting at $today $nowTime")
 
   try {
 

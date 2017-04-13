@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat
 ////import io.circe.parse._
 //import io.circe.syntax._
 
-import model.masterdata.FxRate
-
 import scala.util.Try
 /**
   * Created by werner on 19.01.16.
@@ -28,7 +26,7 @@ case class Person(name: String, age: Double)
 case class Book(title: String, author: String, year: Int)
 case class Country(name: String, population: Int, area: Double)
 
-//case class FxRate(fxtype: Char, fxdate: String, isoCode: String, rate: Double)      //Workaround wg. Date-Parsing !
+case class FxRate(fxtype: Char, fxdate: String, isoCode: String, rate: Double)      //Workaround wg. Date-Parsing !
 
 
 object SimpleStringParser extends App {
@@ -73,15 +71,21 @@ object SimpleStringParser extends App {
   }
 */
 
-/*
     val fxrateParser: RowParser[FxRate] = new RowParser[FxRate] {
       def apply(s: String): FxRate = s.split(";").toList match {
         case List(fxtype, fxdate, isoCode, rate) => FxRate(fxtype.charAt(0),
           fxdate, isoCode, rate.toDouble)
       }
     }
-  println(fxrateParser("D;31.12.2016;USD;1.07"))
-*/
+  var tmpRecord = "\"D\";31.12.2016;\"USD\";1.07"
+  tmpRecord = tmpRecord.replaceAll("\"","")
+  tmpRecord.startsWith("\"")
+  println(fxrateParser(tmpRecord))
+
+  val usd_rate: FxRate =  fxrateParser(tmpRecord)
+  println(s"USD-Rate = $usd_rate")
+  //println(fxrateParser("D";31.12.2016;"USD";1.07)
+
   println(usd)
   println(amd)
   //  println(fxrateParser(";;;"))              // gerneriert Fehler ohne SaferRowParser
