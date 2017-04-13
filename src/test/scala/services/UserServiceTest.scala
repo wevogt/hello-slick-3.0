@@ -4,6 +4,8 @@ import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import slick.jdbc.H2Profile.api._
+
+import scala.concurrent.Future
 //import slick.driver.HsqldbDriver.api._
 import slick.jdbc.meta._
 
@@ -40,7 +42,7 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   }
 
   test("Inserting a Users should works") {
-    val insertCount = UserService.getAllUsers.size
+    val insertCount = UserService.getAllUsers.value.size
     assert(insertCount == 5)
 
     val hal42: Option[User] = UserService.getUserById(1)
@@ -58,12 +60,12 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
     val norma: User = UserService.getUserByName("Norma Jean").getOrElse(User.create("Kasperl", Some(99)))
     assert(norma.name == "Norma Jean")
 
-    val allUsers: List[User] = UserService.getAllUsers
-    assert(allUsers.size >= 5)
+    val allUsers: Future[List[User]] = UserService.getAllUsers
+    assert(allUsers.value.size >= 5)
 
-    for ( u:User <- allUsers) {
-      println("User-Id: " + u.id.get + ", Name: " + u.name)
-    }
+//    for ( u:User <- allUsers.value) {
+//      println("User-Id: " + u.id.get + ", Name: " + u.name)
+//    }
   }
   
   after { db.close }

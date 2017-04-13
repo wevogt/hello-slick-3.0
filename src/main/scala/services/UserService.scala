@@ -1,6 +1,8 @@
 package services
 
 import model.masterdata._
+
+import scala.concurrent.Future
 import scala.language.postfixOps
 
 /**
@@ -12,7 +14,7 @@ object UserService {
 
   def getUserByName(userName: String) :Option[User] = UserDAO.findUserByName(userName)
 
-  def getAllUsers: List[User] = UserDAO.getAll()
+  def getAllUsers: Future[List[User]] = UserDAO.getAll()
 
 /*
   val allUsers = UserDAO.getAll()

@@ -3,7 +3,7 @@ package model.masterdata
 import slick.jdbc.H2Profile.api._
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -53,11 +53,11 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
 
 }
 
-object UserDAO extends TableQuery(new UserTable(_)) {
+object UserDAO extends TableQuery(new UserTable(_)) with BaseDAO {
   // the base query for the Users table
   lazy val users = TableQuery[UserTable]
   //val db = Database.forConfig("pgtest")
-  val db = Database.forConfig("h2mem1")
+  //val db = Database.forConfig("h2mem1")
 
 /*
   val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>
@@ -84,10 +84,11 @@ object UserDAO extends TableQuery(new UserTable(_)) {
     Await.result(db.run(users.filter(_.id === id).result.headOption), Duration.Inf)
 
   def findUserByName(userName: String) :Option[User] =
-    Await.result(db.run(users.filter(_.name === userName).result.headOption), Duration.Inf)
+    exec[Option[User]](users.filter(_.name === userName).result.headOption)
 
   // gibt alle User in einer soriteren Liste zurueck
-  def getAll(): List[User] = Await.result(db.run(users.sortBy(_.id).to[List].result), Duration.Inf)
+  def getAll(): Future[List[User]] = execImmediate(users.sortBy(_.id).to[List].result)
+  //def getAll(): List[User] = Await.result(db.run(users.sortBy(_.id).to[List].result), Duration.Inf)
 
   //def getAll(): Set[User] = Await.result(db.run(users.sortBy(_.id).to[Set].result), Duration.Inf)
   //def getAll(): Unit = Await.result(db.run(DBIO.seq(users.result)), Duration.Inf)
