@@ -1,11 +1,13 @@
 package model.masterdata
 
+import slick.dbio.{FailureAction, SuccessAction}
 import slick.jdbc.H2Profile.api._
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.util.Success
 
 //import slick.driver.PostgresDriver.api._
 
@@ -53,7 +55,10 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
 
 }
 
-object UserDAO extends TableQuery(new UserTable(_)) with BaseDAO {
+object UserDAO extends TableQuery(new UserTable(_)) with BaseDAO[User] {
+
+  import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.Awaitable
   // the base query for the Users table
   lazy val users = TableQuery[UserTable]
   //val db = Database.forConfig("pgtest")
@@ -81,23 +86,64 @@ object UserDAO extends TableQuery(new UserTable(_)) with BaseDAO {
   def findById = users.findBy(_.id)
 
   def getById(id: Int): Option[User] =
-    Await.result(db.run(users.filter(_.id === id).result.headOption), Duration.Inf)
+    exec(users.filter(_.id === id).result.headOption)
 
   def findUserByName(userName: String) :Option[User] =
     exec[Option[User]](users.filter(_.name === userName).result.headOption)
 
   // gibt alle User in einer soriteren Liste zurueck
-  def getAll(): Future[List[User]] = execImmediate(users.sortBy(_.id).to[List].result)
-  //def getAll(): List[User] = Await.result(db.run(users.sortBy(_.id).to[List].result), Duration.Inf)
+  //def getAll(): Future[List[User]] = execImmediate(users.sortBy(_.id).to[List].result)
+  def getAll():  Future[List[User]] = execImmediate(users.sortBy(_.id).to[List].result)
+  def getAllSynchron(): List[User] = exec(users.sortBy(_.id).to[List].result)
 
   //def getAll(): Set[User] = Await.result(db.run(users.sortBy(_.id).to[Set].result), Duration.Inf)
   //def getAll(): Unit = Await.result(db.run(DBIO.seq(users.result)), Duration.Inf)
   //def getAll(): Unit = Await.result(db.run(DBIO.seq(users.result.map(println))), Duration.Inf)
   //def getAll(): Future[Set[User]] = db.run(users.to[Set].result)
 
-  def countUsers(): Int = Await.result(db.run(users.length.result), Duration.Inf)
+  def countUsers(): Int = exec(users.length.result)
 
   //def countUsers(): Future[Int] =db.run(users.length.result)
+
+  //override
+  //def insert(u: User): Future[Unit] = insert(u)
+  def insert(u: User): Unit = Await.result(db.run(users += u).map( _ => ()), Duration.Inf)
+  //def insert(u: User): Unit = Await.result(insert(u), Duration.Inf)
+
+
+  //def update(u: User): Unit = Await.result(db.run(users.filter(_.name === "James Bond").map(_.name).update("Bond James")),Duration.Inf)
+  def update(u: User): Future[Int] = {
+    val userToUpdate = users.filter(_.name === "James Bond").map(_.name).update("Bond James")
+    val stmt = userToUpdate.statements
+    println(s"update UserStmt: $stmt")
+    execImmediate(userToUpdate)
+  }
+
+  def deleteUserByName(userName: String): Future[Int] = {
+    val removeUser: DBIO[Int] = users.filter(_.name === userName).delete
+    val stmt = users.filter(_.name === userName).delete.statements
+    println(s"deleteUserByName-Stmt: $stmt")
+    execImmediate(removeUser)
+    //val f: Future[Int] = execImmediate(removeUser)
+    //f.value.get.get
+//    f.result(Duration.Inf)(Await.ready(f))
+
+/*
+    f.onComplete {
+      case s =>  s.get
+      case _ => -1
+    }
+*/
+/*
+    f.onComplete{
+      case SuccessAction() => 1
+      case _ => -1
+      //case FailureAction(e) => -1
+    }
+*/
+  }
+
+
 }
 
 

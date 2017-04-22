@@ -5,7 +5,9 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
+import scala.util.{Failure, Success}
 //import slick.driver.HsqldbDriver.api._
 import slick.jdbc.meta._
 
@@ -41,8 +43,10 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
     assert(tables.count(_.name.name.equalsIgnoreCase("users")) == 1)
   }
 
-  test("Inserting a Users should works") {
-    val insertCount = UserService.getAllUsers.value.size
+  test("Querying a User (not existing) should works") {
+    import scala.concurrent.ExecutionContext.Implicits.global
+
+    val insertCount = Await.result(UserService.getAllUsers, 1.seconds).size
     assert(insertCount == 5)
 
     val hal42: Option[User] = UserService.getUserById(1)
@@ -60,13 +64,47 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
     val norma: User = UserService.getUserByName("Norma Jean").getOrElse(User.create("Kasperl", Some(99)))
     assert(norma.name == "Norma Jean")
 
-    val allUsers: Future[List[User]] = UserService.getAllUsers
-    assert(allUsers.value.size >= 5)
+//    val allUsers: Future[List[User]] = UserService.getAllUsers
+//    assert(allUsers.value.size >= 5)
 
 //    for ( u:User <- allUsers.value) {
 //      println("User-Id: " + u.id.get + ", Name: " + u.name)
 //    }
   }
-  
+
+  test("asynchron Query Users should work") {
+    val insertCount = Await.result(UserService.getAllUsers, 1.seconds).size
+    assert(insertCount == 5)
+  }
+
+  test("synchron Query Users should work") {
+    val insertCount = UserService.getAllUsersSynchron.size
+    assert(insertCount == 5)
+  }
+
+  test("Insert/Update/Delete a User should works in async-Mode") {
+    var allUsers: List[User] = Await.result(UserService.getAllUsers, 1.seconds)
+
+    val newUser = User.create("James Bond", Some(7))
+
+    UserService.addUser(newUser)
+    allUsers = Await.result(UserService.getAllUsers, 1.seconds)
+    assert(allUsers.size == 6)
+
+    UserService.updateUser(newUser)
+
+    val delSuccess = UserService.deleteUserByName("Bond James")
+    //val delSuccess = UserService.deleteUserByName(newUser.name: String)
+    allUsers = Await.result(UserService.getAllUsers, 1.seconds)
+    assert(allUsers.size == 5)
+    assert(delSuccess.value == Some(Success(1)))
+
+
+    val delError = UserService.deleteUserByName(newUser.name: String)
+    allUsers = Await.result(UserService.getAllUsers, 1.seconds)
+    assert(allUsers.size == 5)
+    assert(delError.value.contains(Success(0)))
+  }
+
   after { db.close }
 }

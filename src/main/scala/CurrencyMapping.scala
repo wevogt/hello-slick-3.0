@@ -50,8 +50,8 @@ object CurrencyMapping extends App {
           .filter(_.startDate <= today)
           .filter(_.endDate isEmpty)
           //.filter(_.decimalDigits >= 1)
-          .sortBy(_.objectidc.desc)
-          .map(_.objectidc)
+          .sortBy(_.isoCode3.desc)
+          .map(_.isoCode3)
 
       println("Statement: \n" +
         currenciesQuery.result.statements)
@@ -72,8 +72,8 @@ object CurrencyMapping extends App {
           .filter(_.startDate <= today)
           .filter(_.endDate isEmpty)
           //          .filter( t => Some(t.endDate) > today || t.endDate === null)
-          .sortBy(_.objectidc)
-          .map(c => c.objectidc)
+          .sortBy(_.isoCode3)
+          .map(c => c.isoCode3)
 
       println("Statement: \n" +
         currenciesCountQuery.result.statements)
@@ -85,7 +85,7 @@ object CurrencyMapping extends App {
     }.flatMap { _ =>
       println("\nCurrency and Currencyname:")
 
-      val currencyDetailQuery = currencies.filter(t => t.fxType === dailyRate || t.fxType === monthlyRate).sortBy(_.objectidc).map(c => (c.objectidc, c.textDE))
+      val currencyDetailQuery = currencies.filter(t => t.fxType === dailyRate || t.fxType === monthlyRate).sortBy(_.isoCode3).map(c => (c.isoCode3, c.nameDE))
 
       println("Statement: \n" + currencyDetailQuery.result.statements)
 
@@ -100,7 +100,7 @@ object CurrencyMapping extends App {
     }.flatMap { _ =>
       println(s"\n$showMaxRecords FxRates-ISO-Codes:")
       //val ratesQuery = fxrates.filter(_.fxtype==='D').sortBy(_.isoCode).sortBy(_.fxdate.asc).take(50).map(_)
-      val ratesQuery = fxrates.filter(_.fxtype=== dailyRate).sortBy(_.isoCode).sortBy(_.fxdate.asc).take(showMaxRecords).map(_.isoCode)
+      val ratesQuery = fxrates.filter(_.fxtype=== dailyRate).sortBy(_.isoCode3).sortBy(_.fxdate.asc).take(showMaxRecords).map(_.isoCode3)
 
       println("Statement: \n" +
         ratesQuery.result.statements)
@@ -110,7 +110,7 @@ object CurrencyMapping extends App {
     }.flatMap { _ =>
       println(s"\n$showMaxRecords FxRates (ohne Stream):")
 //      val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(r => (r.isoCode, r.rate, r.fxdate))
-      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(showMaxRecords).map(r => (r.isoCode, r.rate, r.fxdate))
+      val allRatesQuery = fxrates.sortBy(_.isoCode3).sortBy(_.fxdate.desc).take(showMaxRecords).map(r => (r.isoCode3, r.fxrate, r.fxdate))
 
       println("Statement: \n" +
         allRatesQuery.result.statements)
@@ -120,7 +120,7 @@ object CurrencyMapping extends App {
     }.flatMap { _ =>
       println(s"\n$showMaxRecords FxRates (mit Streaming db.stream(...)):")
       //val allRatesQuery = fxrates.filter(_.fxtype === 'D').sortBy(_.isoCode).sortBy(_.fxdate.desc).take(50).map(_)
-      val allRatesQuery = fxrates.filter(_.isoCode === "USD").take(showMaxRecords).sortBy(_.isoCode).sortBy(_.fxdate.desc).map(r => (r.isoCode, r.rate, r.fxtype, r.fxdate))
+      val allRatesQuery = fxrates.filter(_.isoCode3 === "USD").take(showMaxRecords).sortBy(_.isoCode3).sortBy(_.fxdate.desc).map(r => (r.isoCode3, r.fxrate, r.fxtype, r.fxdate))
       //      val allRatesQuery = fxrates.sortBy(_.isoCode).sortBy(_.fxdate.desc).take(90).map(_)
 
       println("Statement: \n" +
