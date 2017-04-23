@@ -2,7 +2,14 @@ package model.masterdata
 
 import java.sql.Date
 
+import org.h2.jdbc.JdbcSQLException
+import org.hsqldb.jdbc.JDBCSQLXML
+import slick.dbio.Effect
 import slick.jdbc.H2Profile.api._
+import slick.lifted.ForeignKeyQuery
+import slick.sql.FixedSqlAction
+
+import scala.concurrent.Future
 //import slick.jdbc.PostgresProfile.api._
 
 
@@ -21,6 +28,10 @@ class FxRates(tag: Tag) extends Table[FxRate](tag, "FX_RATES") {
   def fxrate = column[Double]("FXRATE")
 
   def * = (fxtype, fxdate, isoCode3, fxrate) <> (FxRate.tupled, FxRate.unapply)
+
+  // A foreign key relation that can be navigated to create a join
+  def isoCodeFK: ForeignKeyQuery[Currencies, Currency] =
+    foreignKey("ISO_CODE3_FK", isoCode3, TableQuery[Currencies])(_.isoCode3)
 }
 
 
@@ -32,10 +43,29 @@ object FxRateDAO extends TableQuery(new FxRates(_)) with BaseDAO[FxRate] {
 
   lazy val fxrates = TableQuery[FxRates]
 
-  def insert(rate: FxRate): Unit = Await.result(db.run(fxrates += rate).map( _ => ()), Duration.Inf)
+  // ToDo Fehlerbehandlung bei ForeignKey-Verletzung, Return Anzahl inserted Datensätze
+  def insert(rate: FxRate): Unit = {
+    var rowCount: Int = 0
+    try {
+      Await.result(db.run(fxrates += rate).map(_ => ()), Duration.Inf)
+//      val insert: FixedSqlAction[Int, NoStream, Effect.Write] = fxrates += rate
+//      val result: Future[Int] = db.run(insert)
+//      rowCount = Await.result(result, Duration.Inf)
+    } catch {
+      case ref :JdbcSQLException => {
+        println(s"Fatal Error, insert FxRateDAO:\n${ref.getLocalizedMessage}")
+        //throw ref
+      }
+      case _: Throwable => println("unknown Exception thrown")
+    }
+    finally {
+      return rowCount
+    }
+  }
 
   def countAll: Int = exec(fxrates.length.result)
   def count(count: Int): Int = exec(fxrates.take(count).length.result)
 
   def getFxRatesByIsoCode3(isocode3: String): Seq[FxRate] = exec[Seq[FxRate]](fxrates.filter(_.isoCode3 === isocode3).result)
+
 }
