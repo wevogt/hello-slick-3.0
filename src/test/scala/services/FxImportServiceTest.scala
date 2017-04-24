@@ -45,14 +45,14 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures
   test("ETL-Service FxImportService shoud works") {
 
     val importFile = "Great_FX_Rates.csv"
-    val importPath = "/Users/werner/Workspace_Scala/hello-slick-3.0/src/main/scala/utils/etl/importdata/"
+    val importPath = "./src/main/scala/utils/etl/importdata/"
 
     FxImportService.readFile(importPath.concat(importFile))
 
     assert(fxrates.take(100).toNode.asInstanceOf[Take].count.asInstanceOf[LiteralNode].value == 100)
 
     //val hundredRates: List[FxRate] = fxrates.take(99)
-    assert(FxRateDAO.countAll >= 100000)
+    assert(FxRateDAO.countAll >= 200000)
 
     //FxRateDAO.count(fxrates.take(99))
 

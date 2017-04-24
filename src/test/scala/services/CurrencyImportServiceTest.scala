@@ -45,7 +45,7 @@ class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaF
   test("ETL-Service CurrencyImportService shoud works") {
 
     val importFile = "Great_Currency.csv"
-    val importPath = "/Users/werner/Workspace_Scala/hello-slick-3.0/src/main/scala/utils/etl/importdata/"
+    val importPath = "./src/main/scala/utils/etl/importdata/"
 
     CurrencyImportService.readFile(importPath.concat(importFile))
 
