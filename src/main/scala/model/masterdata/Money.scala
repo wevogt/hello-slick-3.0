@@ -1,5 +1,6 @@
 package model.masterdata
 
+import java.math.MathContext
 import java.sql.Date
 
 /**
@@ -20,7 +21,8 @@ case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EU
   def + (m :Money) = Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
   def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
 
-  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal), curr)
+//  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal), curr)
+  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal).round(MathContext), curr)
 
   // ToDo weitere Operatoren wie % und autom. Umrechnung bei unterschiedl. Waehrungen
 
