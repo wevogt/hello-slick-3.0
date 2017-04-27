@@ -3,13 +3,8 @@ package model.masterdata
 import java.sql.Date
 
 import org.h2.jdbc.JdbcSQLException
-import org.hsqldb.jdbc.JDBCSQLXML
-import slick.dbio.Effect
 import slick.jdbc.H2Profile.api._
 import slick.lifted.ForeignKeyQuery
-import slick.sql.FixedSqlAction
-
-import scala.concurrent.Future
 //import slick.jdbc.PostgresProfile.api._
 
 
@@ -37,8 +32,8 @@ class FxRates(tag: Tag) extends Table[FxRate](tag, "FX_RATES") {
 
 object FxRateDAO extends TableQuery(new FxRates(_)) with BaseDAO[FxRate] {
   import scala.concurrent.Await
-  import scala.concurrent.duration.Duration
   import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.duration.Duration
 
 
   lazy val fxrates = TableQuery[FxRates]
@@ -68,4 +63,10 @@ object FxRateDAO extends TableQuery(new FxRates(_)) with BaseDAO[FxRate] {
 
   def getFxRatesByIsoCode3(isocode3: String): Seq[FxRate] = exec[Seq[FxRate]](fxrates.filter(_.isoCode3 === isocode3).result)
 
+/*
+  // ToDo aktuellster Umrechnungskurs
+  def getLatestFxRate(isocode3: String): Option[FxRate] = exec[Option[FxRate]](fxrates.filter(_.isoCode3 === isocode3).filter(_.fxdate >= Some(maxFxDate(isocode3).result)).map(_.fxrate))
+
+  def maxFxDate(isocode3: String): Rep[Option[Date]] = exec[Rep[Option[Date]]](fxrates.filter(_.isoCode3 === isocode3).map(_.fxdate).max)
+*/
 }

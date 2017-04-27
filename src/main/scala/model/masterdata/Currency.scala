@@ -14,7 +14,15 @@ import slick.jdbc.PostgresProfile.api._
 case class Currency(isocode: String, decimalDigits: Int, nameDE: String, nameEN: String, nameES: String, startDate: Date, endDate: Option[Date], fxType: Char ) {
 
 //  val defaultCurrency = new Currency("EUR", 2, "?", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D')
+
+//ToDo  def getLatestRate(targetCurrency: Currency): Double = FxRateDAO.getLatestFxRate(targetCurrency.isocode).get.fxrate
 }
+
+/*
+object Currency {
+  def getLatestRate(targetCurrency: Currency): Double = FxRateDAO.getLatestFxRate(targetCurrency.isocode).get.fxrate
+}
+*/
 
 class Currencies(tag: Tag) extends Table[Currency](tag, "CURRENCY") {
   def isoCode3 = column[String]("ISO_CODE3")

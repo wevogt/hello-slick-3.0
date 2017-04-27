@@ -1,7 +1,6 @@
 package model.masterdata
 
 import java.math.MathContext
-import java.sql.Date
 
 /**
  * Created by werner on 30.08.15.
@@ -21,10 +20,14 @@ case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EU
   def + (m :Money) = Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
   def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
 
+  //ToDo wann soll gerundet werden, z.B. Zwischeergenisse nicht, wie erkennt man ein Endergebnis ?
 //  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal), curr)
   def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal).round(MathContext), curr)
 
+/*
   // ToDo weitere Operatoren wie % und autom. Umrechnung bei unterschiedl. Waehrungen
+  def convertTo (targetCurrency: Currency) :Money = amount * targetCurrency.getLatestRate(targetCurrency.isocode)
+*/
 
   //override def toString :String => println(f"$amount%.2f $curr.objectidc")
 
