@@ -17,12 +17,14 @@ case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EU
   val cformat = java.text.NumberFormat.getCurrencyInstance
   val format = java.text.NumberFormat.getNumberInstance
 
+  val mc :MathContext = java.math.MathContext.DECIMAL64
+
   def + (m :Money) = Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
   def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
 
-  //ToDo wann soll gerundet werden, z.B. Zwischeergenisse nicht, wie erkennt man ein Endergebnis ?
+  //ToDo wann soll gerundet werden, z.B. Zwischenergebnisse nicht, wie erkennt man ein Endergebnis ?
 //  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal), curr)
-  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal).round(MathContext), curr)
+  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal).round(mc), curr)
 
 /*
   // ToDo weitere Operatoren wie % und autom. Umrechnung bei unterschiedl. Waehrungen

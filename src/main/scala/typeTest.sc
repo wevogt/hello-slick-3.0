@@ -34,8 +34,8 @@ val mixAEDDollar = Money(1.222, AED)
 (nullEuro + fuenf + hundert + zehnMio) * -2
 val fraction = hundert * 3.14155712987654
 fraction.amount
-hundred * 3.141571
-hundert * 3.141571
+hundred * 3.1415571
+hundert * 3.1415571
 
 hundert * -0.8
 hundert - minusFuenf
