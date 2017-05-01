@@ -2,9 +2,11 @@ package model.masterdata
 
 import java.sql.Date
 
+import scala.concurrent.Future
+
 //import slick.profile.SqlProfile.ColumnOption.Nullable
-//import slick.jdbc.H2Profile.api._
-import slick.jdbc.PostgresProfile.api._
+import slick.jdbc.H2Profile.api._
+//import slick.jdbc.PostgresProfile.api._
 
 /**
  * Created by werner on 09.06.15.
@@ -51,7 +53,8 @@ object CurrencyDAO extends TableQuery(new Currencies(_)) with BaseDAO[Currency] 
   def countAll: Int = exec(currencies.length.result)
   def count(count: Int): Int = exec(currencies.take(count).length.result)
 
-  def getCurrencyByIsoCode3(isocode: String): Seq[Currency] = exec[Seq[Currency]](currencies.filter(_.isoCode3 === isocode).result)
+  def getCurrencyByIsoCode3(isocode: String): Currency = exec[Currency](currencies.filter(_.isoCode3 === isocode).result.head)
+  def getActiveCurrencyByIsoCode3(isocode: String): Option[Currency] = exec[Option[Currency]](currencies.filter(_.isoCode3 === isocode).filter(_.endDate > new java.sql.Date(System.currentTimeMillis())).result.headOption)
 
   def getInActiveCurrencies(): Seq[Currency] = exec[Seq[Currency]](currencies.filter(_.endDate < new java.sql.Date(System.currentTimeMillis())).result)
 }

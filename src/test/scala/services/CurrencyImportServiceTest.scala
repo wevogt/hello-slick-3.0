@@ -62,4 +62,10 @@ class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaF
     assert(currencyDAO.getInActiveCurrencies().size >= 10)
   }
 
+  test("find active/inactive Currencies should work") {
+
+    assert(currencyDAO.getActiveCurrencyByIsoCode3("USD").get.isocode === "USD")
+    // inactive currency TMM
+    assert(currencyDAO.getActiveCurrencyByIsoCode3("TMM") == None)
+  }
 }
