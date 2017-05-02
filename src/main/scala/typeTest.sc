@@ -22,10 +22,16 @@ types.foreach( _ =='M')
 val EUR = Currency("EUR", 2, "€", "Euro", "euro", today,  None, 'M')
 val USD = Currency("USD", 4, "US$", "Dollar", "Dollar", today,  None, 'M')
 val AED = Currency("AED", 0, "AE$", "AED-Dollar", "AEDDollar", today,  None, 'D')
-val hundert :Money = Money(100.00, EUR)
-val hundred :Money = Money(100, USD)
-val fuenf :Money = Money(5, EUR)
+val hundert: Money = Money(100.00, EUR)
+val hundred: Money = Money(100, USD)
+val fuenf: Money = Money(5, EUR)
+//
+// Test Addition von Money mit unterschiedl. Currency !
+hundert.curr.isocode
+hundred.curr.isocode
 hundert + fuenf
+hundert + hundred
+
 val minusFuenf = Money(-5, EUR)
 hundert + minusFuenf
 val zehnMio = Money(10000000, EUR)
@@ -44,6 +50,7 @@ minusFuenf.amount
 // Defaults per Money-Konstruktor :-)
 val defaultMoney = Money()
 val defaultUSD = Money(curr=USD)
+zehnMio + fuenf
 
 object UnifiedTypes extends App {
   val set = new mutable.LinkedHashSet[Any]

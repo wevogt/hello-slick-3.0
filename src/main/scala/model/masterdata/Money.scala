@@ -9,7 +9,7 @@ import java.math.MathContext
 // ToDo Klarheit ueber ID, Symbol und sprachabhaengige Texte/Darstellung
 
 // mit spez. Konstruktor der als Default 0,00 € zulaesst
-case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EUR", 2, "€", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
+case class Money (var amount :BigDecimal = 0,  curr :Currency = Currency("EUR", 2, "€", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
 
   val locale = new java.util.Locale("de", "DE")
   val formatter = java.text.NumberFormat.getCurrencyInstance
@@ -19,7 +19,19 @@ case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EU
 
   val mathContext :MathContext = java.math.MathContext.DECIMAL64
 
-  def + (m :Money) = Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
+  // ToDo wieseo geht die Prüfung auf Gleichheit der Currency.IsoCode3 noch nicht ?
+  def + (m :Money) :Money = {
+    //require(m.curr == curr, throw new RuntimeException() )  // nur Money gleichem IsoCode3 addieren !
+    assert(m.curr == curr, println("for adding Moneys, currencies have to be equal")) // nur Money gleichem IsoCode3 addieren !
+    Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
+    //    if (curr == m.curr) {
+    //      Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
+    //    } else {
+    //      throw new RuntimeException()
+    //    }
+    //  } ensuring(m.curr == curr, this)
+  } ensuring(m.curr == curr)
+
   def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
 
   //ToDo wann soll gerundet werden, z.B. Zwischenergebnisse nicht, wie erkennt man ein Endergebnis ?
@@ -29,6 +41,9 @@ case class Money (var amount :BigDecimal = 0,  curr :Currency = new Currency("EU
 /*
   // ToDo weitere Operatoren wie % und autom. Umrechnung bei unterschiedl. Waehrungen
   def convertTo (targetCurrency: Currency) :Money = amount * targetCurrency.getLatestRate(targetCurrency.isocode)
+  // Money mit "alten" Currency(FxRates) neu mit aktuellstem Kurs berechnen
+  // amount / old.Rate * new.Rate
+  def reCalc : Money = amount / ???? * ????
 */
 
   //override def toString :String => println(f"$amount%.2f $curr.objectidc")
