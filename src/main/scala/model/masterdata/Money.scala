@@ -19,18 +19,16 @@ case class Money (var amount :BigDecimal = 0,  curr :Currency = Currency("EUR", 
 
   val mathContext :MathContext = java.math.MathContext.DECIMAL64
 
-  // ToDo wieseo geht die Prüfung auf Gleichheit der Currency.IsoCode3 noch nicht ?
   def + (m :Money) :Money = {
     //require(m.curr == curr, throw new RuntimeException() )  // nur Money gleichem IsoCode3 addieren !
-    assert(m.curr == curr, println("for adding Moneys, currencies have to be equal")) // nur Money gleichem IsoCode3 addieren !
-    Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
-    //    if (curr == m.curr) {
-    //      Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
-    //    } else {
-    //      throw new RuntimeException()
-    //    }
-    //  } ensuring(m.curr == curr, this)
-  } ensuring(m.curr == curr)
+//    assert(m.curr == curr, println("for adding Moneys, currencies have to be equal")) // nur Money gleichem IsoCode3 addieren !
+//    Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
+    if (curr == m.curr) {
+      Money(amount.bigDecimal.add(m.amount.bigDecimal), curr)
+    } else {
+     throw new RuntimeException()
+    }
+  }
 
   def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
 
