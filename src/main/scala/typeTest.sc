@@ -25,6 +25,8 @@ val AED = Currency("AED", 0, "AE$", "AED-Dollar", "AEDDollar", today,  None, 'D'
 val hundert: Money = Money(100.00, EUR)
 val hundred: Money = Money(100, USD)
 val fuenf: Money = Money(5, EUR)
+val nuull: Money = Money( curr = EUR)
+val nul: Money = Money(amount = 0)
 //
 // Test Addition von Money mit unterschiedl. Currency !
 hundert.curr.isocode
