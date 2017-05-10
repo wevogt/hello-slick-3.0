@@ -25,19 +25,19 @@ val AED = Currency("AED", 0, "AE$", "AED-Dollar", "AEDDollar", today,  None, 'D'
 val hundert: Money = Money(100.00, EUR)
 val hundred: Money = Money(100, USD)
 val fuenf: Money = Money(5, EUR)
-val nuull: Money = Money( curr = EUR)
-val nul: Money = Money(amount = 0)
+val nullEur: Money = Money(curr=EUR)
+val zero: Money = Money(amount=0)
 //
 // Test Addition von Money mit unterschiedl. Currency !
 hundert.curr.isocode
 hundred.curr.isocode
 hundert + fuenf
-hundert + hundred
+//hundert + hundred
 
 val minusFuenf = Money(-5, EUR)
 hundert + minusFuenf
 val zehnMio = Money(10000000, EUR)
-val nullEuro = Money(curr=USD)
+val nullEuro = Money(curr=EUR)
 val mixAEDDollar = Money(1.222, AED)
 (nullEuro + fuenf + hundert + zehnMio) * -2
 val fraction = hundert * 3.14155712987654

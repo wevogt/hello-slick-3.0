@@ -9,7 +9,7 @@ import java.math.MathContext
 // ToDo Klarheit ueber ID, Symbol und sprachabhaengige Texte/Darstellung
 
 // mit spez. Konstruktor der als Default 0,00 € zulaesst
-case class Money (var amount :BigDecimal = 0, var curr :Currency = Currency("EUR", 2, "€", "Euro", "euro", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
+case class Money (val amount :BigDecimal = 0, val curr :Currency = Currency("EUR", 2, "€", "Euro", "euro", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
 
   val locale = new java.util.Locale("de", "DE")
   val formatter = java.text.NumberFormat.getCurrencyInstance
@@ -30,10 +30,12 @@ case class Money (var amount :BigDecimal = 0, var curr :Currency = Currency("EUR
 //    }
   }
 
-  def - (m :Money) = Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
+  def - (m :Money) = {
+    assert(m.curr == curr, println("for subtracting Moneys, currencies have to be equal")) // nur Money gleichem IsoCode3 addieren !
+    Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
+  }
 
-  //ToDo wann soll gerundet werden, z.B. Zwischenergebnisse nicht, wie erkennt man ein Endergebnis ?
-//  def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal), curr)
+  //ToDo so spät wie mögl. runden, d.h. Zwischenergebnisse nicht; wie erkennt man ein Endergebnis ?
   def * (factor :BigDecimal ) = Money(amount.bigDecimal.multiply(factor.bigDecimal).round(mathContext), curr)
 
 /*
