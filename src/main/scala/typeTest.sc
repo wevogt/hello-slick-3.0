@@ -26,7 +26,7 @@ val hundert: Money = Money(100.00, EUR)
 val hundred: Money = Money(100, USD)
 val fuenf: Money = Money(5, EUR)
 val nullEur: Money = Money(curr=EUR)
-val zero: Money = Money(amount=0)
+val zero: Money = Money(amount=0, EUR)
 //
 // Test Addition von Money mit unterschiedl. Currency !
 hundert.curr.isocode
@@ -53,6 +53,14 @@ minusFuenf.amount
 val defaultMoney = Money()
 val defaultUSD = Money(curr=USD)
 zehnMio + fuenf
+
+// Summe über eine Liste von Money-Objekte, sum-Function
+val mList = List(zero, fuenf, hundert, zehnMio)
+mList.head + mList.tail.head
+mList.reduceLeft(_ + _)
+hundert.sum(mList)
+hundred.sum(mList)
+
 
 object UnifiedTypes extends App {
   val set = new mutable.LinkedHashSet[Any]

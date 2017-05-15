@@ -30,6 +30,11 @@ case class Money (val amount :BigDecimal = 0, val curr :Currency = Currency("EUR
 //    }
   }
 
+  /** Summe ueber eine Liste von Money-Ojekten hinzuaddieren **/
+  def sum (ml :List[Money]) :Money = {
+    this + ml.reduceLeft(_ + _)
+  }
+
   def - (m :Money) = {
     assert(m.curr == curr, println("for subtracting Moneys, currencies have to be equal")) // nur Money gleichem IsoCode3 addieren !
     Money(amount.bigDecimal.subtract(m.amount.bigDecimal), curr)
