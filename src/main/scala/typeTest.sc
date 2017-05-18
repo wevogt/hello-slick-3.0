@@ -42,8 +42,9 @@ val mixAEDDollar = Money(1.222, AED)
 (nullEuro + fuenf + hundert + zehnMio) * -2
 val fraction = hundert * 3.14155712987654
 fraction.amount
-hundred * 3.1415571
+// Unterschiedl. Rundungsmodi bzw. Dezimalstellen der Currencies EUR u. USD
 hundert * 3.1415571
+hundred * 3.1415571
 
 hundert * -0.8
 hundert - minusFuenf
@@ -55,11 +56,13 @@ val defaultUSD = Money(curr=USD)
 zehnMio + fuenf
 
 // Summe über eine Liste von Money-Objekte, sum-Function
-val mList = List(zero, fuenf, hundert, zehnMio)
+val mList = List(zero, fuenf, hundert, hundert, fuenf, minusFuenf, zehnMio)
 mList.head + mList.tail.head
 mList.reduceLeft(_ + _)
+zero.sum(mList)
 hundert.sum(mList)
-hundred.sum(mList)
+// hier wird/soll AssertionError: assertion failed: () geworfen
+//hundred.sum(mList)
 
 
 object UnifiedTypes extends App {
