@@ -37,7 +37,9 @@ object SimpleStringParser extends App {
   val finland = Creator.create[Country]("Finland,4500000,338424")
 
   val usd = Creator.create[FxRateETL]("M,30.12.2015,USD,1.19")       // Trennzeichen ","
-  val amd = Creator.create[FxRateETL] ("M;30.08.02 00:00:00;AMD;549.6396")
+
+  val amdString = "M;30.08.02 00:00:00;AMD;549.6396"
+  val amd = Creator.create[FxRateETL] (amdString)
 
 
   var simpleDateFormat: SimpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
@@ -80,6 +82,8 @@ object SimpleStringParser extends App {
   tmpRecord = tmpRecord.replaceAll("\"","")
   tmpRecord.startsWith("\"")
   println(fxrateParser(tmpRecord))
+
+  println("AMD-Rate \"M;30.08.02 00:00:00;AMD;549.6396\"  to: " + fxrateParser(amdString))
 
   val usd_rate: FxRateETL =  fxrateParser(tmpRecord)
   println(s"USD-Rate = $usd_rate")
