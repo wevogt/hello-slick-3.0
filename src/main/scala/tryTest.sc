@@ -13,6 +13,9 @@ def setConnectionWithBrowser(url :URL): URLConnection = {
 parseURL("http://danielwestheide.com")
 parseURL("garbage").getOrElse("Nothing")
 
+parseURL("https://www.instagram.com/ari_maj/")
+
+
 //val url = parseURL(Console.readLine("URL: ")).getOrElse(
 //new URL("http://duckduckgo.com")
 //)
@@ -42,7 +45,9 @@ import scala.util.Failure
 //getURLContent("http://adultboard.net/threads/met-art-com-niemira-dilawa-02-07-2016.12781") match {
 //getURLContent("http://fapat.me/upload/big/2016/11/30/583e3c59a98f5.jpg") match {
 //getURLContent("http://gif-jpg.com/img-577805f5d3cbc.html") match {
-getURLContent("http://www.danielwestheide.com") match {
+//getURLContent("http://www.danielwestheide.com") match {
+
+getURLContent("http://www.ari-maj.com") match {
   case Success(lines) =>
     lines.foreach(println)
   case Failure(ex) =>
