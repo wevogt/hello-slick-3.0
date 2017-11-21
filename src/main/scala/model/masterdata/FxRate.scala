@@ -38,7 +38,7 @@ object FxRateDAO extends TableQuery(new FxRates(_)) with BaseDAO[FxRate] {
 
   lazy val fxrates = TableQuery[FxRates]
 
-  // ToDo Fehlerbehandlung bei ForeignKey-Verletzung, Return Anzahl inserted Datens‰tze
+  // ToDo Fehlerbehandlung bei ForeignKey-Verletzung, Return Anzahl inserted Datens√§tze
   def insert(rate: FxRate): Unit = {
     var rowCount: Int = 0
     try {
