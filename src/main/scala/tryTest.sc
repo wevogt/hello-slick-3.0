@@ -11,7 +11,7 @@ def setConnectionWithBrowser(url :URL): URLConnection = {
 }
 
 parseURL("http://danielwestheide.com")
-parseURL("garbage")
+parseURL("garbage").getOrElse("Nothing")
 
 //val url = parseURL(Console.readLine("URL: ")).getOrElse(
 //new URL("http://duckduckgo.com")

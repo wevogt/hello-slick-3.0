@@ -9,7 +9,7 @@ import java.math.MathContext
 // ToDo Klarheit ueber ID, Symbol und sprachabhaengige Texte/Darstellung
 
 // mit spez. Konstruktor der als Default 0,00 € zulaesst
-case class Money (val amount :BigDecimal = 0, val curr :Currency = Currency("EUR", 2, "€", "Euro", "euro", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
+case class Money (val amount :BigDecimal = 0, val curr :Currency = new Currency("EUR", 2, "€", "Euro", "euro", new java.sql.Date(System.currentTimeMillis()), None, 'D'))  {
 
   val locale = new java.util.Locale("de", "DE")
   val formatter = java.text.NumberFormat.getCurrencyInstance
