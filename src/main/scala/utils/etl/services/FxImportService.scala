@@ -20,10 +20,10 @@ object FxImportService {
 
   //val doIt = readFile(importPath.concat(importFile))
 
-  def readFile(fileToImport: String): Unit = {
+  def importFile(fileToImport: String): Unit = {
     var cnt: Int = 0
-    var fxRateRead: FxRateETL = new FxRateETL(' ', " ", " ", 0L)
-    var fxRate: FxRate = new FxRate(' ', new java.sql.Date(System.currentTimeMillis()), " ", 0L)
+//    var fxRateRead: FxRateETL = new FxRateETL(' ', " ", " ", 0L)
+//    var fxRate: FxRate = new FxRate(' ', new java.sql.Date(System.currentTimeMillis()), " ", 0L)
 
     try {
       for (line <- Source.fromFile(fileToImport).getLines()) {

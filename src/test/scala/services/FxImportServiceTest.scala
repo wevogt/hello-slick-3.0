@@ -47,7 +47,7 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures
     val importFile = "Great_FX_Rates.csv"
     val importPath = "./src/main/scala/utils/etl/importdata/"
 
-    FxImportService.readFile(importPath.concat(importFile))
+    FxImportService.importFile(importPath.concat(importFile))
 
     assert(fxrates.take(100).toNode.asInstanceOf[Take].count.asInstanceOf[LiteralNode].value == 100)
 
