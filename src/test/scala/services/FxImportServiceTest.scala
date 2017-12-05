@@ -42,7 +42,7 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures
   }
 
 
-  test("ETL-Service FxImportService shoud works") {
+  test("ETL-Service FxImportService should works") {
 
     val importFile = "Great_FX_Rates.csv"
     val importPath = "./src/main/scala/utils/etl/importdata/"
