@@ -1,13 +1,13 @@
 package model.masterdata
 
+import java.sql.SQLException
+
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{BeforeAndAfter, FunSuite}
-import slick.ast.{LiteralNode, Take}
 import slick.jdbc.H2Profile.api._
 import slick.jdbc.meta.MTable
 import slick.lifted.TableQuery
-import utils.etl.services.FxImportService
 
 /**
   * Created by werner on 20.04.17.
@@ -69,7 +69,7 @@ class FxRateDAOTest extends FunSuite with BeforeAndAfter with ScalaFutures {
 
   test("insert a fxrate without existing curreny.iscode3, no existing foreign key, should fail") {
     val fxrateWithoutFK = FxRate('M', new java.sql.Date(System.currentTimeMillis()), "XXX", 1400.20)
-    FxRateDAO.insert(fxrateWithoutFK)
+    assertThrows[SQLException] {FxRateDAO.insert(fxrateWithoutFK)}
     assert(FxRateDAO.getFxRatesByIsoCode3("XXX").size == 0)
   }
 

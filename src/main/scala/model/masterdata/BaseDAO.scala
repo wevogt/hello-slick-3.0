@@ -1,10 +1,9 @@
 package model.masterdata
 
-import slick.basic.DatabasePublisher
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 /**
   * Created by werner on 12.04.17.

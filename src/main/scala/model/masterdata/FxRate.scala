@@ -1,8 +1,8 @@
 package model.masterdata
 
 import java.sql.Date
+import java.sql.SQLException
 
-import org.h2.jdbc.JdbcSQLException
 import slick.jdbc.H2Profile.api._
 import slick.lifted.ForeignKeyQuery
 //import slick.jdbc.PostgresProfile.api._
@@ -38,7 +38,7 @@ object FxRateDAO extends TableQuery(new FxRates(_)) with BaseDAO[FxRate] {
 
   lazy val fxrates = TableQuery[FxRates]
 
-  // ToDo Fehlerbehandlung bei ForeignKey-Verletzung, Return Anzahl inserted Datensätze
+  // ToDo Return Anzahl inserted Datensätze
   def insert(rate: FxRate): Unit = {
     var rowCount: Int = 0
     try {
@@ -47,14 +47,11 @@ object FxRateDAO extends TableQuery(new FxRates(_)) with BaseDAO[FxRate] {
 //      val result: Future[Int] = db.run(insert)
 //      rowCount = Await.result(result, Duration.Inf)
     } catch {
-      case ref :JdbcSQLException => {
+      case ref :SQLException => {
         println(s"Fatal Error, insert FxRateDAO:\n${ref.getLocalizedMessage}")
-        //throw ref
+        throw ref
       }
       case _: Throwable => println("unknown Exception thrown")
-    }
-    finally {
-      return rowCount
     }
   }
 
