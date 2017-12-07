@@ -4,8 +4,8 @@ import java.sql.Date
 import java.sql.SQLException
 
 import slick.jdbc.H2Profile.api._
-import slick.lifted.ForeignKeyQuery
 //import slick.jdbc.PostgresProfile.api._
+import slick.lifted.ForeignKeyQuery
 
 
 /**

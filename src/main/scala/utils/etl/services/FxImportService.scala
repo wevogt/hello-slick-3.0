@@ -14,16 +14,11 @@ import scala.io.Source
 object FxImportService {
 
   val importFile = "Great_FX_Rates.csv"
-  val importPath = "/Users/werner/Workspace_Scala/hello-slick-3.0/src/main/scala/utils/etl/importdata/"
-
   val skipHeaderLines: Int = 1
 
-  //val doIt = readFile(importPath.concat(importFile))
 
   def importFile(fileToImport: String): Unit = {
     var cnt: Int = 0
-//    var fxRateRead: FxRateETL = new FxRateETL(' ', " ", " ", 0L)
-//    var fxRate: FxRate = new FxRate(' ', new java.sql.Date(System.currentTimeMillis()), " ", 0L)
 
     try {
       for (line <- Source.fromFile(fileToImport).getLines()) {
