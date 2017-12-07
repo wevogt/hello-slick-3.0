@@ -2,11 +2,11 @@ name := """hello-slick-3.0"""
 
 /*mainClass in Compile := Some("HelloSlick") */
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 
 libraryDependencies ++= List(
   "com.typesafe.slick" %% "slick" % "3.2.1",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.0",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.1",
 
   "org.scalatest" %% "scalatest" % "3.2.0-SNAP4" % "test",
   "org.scalactic" %% "scalactic" % "3.0.1" % "test",
