@@ -43,7 +43,7 @@ class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaF
     val tables = db.run(MTable.getTables).futureValue
 
     Thread.sleep(1000)
-    result(tables, Duration.Inf)
+//    result(tables, Duration.Inf)
     assert(tables.size >= 0)
 //    assert(tables.count(_.name.name.equalsIgnoreCase("currency")) == 1)
   }
