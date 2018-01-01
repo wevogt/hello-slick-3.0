@@ -5,8 +5,9 @@ import java.sql.Date
 import scala.concurrent.Future
 
 //import slick.profile.SqlProfile.ColumnOption.Nullable
-import slick.jdbc.H2Profile.api._
+//import slick.jdbc.H2Profile.api._
 //import slick.jdbc.PostgresProfile.api._
+import slick.jdbc.OracleProfile.api._
 
 /**
  * Created by werner on 09.06.15.
@@ -17,7 +18,7 @@ case class Currency(isocode: String, decimalDigits: Int, nameDE: String, nameEN:
 
 //  val defaultCurrency = new Currency("EUR", 2, "?", "EUR", "EUR", new java.sql.Date(System.currentTimeMillis()), None, 'D')
 
-//ToDo  def getLatestRate(targetCurrency: Currency): Double = FxRateDAO.getLatestFxRate(targetCurrency.isocode).get.fxrate
+// ToDo  def getLatestRate(targetCurrency: Currency): Double = FxRateDAO.getLatestFxRate(targetCurrency.isocode).get.fxrate
 }
 
 /*

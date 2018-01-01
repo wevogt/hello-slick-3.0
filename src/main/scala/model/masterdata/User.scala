@@ -1,13 +1,14 @@
 package model.masterdata
 
 import slick.dbio.{FailureAction, SuccessAction}
-import slick.jdbc.H2Profile.api._
+//import slick.jdbc.H2Profile.api._
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.util.Success
+import slick.jdbc.OracleProfile.api._
 
 //import slick.driver.PostgresDriver.api._
 
@@ -40,7 +41,8 @@ class UserTable(tag: Tag) extends Table[User](tag, "USERS") {
   def name = column[String]("NAME", NotNull)
 
   // Auto Increment the id primary key column
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  //def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("ID", O.PrimaryKey) // wg. Oracle und autoimcrement
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
   // column values to / from a User
