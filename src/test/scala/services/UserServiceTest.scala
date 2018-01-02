@@ -5,15 +5,14 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.util.Success
 //import slick.driver.HsqldbDriver.api._
+import model.masterdata._
 import slick.jdbc.meta._
 
-import model.masterdata._
-
-class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
+class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
   var db: Database = _
@@ -44,7 +43,6 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   }
 
   test("Querying a User (not existing) should works") {
-    import scala.concurrent.ExecutionContext.Implicits.global
 
     val insertCount = Await.result(UserService.getAllUsers, 1.seconds).size
     assert(insertCount == 5)
@@ -106,5 +104,10 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
     assert(delError.value.contains(Success(0)))
   }
 
-  after { db.close }
+  override def afterAll() {
+    printf("... test's finished, cleanup DB")
+    db.io(users.schema.drop)
+    db.close
+  }
+
 }
