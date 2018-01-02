@@ -8,15 +8,16 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-import slick.jdbc.H2Profile.api._
+//import slick.jdbc.H2Profile.api._
 //import slick.jdbc.PostgresProfile.api._
+import slick.jdbc.OracleProfile.api._
 
 object CurrencyMapping extends App {
 
   val fxrates = TableQuery[FxRates]
   val currencies = TableQuery[Currencies]
 
-  val db = Database.forConfig("h2mem1")
+  val db = Database.forConfig("slick-oracle")
   //val db = Database.forConfig("pgtest")
 
   /*

@@ -3,8 +3,9 @@ package model.masterdata
 import java.sql.Date
 import java.sql.SQLException
 
-import slick.jdbc.H2Profile.api._
+//import slick.jdbc.H2Profile.api._
 //import slick.jdbc.PostgresProfile.api._
+import slick.jdbc.OracleProfile.api._
 import slick.lifted.ForeignKeyQuery
 
 

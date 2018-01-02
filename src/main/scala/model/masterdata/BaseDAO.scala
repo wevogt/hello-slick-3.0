@@ -1,6 +1,7 @@
 package model.masterdata
 
-import slick.jdbc.H2Profile.api._
+//import slick.jdbc.H2Profile.api._
+import slick.jdbc.OracleProfile.api._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -10,7 +11,7 @@ import scala.concurrent.{Await, Future}
   */
 trait BaseDAO [T] {
 
-  lazy val db = Database.forConfig("h2mem1")
+  lazy val db = Database.forConfig("slick-oracle")
   val stmtTimeout: Duration = 1.seconds
 
 
