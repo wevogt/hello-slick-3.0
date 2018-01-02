@@ -27,6 +27,8 @@ object FxImportService {
         }
         cnt = cnt + 1
       }
+      cnt = cnt - skipHeaderLines
+      println(s"\n... FxImportService, $cnt lines reading importfile")
     } catch {
       case ex: Exception => println(s"Bummer, an exception happened:\n $ex")
     }
