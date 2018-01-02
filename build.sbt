@@ -1,3 +1,7 @@
+/* wg. z_trail.Futures.Prog_3 */
+fork in run := true
+javaOptions += "-Dscala.concurrent.context.maxThreads=1"
+
 name := """hello-slick-3.0"""
 
 /*mainClass in Compile := Some("HelloSlick") */
@@ -23,7 +27,5 @@ libraryDependencies ++= List(
   "javax.mail" % "mail" % "1.4.7"
 
 )
-
-
 
 scalacOptions ++= Seq("-deprecation", "-feature")
