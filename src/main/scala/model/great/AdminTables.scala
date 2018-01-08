@@ -1,7 +1,5 @@
 package model.great
 
-import model.generator.GreatReverseEngineered
-
 object AdminTables extends {
   val profile = slick.jdbc.OracleProfile
 } with AdminTables
@@ -19,6 +17,7 @@ trait AdminTables {
   import model.great.MasterDataTables._
   import model.great.CommonTables._
   import model.great.BackOfficeTables._
+  import model.great.GuaranteeAllTables._
 
 
   /** DDL for all tables. Call .create to execute. */
