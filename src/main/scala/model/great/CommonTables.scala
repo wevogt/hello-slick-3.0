@@ -11,14 +11,14 @@ trait CommonTables {
   import slick.model.ForeignKeyAction
   // NOTE: GetResult mappers for plain SQL are only generated for tables where Slick knows how to map the types of all columns.
   import model.great.AdminTables._
-  import model.great.GuaranteeAllTables._
+  import model.great.GuaranteeTables._
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
   lazy val schema: profile.SchemaDescription = Array(ArchivingBarcode.schema, ArchivingIxosResult.schema, ArchivingMetadata.schema, ArchivingTransported.schema, AuditLog.schema, BatchDriver.schema, BatchJobDescription.schema, BatchJobRun.schema, Enterprise.schema, GmsState.schema, GmsTransfer.schema, GmsTransferEntity.schema, Import.schema, InternatTexts.schema, MessageAttachment.schema, MessageEvent.schema, MessageInfo.schema, OpenftParameter.schema, ReminderRun.schema, ServerstatsSnapshot.schema, UniqueIds.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
-  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; später moechte ich hier z.B. "COM" für Common setzten um in der DB eine Struktur zu erhalten
+  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" fuer Common setzten um in der DB eine Struktur zu erhalten
   val tablePrefix = "GREAT_"
 
 
@@ -54,7 +54,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table AuditLog */
   lazy val AuditLog = new TableQuery(tag => new AuditLog(tag))
 
-  /** Entity class storing rows of table GreatBatchDriver
+  /** Entity class storing rows of table BatchDriver
     *  @param schedulerDelaySeconds Database column SCHEDULER_DELAY_SECONDS SqlType(NUMBER)
     *  @param workerDelaySeconds Database column WORKER_DELAY_SECONDS SqlType(NUMBER)
     *  @param notifyingPerEmail Database column NOTIFYING_PER_EMAIL SqlType(CHAR) */
@@ -78,7 +78,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table BatchDriver */
   lazy val BatchDriver = new TableQuery(tag => new BatchDriver(tag))
 
-  /** Entity class storing rows of table GreatBatchJobDescription
+  /** Entity class storing rows of table BatchJobDescription
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -140,7 +140,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table BatchJobDescription */
   lazy val BatchJobDescription = new TableQuery(tag => new BatchJobDescription(tag))
 
-  /** Entity class storing rows of table GreatBatchJobRun
+  /** Entity class storing rows of table BatchJobRun
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param jobsName Database column JOBS_NAME SqlType(VARCHAR2), Length(10,true)
     *  @param startDate Database column START_DATE SqlType(DATE)
@@ -185,7 +185,7 @@ trait CommonTables {
   lazy val BatchJobRun = new TableQuery(tag => new BatchJobRun(tag))
 
 
-  /** Entity class storing rows of table GreatEnterprise
+  /** Entity class storing rows of table Enterprise
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -219,7 +219,7 @@ trait CommonTables {
   lazy val Enterprise = new TableQuery(tag => new Enterprise(tag))
 
 
-  /** Entity class storing rows of table GreatGmsState
+  /** Entity class storing rows of table GmsState
     *  @param businessPartnerIdc Database column BUSINESS_PARTNER_IDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param gmsState Database column GMS_STATE SqlType(CHAR) */
   case class GmsStateRow(businessPartnerIdc: String, gmsState: Option[Char])
@@ -242,7 +242,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table GmsState */
   lazy val GmsState = new TableQuery(tag => new GmsState(tag))
 
-  /** Entity class storing rows of table GreatGmsTransfer
+  /** Entity class storing rows of table GmsTransfer
     *  @param roleNumber Database column ROLE_NUMBER SqlType(NUMBER), PrimaryKey
     *  @param direction Database column DIRECTION SqlType(CHAR)
     *  @param timestamp Database column TIMESTAMP SqlType(TIMESTAMP(6))
@@ -274,7 +274,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table GmsTransfer */
   lazy val GmsTransfer = new TableQuery(tag => new GmsTransfer(tag))
 
-  /** Entity class storing rows of table GreatGmsTransferEntity
+  /** Entity class storing rows of table GmsTransferEntity
     *  @param roleNumber Database column ROLE_NUMBER SqlType(NUMBER)
     *  @param businessPartnerIdc Database column BUSINESS_PARTNER_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param action Database column ACTION SqlType(CHAR) */
@@ -307,7 +307,7 @@ trait CommonTables {
   lazy val GmsTransferEntity = new TableQuery(tag => new GmsTransferEntity(tag))
 
 
-  /** Entity class storing rows of table GreatImport
+  /** Entity class storing rows of table Import
     *  @param md5 Database column MD5 SqlType(VARCHAR2), Length(32,true)
     *  @param importStart Database column IMPORT_START SqlType(TIMESTAMP(6))
     *  @param importType Database column IMPORT_TYPE SqlType(VARCHAR2), Length(8,true)
@@ -354,7 +354,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table Import */
   lazy val Import = new TableQuery(tag => new Import(tag))
 
-  /** Entity class storing rows of table GreatInternatTexts
+  /** Entity class storing rows of table InternatTexts
     *  @param category Database column CATEGORY SqlType(VARCHAR2), Length(128,true)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(64,true)
     *  @param language Database column LANGUAGE SqlType(VARCHAR2), Length(2,true)
@@ -388,7 +388,7 @@ trait CommonTables {
 
 
 
-  /** Entity class storing rows of table GreatMessageAttachment
+  /** Entity class storing rows of table MessageAttachment
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param messageInfoId Database column MESSAGE_INFO_ID SqlType(VARCHAR2), Length(10,true)
     *  @param content Database column CONTENT SqlType(BLOB) */
@@ -417,7 +417,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table MessageAttachment */
   lazy val MessageAttachment = new TableQuery(tag => new MessageAttachment(tag))
 
-  /** Entity class storing rows of table GreatMessageEvent
+  /** Entity class storing rows of table MessageEvent
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param status Database column STATUS SqlType(VARCHAR2)
     *  @param messageInfoId Database column MESSAGE_INFO_ID SqlType(VARCHAR2), Length(10,true)
@@ -543,7 +543,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table MessageEvent */
   lazy val MessageEvent = new TableQuery(tag => new MessageEvent(tag))
 
-  /** Entity class storing rows of table GreatMessageInfo
+  /** Entity class storing rows of table MessageInfo
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param subject Database column SUBJECT SqlType(CLOB)
     *  @param content Database column CONTENT SqlType(CLOB)
@@ -578,7 +578,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table MessageInfo */
   lazy val MessageInfo = new TableQuery(tag => new MessageInfo(tag))
 
-  /** Entity class storing rows of table GreatOpenftParameter
+  /** Entity class storing rows of table OpenftParameter
     *  @param isProductionEnviroment Database column IS_PRODUCTION_ENVIROMENT SqlType(CHAR)
     *  @param bare Database column BARE SqlType(VARCHAR2), Length(10,true)
     *  @param destinationHost Database column DESTINATION_HOST SqlType(VARCHAR2), Length(50,true)
@@ -614,7 +614,7 @@ trait CommonTables {
   lazy val OpenftParameter = new TableQuery(tag => new OpenftParameter(tag))
 
 
-  /** Entity class storing rows of table GreatReminderRun
+  /** Entity class storing rows of table ReminderRun
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param execStart Database column EXEC_START SqlType(TIMESTAMP(6))
     *  @param execEnd Database column EXEC_END SqlType(TIMESTAMP(6))
@@ -668,7 +668,7 @@ trait CommonTables {
   lazy val ReminderRun = new TableQuery(tag => new ReminderRun(tag))
 
 
-  /** Entity class storing rows of table GreatServerstatsSnapshot
+  /** Entity class storing rows of table ServerstatsSnapshot
     *  @param id Database column ID SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param timestamp Database column TIMESTAMP SqlType(DATE)
     *  @param freememory Database column FREEMEMORY SqlType(NUMBER)
@@ -734,7 +734,7 @@ trait CommonTables {
   lazy val ServerstatsSnapshot = new TableQuery(tag => new ServerstatsSnapshot(tag))
 
 
-  /** Entity class storing rows of table GreatUniqueIds
+  /** Entity class storing rows of table UniqueIds
     *  @param tablenamec Database column TABLENAMEC SqlType(VARCHAR2), PrimaryKey, Length(40,true)
     *  @param idc Database column IDC SqlType(NUMBER) */
   case class UniqueIdsRow(tablenamec: String, idc: scala.math.BigDecimal)
@@ -758,7 +758,7 @@ trait CommonTables {
   lazy val UniqueIds = new TableQuery(tag => new UniqueIds(tag))
 
 
-  /** Entity class storing rows of table GreatArchivingBarcode
+  /** Entity class storing rows of table ArchivingBarcode
     *  @param barcode Database column BARCODE SqlType(VARCHAR2), PrimaryKey, Length(5,true)
     *  @param barcodeCreationDate Database column BARCODE_CREATION_DATE SqlType(DATE)
     *  @param barcodePrintAction Database column BARCODE_PRINT_ACTION SqlType(CHAR), Length(10,false)
@@ -814,7 +814,7 @@ trait CommonTables {
     /** Foreign key referencing DivisionUser (database name AB_FK_USER_ID) */
     lazy val divisionUserFk = foreignKey("AB_FK_USER_ID", userId, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing Guarantee (database name AB_FK_GUARANTEE_VERSION) */
-    lazy val guaranteeFk = foreignKey("AB_FK_GUARANTEE_VERSION", (guaranteeFileObjectidc, guaranteeVersion), GreatGuarantee)(r => (Rep.Some(r.fileIdValue), Rep.Some(r.guaranteeVersion)), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val guaranteeFk = foreignKey("AB_FK_GUARANTEE_VERSION", (guaranteeFileObjectidc, guaranteeVersion), Guarantee)(r => (Rep.Some(r.fileIdValue), Rep.Some(r.guaranteeVersion)), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (guaranteeFileNumber) (database name AB_IDX0) */
     val index1 = index("AB_IDX0", guaranteeFileNumber)
@@ -822,7 +822,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table ArchivingBarcode */
   lazy val ArchivingBarcode = new TableQuery(tag => new ArchivingBarcode(tag))
 
-  /** Entity class storing rows of table GreatArchivingIxosResult
+  /** Entity class storing rows of table ArchivingIxosResult
     *  @param barcode Database column BARCODE SqlType(VARCHAR2), Length(5,true)
     *  @param ixosDataCreationTimestamp Database column IXOS_DATA_CREATION_TIMESTAMP SqlType(TIMESTAMP(6))
     *  @param ixosDsId Database column IXOS_DS_ID SqlType(VARCHAR2), Length(40,true)
@@ -878,7 +878,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table ArchivingIxosResult */
   lazy val ArchivingIxosResult = new TableQuery(tag => new ArchivingIxosResult(tag))
 
-  /** Entity class storing rows of table GreatArchivingMetadata
+  /** Entity class storing rows of table ArchivingMetadata
     *  @param barcode Database column BARCODE SqlType(VARCHAR2), Length(5,true)
     *  @param metaDataCreationTimestamp Database column META_DATA_CREATION_TIMESTAMP SqlType(TIMESTAMP(6))
     *  @param ixosDataCreationTimestamp Database column IXOS_DATA_CREATION_TIMESTAMP SqlType(TIMESTAMP(6))
@@ -920,7 +920,7 @@ trait CommonTables {
   /** Collection-like TableQuery object for table ArchivingMetadata */
   lazy val ArchivingMetadata = new TableQuery(tag => new ArchivingMetadata(tag))
 
-  /** Entity class storing rows of table GreatArchivingTransported
+  /** Entity class storing rows of table ArchivingTransported
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param transportDate Database column TRANSPORT_DATE SqlType(DATE) */
   case class ArchivingTransportedRow(objectidc: String, transportDate: Option[java.sql.Timestamp])

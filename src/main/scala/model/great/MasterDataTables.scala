@@ -17,7 +17,7 @@ trait MasterDataTables {
   import model.great.AdminTables._
   import model.great.CommonTables._
   import model.great.BackOfficeTables._
-  import model.great.GuaranteeAllTables._
+  import model.great.GuaranteeTables._
 
   /** DDL for all tables. Call .create to execute. */
   lazy val schema: profile.SchemaDescription = Array(AccountingArea.schema, AccountingAreaHistory.schema, BusinessPartner.schema, BusinessPartnerHistory.schema, Country.schema, CountryHistory.schema, Currency.schema, CurrencyHistory.schema, FxRates.schema, GlineAccount.schema, GlineAccountHistory.schema, GlineContract.schema, GlineContractHistory.schema, GlineReservation.schema, GlineReservationHist.schema, GlineReservations.schema, GlineReservationsHist.schema, Language.schema, LatestFxRates.schema, Org.schema, OrgHistory.schema, Ratings.schema).reduceLeft(_ ++ _)
@@ -25,7 +25,7 @@ trait MasterDataTables {
   def ddl = schema
   val tablePrefix = "GREAT_"
 
-  /** Entity class storing rows of table GreatAccountingArea
+  /** Entity class storing rows of table AccountingArea
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -89,7 +89,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table AccountingArea */
   lazy val AccountingArea = new TableQuery(tag => new AccountingArea(tag))
 
-  /** Entity class storing rows of table GreatAccountingAreaHistory
+  /** Entity class storing rows of table AccountingAreaHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -162,7 +162,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table AccountingAreaHistory */
   lazy val AccountingAreaHistory = new TableQuery(tag => new AccountingAreaHistory(tag))
 
-  /** Entity class storing rows of table GreatCountry
+  /** Entity class storing rows of table Country
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -218,7 +218,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table Country */
   lazy val Country = new TableQuery(tag => new Country(tag))
 
-  /** Entity class storing rows of table GreatCountryHistory
+  /** Entity class storing rows of table CountryHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -286,7 +286,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table CountryHistory */
   lazy val CountryHistory = new TableQuery(tag => new CountryHistory(tag))
 
-  /** Entity class storing rows of table GreatCurrency
+  /** Entity class storing rows of table Currency
     *  @param objectidc Database column OBJECTIDC SqlType(CHAR), PrimaryKey, Length(3,false)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -336,7 +336,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table Currency */
   lazy val Currency = new TableQuery(tag => new Currency(tag))
 
-  /** Entity class storing rows of table GreatCurrencyHistory
+  /** Entity class storing rows of table CurrencyHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -680,7 +680,7 @@ trait MasterDataTables {
   lazy val BusinessPartnerHistory = new TableQuery(tag => new BusinessPartnerHistory(tag))
 
 
-  /** Entity class storing rows of table GreatFxRates
+  /** Entity class storing rows of table FxRates
     *  @param fxtype Database column FXTYPE SqlType(CHAR)
     *  @param fxdate Database column FXDATE SqlType(DATE)
     *  @param isoCode Database column ISO_CODE SqlType(CHAR), Length(3,false)
@@ -713,7 +713,7 @@ trait MasterDataTables {
   lazy val FxRates = new TableQuery(tag => new FxRates(tag))
 
 
-  /** Entity class storing rows of table GreatLanguage
+  /** Entity class storing rows of table Language
     *  @param iso639Code Database column ISO_639_CODE SqlType(CHAR), PrimaryKey, Length(2,false)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(30,true)
     *  @param systemLanguage Database column SYSTEM_LANGUAGE SqlType(CHAR) */
@@ -739,7 +739,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table Language */
   lazy val Language = new TableQuery(tag => new Language(tag))
 
-  /** Entity class storing rows of table GreatLatestFxRates
+  /** Entity class storing rows of table LatestFxRates
     *  @param isoCode Database column ISO_CODE SqlType(CHAR), PrimaryKey, Length(3,false)
     *  @param rate Database column RATE SqlType(NUMBER) */
   case class LatestFxRatesRow(isoCode: String, rate: scala.math.BigDecimal)
@@ -764,7 +764,7 @@ trait MasterDataTables {
 
 
 
-  /** Entity class storing rows of table GreatOrg
+  /** Entity class storing rows of table Org
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -826,7 +826,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table Org */
   lazy val Org = new TableQuery(tag => new Org(tag))
 
-  /** Entity class storing rows of table GreatOrgHistory
+  /** Entity class storing rows of table OrgHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -899,7 +899,7 @@ trait MasterDataTables {
 
 
 
-  /** Entity class storing rows of table GreatRatings
+  /** Entity class storing rows of table Ratings
     *  @param code Database column CODE SqlType(CHAR), Length(3,false)
     *  @param lifetime Database column LIFETIME SqlType(NUMBER)
     *  @param rate Database column RATE SqlType(NUMBER) */
@@ -929,7 +929,7 @@ trait MasterDataTables {
   lazy val Ratings = new TableQuery(tag => new Ratings(tag))
 
 
-  /** Entity class storing rows of table GreatGlineAccount
+  /** Entity class storing rows of table GlineAccount
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -995,12 +995,12 @@ trait MasterDataTables {
     /** Foreign key referencing GlineContract (database name GLA_FK_CONTRACT_ID) */
     lazy val glineContractFk = foreignKey("GLA_FK_CONTRACT_ID", contractId, GlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GuaranteeFile (database name GLA_FK_LOS_ID) */
-    lazy val guaranteeFileFk = foreignKey("GLA_FK_LOS_ID", losId, GreatGuaranteeFile)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val guaranteeFileFk = foreignKey("GLA_FK_LOS_ID", losId, GuaranteeFile)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GlineAccount */
   lazy val GlineAccount = new TableQuery(tag => new GlineAccount(tag))
 
-  /** Entity class storing rows of table GreatGlineAccountHistory
+  /** Entity class storing rows of table GlineAccountHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -1396,7 +1396,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table GlineContractHistory */
   lazy val GlineContractHistory = new TableQuery(tag => new GlineContractHistory(tag))
 
-  /** Entity class storing rows of table GreatGlineReservation
+  /** Entity class storing rows of table GlineReservation
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param parentId Database column PARENT_ID SqlType(VARCHAR2), Length(10,true)
     *  @param parentVersion Database column PARENT_VERSION SqlType(NUMBER)
@@ -1484,7 +1484,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table GlineReservation */
   lazy val GlineReservation = new TableQuery(tag => new GlineReservation(tag))
 
-  /** Entity class storing rows of table GreatGlineReservationHist
+  /** Entity class storing rows of table GlineReservationHist
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param parentId Database column PARENT_ID SqlType(VARCHAR2), Length(10,true)
     *  @param parentVersion Database column PARENT_VERSION SqlType(NUMBER)
@@ -1610,7 +1610,7 @@ trait MasterDataTables {
   /** Collection-like TableQuery object for table GlineReservations */
   lazy val GlineReservations = new TableQuery(tag => new GlineReservations(tag))
 
-  /** Entity class storing rows of table GreatGlineReservationsHist
+  /** Entity class storing rows of table GlineReservationsHist
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)

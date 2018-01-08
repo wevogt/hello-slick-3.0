@@ -17,18 +17,18 @@ trait AdminTables {
   import model.great.MasterDataTables._
   import model.great.CommonTables._
   import model.great.BackOfficeTables._
-  import model.great.GuaranteeAllTables._
+  import model.great.GuaranteeTables._
 
 
   /** DDL for all tables. Call .create to execute. */
   lazy val schema: profile.SchemaDescription = Array (BareDependants.schema, BareDependantsHistory.schema, BareRights.schema, BusinessUnits.schema, Division.schema, DivisioncodeInSector.schema, DivisionLimits.schema, DivisionReportRight.schema, DivisionUser.schema, DownloadColumn.schema, DownloadFormat.schema, DownloadFormatRef.schema, GroupStructure.schema, GroupStructureHistory.schema, Person.schema, User.schema, UserAccount.schema, UserDeputies.schema, UserGroup.schema, UserInDivision.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
-  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; später moechte ich hier z.B. "COM" für Common setzten um in der DB eine Struktur zu erhalten
+  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" furr Common setzten um in der DB eine Struktur zu erhalten
   val tablePrefix = "GREAT_"
 
 
-  /** Row type of table GreatDivision */
+  /** Row type of table Division */
   type divisionRow = HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]
   /** Constructor for DivisionRow providing default values if available in the database schema. */
   def DivisionRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], kind: Option[String], name: Option[String], description: Option[String], address: Option[String], isLive: Option[Char], email: Option[String], parent: Option[String], telephone: Option[String], country: Option[String], currency: Option[String], isArchiving: Option[Char], barcodeAddress: Option[String], language: Option[String], disabled: Option[Char], mainContactUser: Option[String], showNationalFields: Option[Char], inheritShowNationalFields: Option[Char], archiveCountryIsocode2: Option[String], archiveUrl: Option[String]): divisionRow = {
@@ -100,7 +100,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table Division */
   lazy val Division = new TableQuery(tag => new Division(tag))
 
-  /** Entity class storing rows of table GreatDivisioncodeInSector
+  /** Entity class storing rows of table DivisioncodeInSector
     *  @param division Database column DIVISION SqlType(VARCHAR2), Length(3,true)
     *  @param sector Database column SECTOR SqlType(VARCHAR2), Length(50,true) */
   case class DivisioncodeInSectorRow(division: String, sector: String)
@@ -126,7 +126,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table DivisioncodeInSector */
   lazy val DivisioncodeInSector = new TableQuery(tag => new DivisioncodeInSector(tag))
 
-  /** Entity class storing rows of table GreatDivisionLimits
+  /** Entity class storing rows of table DivisionLimits
     *  @param divisioncode Database column DIVISIONCODE SqlType(VARCHAR2), PrimaryKey, Length(3,true)
     *  @param limit Database column LIMIT SqlType(NUMBER) */
   case class DivisionLimitsRow(divisioncode: String, limit: Option[scala.math.BigDecimal])
@@ -149,7 +149,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table DivisionLimits */
   lazy val DivisionLimits = new TableQuery(tag => new DivisionLimits(tag))
 
-  /** Entity class storing rows of table GreatDivisionReportRight
+  /** Entity class storing rows of table DivisionReportRight
     *  @param report Database column REPORT SqlType(CHAR), Length(5,false)
     *  @param generalAvailability Database column GENERAL_AVAILABILITY SqlType(CHAR), Length(3,false)
     *  @param division Database column DIVISION SqlType(VARCHAR2), Length(10,true)
@@ -179,7 +179,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table DivisionReportRight */
   lazy val DivisionReportRight = new TableQuery(tag => new DivisionReportRight(tag))
 
-  /** Entity class storing rows of table GreatDivisionUser
+  /** Entity class storing rows of table DivisionUser
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -238,7 +238,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table DivisionUser */
   lazy val DivisionUser = new TableQuery(tag => new DivisionUser(tag))
 
-  /** Entity class storing rows of table GreatDownloadColumn
+  /** Entity class storing rows of table DownloadColumn
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param formatIdc Database column FORMAT_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param pos Database column POS SqlType(NUMBER)
@@ -270,7 +270,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table DownloadColumn */
   lazy val DownloadColumn = new TableQuery(tag => new DownloadColumn(tag))
 
-  /** Entity class storing rows of table GreatDownloadFormat
+  /** Entity class storing rows of table DownloadFormat
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param owner Database column OWNER SqlType(VARCHAR2), Length(10,true)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(52,true)
@@ -302,7 +302,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table DownloadFormat */
   lazy val DownloadFormat = new TableQuery(tag => new DownloadFormat(tag))
 
-  /** Entity class storing rows of table GreatDownloadFormatRef
+  /** Entity class storing rows of table DownloadFormatRef
     *  @param formatIdc Database column FORMAT_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param userIdc Database column USER_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param `type` Database column TYPE SqlType(CHAR) */
@@ -334,7 +334,7 @@ trait AdminTables {
   lazy val DownloadFormatRef = new TableQuery(tag => new DownloadFormatRef(tag))
 
 
-  /** Entity class storing rows of table GreatBusinessUnits
+  /** Entity class storing rows of table BusinessUnits
     *  @param code Database column CODE SqlType(VARCHAR2), Length(10,true)
     *  @param version Database column VERSION SqlType(NUMBER)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(30,true)
@@ -599,21 +599,21 @@ trait AdminTables {
     /** Foreign key referencing BareDependants (database name B_FK_PARENT) */
     lazy val bareDependantsFk = foreignKey("B_FK_PARENT", parent :: HNil, BareDependants)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_PERIODIC_DEF_BANK_COM_REC) */
-    lazy val commissionReceiverFk3 = foreignKey("B_FK_PERIODIC_DEF_BANK_COM_REC", periodicDefBankComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk3 = foreignKey("B_FK_PERIODIC_DEF_BANK_COM_REC", periodicDefBankComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_PERIODIC_DEF_GROUP_COM_3) */
-    lazy val commissionReceiverFk4 = foreignKey("B_FK_PERIODIC_DEF_GROUP_COM_3", periodicDefGroupComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk4 = foreignKey("B_FK_PERIODIC_DEF_GROUP_COM_3", periodicDefGroupComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_PERIODIC_DEF_IND_BANK_C5) */
-    lazy val commissionReceiverFk5 = foreignKey("B_FK_PERIODIC_DEF_IND_BANK_C5", periodicDefIndBankComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk5 = foreignKey("B_FK_PERIODIC_DEF_IND_BANK_C5", periodicDefIndBankComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_PERIODIC_DEF_INSURANCE_6) */
-    lazy val commissionReceiverFk6 = foreignKey("B_FK_PERIODIC_DEF_INSURANCE_6", periodicDefInsuranceComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk6 = foreignKey("B_FK_PERIODIC_DEF_INSURANCE_6", periodicDefInsuranceComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_SINGULAR_DEF_BANK_COM_REC) */
-    lazy val commissionReceiverFk7 = foreignKey("B_FK_SINGULAR_DEF_BANK_COM_REC", singularDefBankComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk7 = foreignKey("B_FK_SINGULAR_DEF_BANK_COM_REC", singularDefBankComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_SINGULAR_DEF_GROUP_COM_7) */
-    lazy val commissionReceiverFk8 = foreignKey("B_FK_SINGULAR_DEF_GROUP_COM_7", singularDefGroupComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk8 = foreignKey("B_FK_SINGULAR_DEF_GROUP_COM_7", singularDefGroupComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_SINGULAR_DEF_IND_BANK_C9) */
-    lazy val commissionReceiverFk9 = foreignKey("B_FK_SINGULAR_DEF_IND_BANK_C9", singularDefIndBankComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk9 = foreignKey("B_FK_SINGULAR_DEF_IND_BANK_C9", singularDefIndBankComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing CommissionReceiver (database name B_FK_SINGULAR_DEF_INSUR_COM_10) */
-    lazy val commissionReceiverFk10 = foreignKey("B_FK_SINGULAR_DEF_INSUR_COM_10", singularDefInsurComRec :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val commissionReceiverFk10 = foreignKey("B_FK_SINGULAR_DEF_INSUR_COM_10", singularDefInsurComRec :: HNil, CommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing Currency (database name B_FK_AMENDM_FEE_DIRECT_CUR) */
     lazy val currencyFk11 = foreignKey("B_FK_AMENDM_FEE_DIRECT_CUR", amendmFeeDirectCur :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing Currency (database name B_FK_AMENDM_FEE_GROUP_CUR) */
@@ -910,7 +910,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table BareDependantsHistory */
   lazy val BareDependantsHistory = new TableQuery(tag => new BareDependantsHistory(tag))
 
-  /** Entity class storing rows of table GreatBareRights
+  /** Entity class storing rows of table BareRights
     *  @param bareCode Database column BARE_CODE SqlType(VARCHAR2), Length(4,true)
     *  @param divisionIdc Database column DIVISION_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param group Database column GROUP_ SqlType(CHAR)
@@ -958,7 +958,7 @@ trait AdminTables {
 
 
 
-  /** Entity class storing rows of table GreatGroupStructure
+  /** Entity class storing rows of table GroupStructure
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -990,7 +990,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table GroupStructure */
   lazy val GroupStructure = new TableQuery(tag => new GroupStructure(tag))
 
-  /** Entity class storing rows of table GreatGroupStructureHistory
+  /** Entity class storing rows of table GroupStructureHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -1036,7 +1036,7 @@ trait AdminTables {
 
 
 
-  /** Entity class storing rows of table GreatPerson
+  /** Entity class storing rows of table Person
     *  @param personKey Database column PERSON_KEY SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(82,true)
     *  @param appendix1 Database column APPENDIX1 SqlType(VARCHAR2), Length(500,true)
@@ -1194,7 +1194,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table User */
   lazy val User = new TableQuery(tag => new User(tag))
 
-  /** Entity class storing rows of table GreatUserAccount
+  /** Entity class storing rows of table UserAccount
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -1264,7 +1264,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table UserAccount */
   lazy val UserAccount = new TableQuery(tag => new UserAccount(tag))
 
-  /** Entity class storing rows of table GreatUserDeputies
+  /** Entity class storing rows of table UserDeputies
     *  @param userIdc Database column USER_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param deputyIdc Database column DEPUTY_IDC SqlType(VARCHAR2), Length(10,true) */
   case class UserDeputiesRow(userIdc: String, deputyIdc: String)
@@ -1295,7 +1295,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table UserDeputies */
   lazy val UserDeputies = new TableQuery(tag => new UserDeputies(tag))
 
-  /** Entity class storing rows of table GreatUserGroup
+  /** Entity class storing rows of table UserGroup
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
@@ -1345,7 +1345,7 @@ trait AdminTables {
   /** Collection-like TableQuery object for table UserGroup */
   lazy val UserGroup = new TableQuery(tag => new UserGroup(tag))
 
-  /** Entity class storing rows of table GreatUserInDivision
+  /** Entity class storing rows of table UserInDivision
     *  @param divisionIdc Database column DIVISION_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param userIdc Database column USER_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param role Database column ROLE SqlType(VARCHAR2), Length(4,true) */
@@ -1375,7 +1375,7 @@ trait AdminTables {
   lazy val UserInDivision = new TableQuery(tag => new UserInDivision(tag))
 
 
-  /** Entity class storing rows of table GreatAppInGroup
+  /** Entity class storing rows of table AppInGroup
     *  @param userGroupIdc Database column USER_GROUP_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param userIdc Database column USER_IDC SqlType(VARCHAR2), Length(10,true) */
   case class AppInGroupRow(userGroupIdc: String, userIdc: String)
