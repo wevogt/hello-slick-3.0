@@ -77,7 +77,7 @@ trait GuaranteeAllTables {
     val degreeOfUtilization: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("DEGREE_OF_UTILIZATION")
 
     /** Foreign key referencing GreatGlineAccount (database name GAC_FK_LINE_ACCOUNT_IDC) */
-    lazy val greatGlineAccountFk = foreignKey("GAC_FK_LINE_ACCOUNT_IDC", lineAccountIdc, GreatGlineAccount)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatGlineAccountFk = foreignKey("GAC_FK_LINE_ACCOUNT_IDC", lineAccountIdc, GlineAccount)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatAccountConsumption */
   lazy val GreatAccountConsumption = new TableQuery(tag => new GreatAccountConsumption(tag))
@@ -110,7 +110,7 @@ trait GuaranteeAllTables {
     val parentKey: Rep[Option[String]] = column[Option[String]]("PARENT_KEY", O.Length(10,varying=true))
 
     /** Foreign key referencing GreatCurrency (database name AAM_FK_CURRENCY_ISO_CODE) */
-    lazy val greatCurrencyFk = foreignKey("AAM_FK_CURRENCY_ISO_CODE", currencyIsoCode, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("AAM_FK_CURRENCY_ISO_CODE", currencyIsoCode, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (parentKey) (database name AAM_IDX0) */
     val index1 = index("AAM_IDX0", parentKey)
@@ -159,7 +159,7 @@ trait GuaranteeAllTables {
     val pk = primaryKey("GCO_PK_FILE_ID_VALUE", (fileIdValue, lineAccountIdc))
 
     /** Foreign key referencing GreatGlineAccount (database name GCO_FK_LINE_ACCOUNT_IDC) */
-    lazy val greatGlineAccountFk = foreignKey("GCO_FK_LINE_ACCOUNT_IDC", lineAccountIdc, GreatGlineAccount)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatGlineAccountFk = foreignKey("GCO_FK_LINE_ACCOUNT_IDC", lineAccountIdc, GlineAccount)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGuaranteeFile (database name GCO_FK_FILE_ID_VALUE) */
     lazy val greatGuaranteeFileFk = foreignKey("GCO_FK_FILE_ID_VALUE", fileIdValue, GreatGuaranteeFile)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
@@ -217,7 +217,7 @@ trait GuaranteeAllTables {
     val degreeOfUtilization: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("DEGREE_OF_UTILIZATION")
 
     /** Foreign key referencing GreatGlineContract (database name GCC_FK_LINE_CONTRACT_IDC) */
-    lazy val greatGlineContractFk = foreignKey("GCC_FK_LINE_CONTRACT_IDC", lineContractIdc, GreatGlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatGlineContractFk = foreignKey("GCC_FK_LINE_CONTRACT_IDC", lineContractIdc, GlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatContractConsumption */
   lazy val GreatContractConsumption = new TableQuery(tag => new GreatContractConsumption(tag))
@@ -334,19 +334,19 @@ trait GuaranteeAllTables {
     val iReferencesAnnotation: Rep[Option[String]] = column[Option[String]]("I_REFERENCES_ANNOTATION", O.Length(52,varying=true))
 
     /** Foreign key referencing GreatCountry (database name DP_FK_LAND_DES_SICHERHEITENG3) */
-    lazy val greatCountryFk = foreignKey("DP_FK_LAND_DES_SICHERHEITENG3", landDesSicherheitengebers :: HNil, GreatCountry)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCountryFk = foreignKey("DP_FK_LAND_DES_SICHERHEITENG3", landDesSicherheitengebers :: HNil, Country)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name DP_FK_CURRENCY) */
-    lazy val greatCurrencyFk2 = foreignKey("DP_FK_CURRENCY", currency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk2 = foreignKey("DP_FK_CURRENCY", currency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name DP_FK_CURRENT_LIABILITY_CURR1) */
-    lazy val greatCurrencyFk3 = foreignKey("DP_FK_CURRENT_LIABILITY_CURR1", currentLiabilityCurrency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk3 = foreignKey("DP_FK_CURRENT_LIABILITY_CURR1", currentLiabilityCurrency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name DP_FK_WKZ_DER_SICHERHEIT) */
-    lazy val greatCurrencyFk4 = foreignKey("DP_FK_WKZ_DER_SICHERHEIT", wkzDerSicherheit :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk4 = foreignKey("DP_FK_WKZ_DER_SICHERHEIT", wkzDerSicherheit :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name DP_FK_DEBTOR_ORG_ID) */
-    lazy val greatOrgFk5 = foreignKey("DP_FK_DEBTOR_ORG_ID", debtorOrgId :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk5 = foreignKey("DP_FK_DEBTOR_ORG_ID", debtorOrgId :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name DP_FK_INVOICE_ORG_ID) */
-    lazy val greatOrgFk6 = foreignKey("DP_FK_INVOICE_ORG_ID", invoiceOrgId :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk6 = foreignKey("DP_FK_INVOICE_ORG_ID", invoiceOrgId :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name DP_FK_PARTNER_ORG_ID) */
-    lazy val greatOrgFk7 = foreignKey("DP_FK_PARTNER_ORG_ID", partnerOrgId :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk7 = foreignKey("DP_FK_PARTNER_ORG_ID", partnerOrgId :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (settlementId) (database name DP_IDX0) */
     val index1 = index("DP_IDX0", settlementId :: HNil)
@@ -645,7 +645,7 @@ trait GuaranteeAllTables {
     val pk = primaryKey("G_PK_FILE_ID_VALUE", fileIdValue :: guaranteeVersion :: HNil)
 
     /** Foreign key referencing GreatDivision (database name G_FK_ISSUING_FIN_DIVISION) */
-    lazy val greatDivisionFk = foreignKey("G_FK_ISSUING_FIN_DIVISION", issuingFinDivision :: HNil, GreatDivision)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionFk = foreignKey("G_FK_ISSUING_FIN_DIVISION", issuingFinDivision :: HNil, Division)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatRequest (database name G_FK_REQUEST) */
     lazy val greatRequestFk = foreignKey("G_FK_REQUEST", request :: HNil, GreatRequest)(r => Rep.Some(r.requestKey) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatSettlement (database name G_FK_SETTLEMENT) */
@@ -769,13 +769,13 @@ trait GuaranteeAllTables {
     /** Foreign key referencing GreatCommissionReceiver (database name GFE_FK_COMMISSION_RECEIVER) */
     lazy val greatCommissionReceiverFk = foreignKey("GFE_FK_COMMISSION_RECEIVER", commissionReceiver :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatDivisionUser (database name GFE_FK_APP_CONFIRMER) */
-    lazy val greatDivisionUserFk2 = foreignKey("GFE_FK_APP_CONFIRMER", appConfirmer :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionUserFk2 = foreignKey("GFE_FK_APP_CONFIRMER", appConfirmer :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatDivisionUser (database name GFE_FK_LAST_AC_COMPLETE_USER) */
-    lazy val greatDivisionUserFk3 = foreignKey("GFE_FK_LAST_AC_COMPLETE_USER", lastAcCompleteUser :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionUserFk3 = foreignKey("GFE_FK_LAST_AC_COMPLETE_USER", lastAcCompleteUser :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatDivisionUser (database name GFE_FK_RESPONSIBLE_APP) */
-    lazy val greatDivisionUserFk4 = foreignKey("GFE_FK_RESPONSIBLE_APP", responsibleApp :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionUserFk4 = foreignKey("GFE_FK_RESPONSIBLE_APP", responsibleApp :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatUserGroup (database name GFE_FK_APP_GROUP) */
-    lazy val greatUserGroupFk = foreignKey("GFE_FK_APP_GROUP", appGroup :: HNil, GreatUserGroup)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatUserGroupFk = foreignKey("GFE_FK_APP_GROUP", appGroup :: HNil, UserGroup)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (externalId) (database name GFE_IDX0) */
     val index1 = index("GFE_IDX0", externalId :: HNil)
@@ -827,7 +827,7 @@ trait GuaranteeAllTables {
     val userValueId: Rep[Option[String]] = column[Option[String]]("USER_VALUE_ID", O.Length(10,varying=true))
 
     /** Foreign key referencing GreatDivisionUser (database name SCHED_FK_USER_VALUE_ID) */
-    lazy val greatDivisionUserFk = foreignKey("SCHED_FK_USER_VALUE_ID", userValueId, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionUserFk = foreignKey("SCHED_FK_USER_VALUE_ID", userValueId, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatGuaranteeScheduler2 */
   lazy val GreatGuaranteeScheduler2 = new TableQuery(tag => new GreatGuaranteeScheduler2(tag))
@@ -927,17 +927,17 @@ trait GuaranteeAllTables {
     val bankAutoMature: Rep[Option[Char]] = column[Option[Char]]("BANK_AUTO_MATURE")
 
     /** Foreign key referencing GreatBusinessPartner (database name REQ_FK_THIRD_PARTY_BENEFICIA2) */
-    lazy val greatBusinessPartnerFk = foreignKey("REQ_FK_THIRD_PARTY_BENEFICIA2", thirdPartyBeneficiaryId :: HNil, GreatBusinessPartner)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBusinessPartnerFk = foreignKey("REQ_FK_THIRD_PARTY_BENEFICIA2", thirdPartyBeneficiaryId :: HNil, BusinessPartner)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCountry (database name REQ_FK_CONTRACT_COUNTRY) */
-    lazy val greatCountryFk = foreignKey("REQ_FK_CONTRACT_COUNTRY", contractCountry :: HNil, GreatCountry)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCountryFk = foreignKey("REQ_FK_CONTRACT_COUNTRY", contractCountry :: HNil, Country)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGuaranteeAttachment (database name REQ_FK_ATTACHMENT_IDC) */
     lazy val greatGuaranteeAttachmentFk = foreignKey("REQ_FK_ATTACHMENT_IDC", attachmentIdc :: HNil, GreatGuaranteeAttachment)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatLanguage (database name REQ_FK_LANGUAGE) */
-    lazy val greatLanguageFk = foreignKey("REQ_FK_LANGUAGE", language :: HNil, GreatLanguage)(r => Rep.Some(r.iso639Code) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatLanguageFk = foreignKey("REQ_FK_LANGUAGE", language :: HNil, Language)(r => Rep.Some(r.iso639Code) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatPerson (database name REQ_FK_BENEFICIARY_PERSON_KEY) */
-    lazy val greatPersonFk5 = foreignKey("REQ_FK_BENEFICIARY_PERSON_KEY", beneficiaryPersonKey :: HNil, GreatPerson)(r => Rep.Some(r.personKey) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatPersonFk5 = foreignKey("REQ_FK_BENEFICIARY_PERSON_KEY", beneficiaryPersonKey :: HNil, Person)(r => Rep.Some(r.personKey) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatPerson (database name REQ_FK_DISTRIBUTION_TARGET) */
-    lazy val greatPersonFk6 = foreignKey("REQ_FK_DISTRIBUTION_TARGET", distributionTarget :: HNil, GreatPerson)(r => Rep.Some(r.personKey) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatPersonFk6 = foreignKey("REQ_FK_DISTRIBUTION_TARGET", distributionTarget :: HNil, Person)(r => Rep.Some(r.personKey) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatRequest */
   lazy val GreatRequest = new TableQuery(tag => new GreatRequest(tag))
@@ -1086,21 +1086,21 @@ trait GuaranteeAllTables {
     val effectiveForBalancecalc: Rep[Option[Char]] = column[Option[Char]]("EFFECTIVE_FOR_BALANCECALC")
 
     /** Foreign key referencing GreatBareDependants (database name SET_FK_GROUP_UNIT_ID) */
-    lazy val greatBareDependantsFk = foreignKey("SET_FK_GROUP_UNIT_ID", groupUnitId :: HNil, GreatBareDependants)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBareDependantsFk = foreignKey("SET_FK_GROUP_UNIT_ID", groupUnitId :: HNil, BareDependants)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name SET_FK_COURIER_CHARGES_CURRE5) */
-    lazy val greatCurrencyFk2 = foreignKey("SET_FK_COURIER_CHARGES_CURRE5", courierChargesCurrency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk2 = foreignKey("SET_FK_COURIER_CHARGES_CURRE5", courierChargesCurrency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name SET_FK_CREATION_FEE_CURRENCY) */
-    lazy val greatCurrencyFk3 = foreignKey("SET_FK_CREATION_FEE_CURRENCY", creationFeeCurrency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk3 = foreignKey("SET_FK_CREATION_FEE_CURRENCY", creationFeeCurrency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name SET_FK_EXPENSES_CURRENCY) */
-    lazy val greatCurrencyFk4 = foreignKey("SET_FK_EXPENSES_CURRENCY", expensesCurrency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk4 = foreignKey("SET_FK_EXPENSES_CURRENCY", expensesCurrency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name SET_FK_FIX_COMM_CUR) */
-    lazy val greatCurrencyFk5 = foreignKey("SET_FK_FIX_COMM_CUR", fixCommCur :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk5 = foreignKey("SET_FK_FIX_COMM_CUR", fixCommCur :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name SET_FK_MIN_COMM_CUR) */
-    lazy val greatCurrencyFk6 = foreignKey("SET_FK_MIN_COMM_CUR", minCommCur :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk6 = foreignKey("SET_FK_MIN_COMM_CUR", minCommCur :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name SET_FK_SUPPLEMENT_FEE_CURRENCY) */
-    lazy val greatCurrencyFk7 = foreignKey("SET_FK_SUPPLEMENT_FEE_CURRENCY", supplementFeeCurrency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk7 = foreignKey("SET_FK_SUPPLEMENT_FEE_CURRENCY", supplementFeeCurrency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGlineAccount (database name SET_FK_LINE_ACCOUNT_IDC) */
-    lazy val greatGlineAccountFk = foreignKey("SET_FK_LINE_ACCOUNT_IDC", lineAccountIdc :: HNil, GreatGlineAccount)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatGlineAccountFk = foreignKey("SET_FK_LINE_ACCOUNT_IDC", lineAccountIdc :: HNil, GlineAccount)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatSettlement */
   lazy val GreatSettlement = new TableQuery(tag => new GreatSettlement(tag))
@@ -1124,7 +1124,7 @@ trait GuaranteeAllTables {
     val constraint: Rep[Option[String]] = column[Option[String]]("CONSTRAINT", O.Length(30,varying=true))
 
     /** Foreign key referencing GreatDivisionUser (database name SVIEW_FK_USER_IDC) */
-    lazy val greatDivisionUserFk = foreignKey("SVIEW_FK_USER_IDC", userIdc, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionUserFk = foreignKey("SVIEW_FK_USER_IDC", userIdc, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatSviewConstraint */
   lazy val GreatSviewConstraint = new TableQuery(tag => new GreatSviewConstraint(tag))
@@ -1205,7 +1205,7 @@ trait GuaranteeAllTables {
     val pk = primaryKey("UA_PK_DIVISION_IDC", (divisionIdc, kind, fieldNumber))
 
     /** Foreign key referencing GreatDivision (database name UA_FK_DIVISION_IDC) */
-    lazy val greatDivisionFk = foreignKey("UA_FK_DIVISION_IDC", divisionIdc, GreatDivision)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionFk = foreignKey("UA_FK_DIVISION_IDC", divisionIdc, Division)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatUnitAttributes */
   lazy val GreatUnitAttributes = new TableQuery(tag => new GreatUnitAttributes(tag))

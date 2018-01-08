@@ -20,9 +20,10 @@ trait BackOfficeTables {
   import model.great.GuaranteeAllTables._
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(GreatBalanceSheetReportDef.schema, GreatBalanceSheetReportRun.schema, GreatBareBillingRun.schema, GreatBillingRun.schema, GreatBookEntry.schema, GreatBookEntryRelation.schema, GreatBulkUpdateDef.schema, GreatBulkUpdateDokuments.schema, GreatBulkUpdateGuarantee.schema, GreatBulkUpdateRun.schema, GreatBulkUpdateValue.schema, GreatCommissionRecBareDep.schema, GreatCommissionReceiver.schema, GreatCommissionReceiverHist.schema, GreatCostItem.schema, GreatInvoice.schema, GreatInvoiceEvent.schema, GreatInvoiceEvidence.schema, GreatInvoiceEvidencePos.schema, GreatInvoiceLineItem.schema, GreatInvoiceNumber.schema, GreatInvoicePass.schema, GreatInvPassCalendar.schema, GreatPayment.schema, GreatPriceScaleEntry.schema, GreatPriceScaleEntryHist.schema, GreatQuarterlyReserves.schema, GreatReconciliationProcess.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(BalanceSheetReportDef.schema, BalanceSheetReportRun.schema, GreatBareBillingRun.schema, BillingRun.schema, BookEntry.schema, BookEntryRelation.schema, BulkUpdateDef.schema, BulkUpdateDokuments.schema, BulkUpdateGuarantee.schema, BulkUpdateRun.schema, BulkUpdateValue.schema, GreatCommissionRecBareDep.schema, GreatCommissionReceiver.schema, GreatCommissionReceiverHist.schema, GreatCostItem.schema, GreatInvoice.schema, GreatInvoiceEvent.schema, GreatInvoiceEvidence.schema, GreatInvoiceEvidencePos.schema, GreatInvoiceLineItem.schema, GreatInvoiceNumber.schema, GreatInvoicePass.schema, GreatInvPassCalendar.schema, GreatPayment.schema, GreatPriceScaleEntry.schema, GreatPriceScaleEntryHist.schema, GreatQuarterlyReserves.schema, GreatReconciliationProcess.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
+  val tablePrefix = "GREAT_"
 
   /** Entity class storing rows of table GreatBillingRun
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -40,17 +41,17 @@ trait BackOfficeTables {
     *  @param transportStatus Database column TRANSPORT_STATUS SqlType(CHAR)
     *  @param concernedBaren Database column CONCERNED_BAREN SqlType(VARCHAR2), Length(600,true)
     *  @param testMode Database column TEST_MODE SqlType(CHAR) */
-  case class GreatBillingRunRow(objectidc: String, bareGroup: Option[String], execStart: Option[java.sql.Timestamp], execEnd: Option[java.sql.Timestamp], status: Option[Char], userAccount: Option[String], endDate: Option[java.sql.Timestamp], onlyFlagged: Option[Char], nrsValidation: Option[Char], protocol: Option[java.sql.Blob], protocolLength: Option[scala.math.BigDecimal], transportDescription: Option[String], transportStatus: Option[Char], concernedBaren: Option[String], testMode: Option[Char])
-  /** GetResult implicit for fetching GreatBillingRunRow objects using plain SQL queries */
-  implicit def GetResultGreatBillingRunRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[java.sql.Timestamp]], e3: GR[Option[Char]], e4: GR[Option[java.sql.Blob]], e5: GR[Option[scala.math.BigDecimal]]): GR[GreatBillingRunRow] = GR{
+  case class BillingRunRow(objectidc: String, bareGroup: Option[String], execStart: Option[java.sql.Timestamp], execEnd: Option[java.sql.Timestamp], status: Option[Char], userAccount: Option[String], endDate: Option[java.sql.Timestamp], onlyFlagged: Option[Char], nrsValidation: Option[Char], protocol: Option[java.sql.Blob], protocolLength: Option[scala.math.BigDecimal], transportDescription: Option[String], transportStatus: Option[Char], concernedBaren: Option[String], testMode: Option[Char])
+  /** GetResult implicit for fetching BillingRunRow objects using plain SQL queries */
+  implicit def GetResultBillingRunRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[java.sql.Timestamp]], e3: GR[Option[Char]], e4: GR[Option[java.sql.Blob]], e5: GR[Option[scala.math.BigDecimal]]): GR[BillingRunRow] = GR{
     prs => import prs._
-      GreatBillingRunRow.tupled((<<[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[String], <<?[java.sql.Timestamp], <<?[Char], <<?[Char], <<?[java.sql.Blob], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[String], <<?[Char]))
+      BillingRunRow.tupled((<<[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[String], <<?[java.sql.Timestamp], <<?[Char], <<?[Char], <<?[java.sql.Blob], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_BILLING_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBillingRun(_tableTag: Tag) extends profile.api.Table[GreatBillingRunRow](_tableTag, Some("WERNER2"), "GREAT_BILLING_RUN") {
-    def * = (objectidc, bareGroup, execStart, execEnd, status, userAccount, endDate, onlyFlagged, nrsValidation, protocol, protocolLength, transportDescription, transportStatus, concernedBaren, testMode) <> (GreatBillingRunRow.tupled, GreatBillingRunRow.unapply)
+  class BillingRun(_tableTag: Tag) extends profile.api.Table[BillingRunRow](_tableTag, Some("WERNER2"), "GREAT_BILLING_RUN") {
+    def * = (objectidc, bareGroup, execStart, execEnd, status, userAccount, endDate, onlyFlagged, nrsValidation, protocol, protocolLength, transportDescription, transportStatus, concernedBaren, testMode) <> (BillingRunRow.tupled, BillingRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), bareGroup, execStart, execEnd, status, userAccount, endDate, onlyFlagged, nrsValidation, protocol, protocolLength, transportDescription, transportStatus, concernedBaren, testMode).shaped.<>({r=>import r._; _1.map(_=> GreatBillingRunRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), bareGroup, execStart, execEnd, status, userAccount, endDate, onlyFlagged, nrsValidation, protocol, protocolLength, transportDescription, transportStatus, concernedBaren, testMode).shaped.<>({r=>import r._; _1.map(_=> BillingRunRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -83,13 +84,13 @@ trait BackOfficeTables {
     /** Database column TEST_MODE SqlType(CHAR) */
     val testMode: Rep[Option[Char]] = column[Option[Char]]("TEST_MODE")
 
-    /** Foreign key referencing GreatBareDependants (database name BRU_FK_BARE_GROUP) */
-    lazy val greatBareDependantsFk = foreignKey("BRU_FK_BARE_GROUP", bareGroup, GreatBareDependants)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatUserAccount (database name BRU_FK_USER_ACCOUNT) */
-    lazy val greatUserAccountFk = foreignKey("BRU_FK_USER_ACCOUNT", userAccount, GreatUserAccount)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BareDependants (database name BRU_FK_BARE_GROUP) */
+    lazy val bareDependantsFk = foreignKey("BRU_FK_BARE_GROUP", bareGroup, BareDependants)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing UserAccount (database name BRU_FK_USER_ACCOUNT) */
+    lazy val userAccountFk = foreignKey("BRU_FK_USER_ACCOUNT", userAccount, UserAccount)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBillingRun */
-  lazy val GreatBillingRun = new TableQuery(tag => new GreatBillingRun(tag))
+  /** Collection-like TableQuery object for table BillingRun */
+  lazy val BillingRun = new TableQuery(tag => new BillingRun(tag))
 
   /** Entity class storing rows of table GreatBookEntry
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -113,17 +114,17 @@ trait BackOfficeTables {
     *  @param additionalPaymentPosition Database column ADDITIONAL_PAYMENT_POSITION SqlType(NUMBER)
     *  @param cancelledBookEntryIdValue Database column CANCELLED_BOOK_ENTRY_ID_VALUE SqlType(VARCHAR2), Length(10,true)
     *  @param invoiceLineItemIdValue Database column INVOICE_LINE_ITEM_ID_VALUE SqlType(VARCHAR2), Length(10,true) */
-  case class GreatBookEntryRow(objectidc: String, fileIdValue: Option[String], debtorPosition: Option[scala.math.BigDecimal], preciseCostType: Option[String], valueDate: Option[java.sql.Timestamp], periodOfPerformanceBegin: Option[java.sql.Timestamp], periodOfPerformanceEnd: Option[java.sql.Timestamp], materialNumber: Option[String], bare: Option[String], commissionReceiver: Option[String], targetAmount: Option[scala.math.BigDecimal], targetAmountCur: Option[String], purpose: Option[Char], invoiceOrgId: Option[String], invoiceOrgName: Option[String], orderNumber: Option[String], orderItem: Option[String], reason: Option[String], additionalPaymentPosition: Option[scala.math.BigDecimal], cancelledBookEntryIdValue: Option[String], invoiceLineItemIdValue: Option[String])
-  /** GetResult implicit for fetching GreatBookEntryRow objects using plain SQL queries */
-  implicit def GetResultGreatBookEntryRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[scala.math.BigDecimal]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[GreatBookEntryRow] = GR{
+  case class BookEntryRow(objectidc: String, fileIdValue: Option[String], debtorPosition: Option[scala.math.BigDecimal], preciseCostType: Option[String], valueDate: Option[java.sql.Timestamp], periodOfPerformanceBegin: Option[java.sql.Timestamp], periodOfPerformanceEnd: Option[java.sql.Timestamp], materialNumber: Option[String], bare: Option[String], commissionReceiver: Option[String], targetAmount: Option[scala.math.BigDecimal], targetAmountCur: Option[String], purpose: Option[Char], invoiceOrgId: Option[String], invoiceOrgName: Option[String], orderNumber: Option[String], orderItem: Option[String], reason: Option[String], additionalPaymentPosition: Option[scala.math.BigDecimal], cancelledBookEntryIdValue: Option[String], invoiceLineItemIdValue: Option[String])
+  /** GetResult implicit for fetching BookEntryRow objects using plain SQL queries */
+  implicit def GetResultBookEntryRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[scala.math.BigDecimal]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[BookEntryRow] = GR{
     prs => import prs._
-      GreatBookEntryRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String]))
+      BookEntryRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_BOOK_ENTRY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBookEntry(_tableTag: Tag) extends profile.api.Table[GreatBookEntryRow](_tableTag, Some("WERNER2"), "GREAT_BOOK_ENTRY") {
-    def * = (objectidc, fileIdValue, debtorPosition, preciseCostType, valueDate, periodOfPerformanceBegin, periodOfPerformanceEnd, materialNumber, bare, commissionReceiver, targetAmount, targetAmountCur, purpose, invoiceOrgId, invoiceOrgName, orderNumber, orderItem, reason, additionalPaymentPosition, cancelledBookEntryIdValue, invoiceLineItemIdValue) <> (GreatBookEntryRow.tupled, GreatBookEntryRow.unapply)
+  class BookEntry(_tableTag: Tag) extends profile.api.Table[BookEntryRow](_tableTag, Some("WERNER2"), "GREAT_BOOK_ENTRY") {
+    def * = (objectidc, fileIdValue, debtorPosition, preciseCostType, valueDate, periodOfPerformanceBegin, periodOfPerformanceEnd, materialNumber, bare, commissionReceiver, targetAmount, targetAmountCur, purpose, invoiceOrgId, invoiceOrgName, orderNumber, orderItem, reason, additionalPaymentPosition, cancelledBookEntryIdValue, invoiceLineItemIdValue) <> (BookEntryRow.tupled, BookEntryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), fileIdValue, debtorPosition, preciseCostType, valueDate, periodOfPerformanceBegin, periodOfPerformanceEnd, materialNumber, bare, commissionReceiver, targetAmount, targetAmountCur, purpose, invoiceOrgId, invoiceOrgName, orderNumber, orderItem, reason, additionalPaymentPosition, cancelledBookEntryIdValue, invoiceLineItemIdValue).shaped.<>({r=>import r._; _1.map(_=> GreatBookEntryRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), fileIdValue, debtorPosition, preciseCostType, valueDate, periodOfPerformanceBegin, periodOfPerformanceEnd, materialNumber, bare, commissionReceiver, targetAmount, targetAmountCur, purpose, invoiceOrgId, invoiceOrgName, orderNumber, orderItem, reason, additionalPaymentPosition, cancelledBookEntryIdValue, invoiceLineItemIdValue).shaped.<>({r=>import r._; _1.map(_=> BookEntryRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -168,55 +169,55 @@ trait BackOfficeTables {
     /** Database column INVOICE_LINE_ITEM_ID_VALUE SqlType(VARCHAR2), Length(10,true) */
     val invoiceLineItemIdValue: Rep[Option[String]] = column[Option[String]]("INVOICE_LINE_ITEM_ID_VALUE", O.Length(10,varying=true))
 
-    /** Foreign key referencing GreatBareDependants (database name BEY_FK_BARE) */
-    lazy val greatBareDependantsFk = foreignKey("BEY_FK_BARE", bare, GreatBareDependants)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatCommissionReceiver (database name BEY_FK_COMMISSION_RECEIVER) */
-    lazy val greatCommissionReceiverFk = foreignKey("BEY_FK_COMMISSION_RECEIVER", commissionReceiver, GreatCommissionReceiver)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatCurrency (database name BEY_FK_TARGET_AMOUNT_CUR) */
-    lazy val greatCurrencyFk = foreignKey("BEY_FK_TARGET_AMOUNT_CUR", targetAmountCur, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatGuaranteeFile (database name BEY_FK_FILE_ID_VALUE) */
-    lazy val greatGuaranteeFileFk = foreignKey("BEY_FK_FILE_ID_VALUE", fileIdValue, GreatGuaranteeFile)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatInvoiceLineItem (database name BEY_FK_INVOICE_LINE_ITEM_ID_5) */
-    lazy val greatInvoiceLineItemFk = foreignKey("BEY_FK_INVOICE_LINE_ITEM_ID_5", invoiceLineItemIdValue, GreatInvoiceLineItem)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatOrg (database name BEY_FK_INVOICE_ORG_ID) */
-    lazy val greatOrgFk = foreignKey("BEY_FK_INVOICE_ORG_ID", invoiceOrgId, GreatOrg)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BareDependants (database name BEY_FK_BARE) */
+    lazy val bareDependantsFk = foreignKey("BEY_FK_BARE", bare, BareDependants)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing CommissionReceiver (database name BEY_FK_COMMISSION_RECEIVER) */
+    lazy val commissionReceiverFk = foreignKey("BEY_FK_COMMISSION_RECEIVER", commissionReceiver, GreatCommissionReceiver)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Currency (database name BEY_FK_TARGET_AMOUNT_CUR) */
+    lazy val currencyFk = foreignKey("BEY_FK_TARGET_AMOUNT_CUR", targetAmountCur, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing GuaranteeFile (database name BEY_FK_FILE_ID_VALUE) */
+    lazy val guaranteeFileFk = foreignKey("BEY_FK_FILE_ID_VALUE", fileIdValue, GreatGuaranteeFile)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing InvoiceLineItem (database name BEY_FK_INVOICE_LINE_ITEM_ID_5) */
+    lazy val invoiceLineItemFk = foreignKey("BEY_FK_INVOICE_LINE_ITEM_ID_5", invoiceLineItemIdValue, GreatInvoiceLineItem)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Org (database name BEY_FK_INVOICE_ORG_ID) */
+    lazy val orgFk = foreignKey("BEY_FK_INVOICE_ORG_ID", invoiceOrgId, Org)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (fileIdValue,debtorPosition) (database name BEY_CDX0) */
     val index1 = index("BEY_CDX0", (fileIdValue, debtorPosition))
   }
-  /** Collection-like TableQuery object for table GreatBookEntry */
-  lazy val GreatBookEntry = new TableQuery(tag => new GreatBookEntry(tag))
+  /** Collection-like TableQuery object for table BookEntry */
+  lazy val BookEntry = new TableQuery(tag => new BookEntry(tag))
 
   /** Entity class storing rows of table GreatBookEntryRelation
     *  @param masterBookEntryIdc Database column MASTER_BOOK_ENTRY_IDC SqlType(VARCHAR2), Length(10,true)
     *  @param detailBookEntryIdc Database column DETAIL_BOOK_ENTRY_IDC SqlType(VARCHAR2), Length(10,true) */
-  case class GreatBookEntryRelationRow(masterBookEntryIdc: String, detailBookEntryIdc: String)
-  /** GetResult implicit for fetching GreatBookEntryRelationRow objects using plain SQL queries */
-  implicit def GetResultGreatBookEntryRelationRow(implicit e0: GR[String]): GR[GreatBookEntryRelationRow] = GR{
+  case class BookEntryRelationRow(masterBookEntryIdc: String, detailBookEntryIdc: String)
+  /** GetResult implicit for fetching BookEntryRelationRow objects using plain SQL queries */
+  implicit def GetResultBookEntryRelationRow(implicit e0: GR[String]): GR[BookEntryRelationRow] = GR{
     prs => import prs._
-      GreatBookEntryRelationRow.tupled((<<[String], <<[String]))
+      BookEntryRelationRow.tupled((<<[String], <<[String]))
   }
   /** Table description of table GREAT_BOOK_ENTRY_RELATION. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBookEntryRelation(_tableTag: Tag) extends profile.api.Table[GreatBookEntryRelationRow](_tableTag, Some("WERNER2"), "GREAT_BOOK_ENTRY_RELATION") {
-    def * = (masterBookEntryIdc, detailBookEntryIdc) <> (GreatBookEntryRelationRow.tupled, GreatBookEntryRelationRow.unapply)
+  class BookEntryRelation(_tableTag: Tag) extends profile.api.Table[BookEntryRelationRow](_tableTag, Some("WERNER2"), "GREAT_BOOK_ENTRY_RELATION") {
+    def * = (masterBookEntryIdc, detailBookEntryIdc) <> (BookEntryRelationRow.tupled, BookEntryRelationRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(masterBookEntryIdc), Rep.Some(detailBookEntryIdc)).shaped.<>({r=>import r._; _1.map(_=> GreatBookEntryRelationRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(masterBookEntryIdc), Rep.Some(detailBookEntryIdc)).shaped.<>({r=>import r._; _1.map(_=> BookEntryRelationRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column MASTER_BOOK_ENTRY_IDC SqlType(VARCHAR2), Length(10,true) */
     val masterBookEntryIdc: Rep[String] = column[String]("MASTER_BOOK_ENTRY_IDC", O.Length(10,varying=true))
     /** Database column DETAIL_BOOK_ENTRY_IDC SqlType(VARCHAR2), Length(10,true) */
     val detailBookEntryIdc: Rep[String] = column[String]("DETAIL_BOOK_ENTRY_IDC", O.Length(10,varying=true))
 
-    /** Primary key of GreatBookEntryRelation (database name BER_PK_MASTER_BOOK_ENTRY_IDC) */
+    /** Primary key of BookEntryRelation (database name BER_PK_MASTER_BOOK_ENTRY_IDC) */
     val pk = primaryKey("BER_PK_MASTER_BOOK_ENTRY_IDC", (masterBookEntryIdc, detailBookEntryIdc))
 
-    /** Foreign key referencing GreatBookEntry (database name BER_FK_DETAIL_BOOK_ENTRY_IDC) */
-    lazy val greatBookEntryFk1 = foreignKey("BER_FK_DETAIL_BOOK_ENTRY_IDC", detailBookEntryIdc, GreatBookEntry)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatBookEntry (database name BER_FK_MASTER_BOOK_ENTRY_IDC) */
-    lazy val greatBookEntryFk2 = foreignKey("BER_FK_MASTER_BOOK_ENTRY_IDC", masterBookEntryIdc, GreatBookEntry)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BookEntry (database name BER_FK_DETAIL_BOOK_ENTRY_IDC) */
+    lazy val bookEntryFk1 = foreignKey("BER_FK_DETAIL_BOOK_ENTRY_IDC", detailBookEntryIdc, BookEntry)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BookEntry (database name BER_FK_MASTER_BOOK_ENTRY_IDC) */
+    lazy val bookEntryFk2 = foreignKey("BER_FK_MASTER_BOOK_ENTRY_IDC", masterBookEntryIdc, BookEntry)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBookEntryRelation */
-  lazy val GreatBookEntryRelation = new TableQuery(tag => new GreatBookEntryRelation(tag))
+  /** Collection-like TableQuery object for table BookEntryRelation */
+  lazy val BookEntryRelation = new TableQuery(tag => new BookEntryRelation(tag))
 
   /** Entity class storing rows of table GreatBulkUpdateDef
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -224,17 +225,17 @@ trait BackOfficeTables {
     *  @param userObjectidc Database column USER_OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param reason Database column REASON SqlType(VARCHAR2), Length(128,true)
     *  @param log Database column LOG SqlType(CLOB) */
-  case class GreatBulkUpdateDefRow(idValue: String, defTimestamp: Option[java.sql.Timestamp], userObjectidc: Option[String], reason: Option[String], log: Option[java.sql.Clob])
-  /** GetResult implicit for fetching GreatBulkUpdateDefRow objects using plain SQL queries */
-  implicit def GetResultGreatBulkUpdateDefRow(implicit e0: GR[String], e1: GR[Option[java.sql.Timestamp]], e2: GR[Option[String]], e3: GR[Option[java.sql.Clob]]): GR[GreatBulkUpdateDefRow] = GR{
+  case class BulkUpdateDefRow(idValue: String, defTimestamp: Option[java.sql.Timestamp], userObjectidc: Option[String], reason: Option[String], log: Option[java.sql.Clob])
+  /** GetResult implicit for fetching BulkUpdateDefRow objects using plain SQL queries */
+  implicit def GetResultBulkUpdateDefRow(implicit e0: GR[String], e1: GR[Option[java.sql.Timestamp]], e2: GR[Option[String]], e3: GR[Option[java.sql.Clob]]): GR[BulkUpdateDefRow] = GR{
     prs => import prs._
-      GreatBulkUpdateDefRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[java.sql.Clob]))
+      BulkUpdateDefRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_BULK_UPDATE_DEF. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBulkUpdateDef(_tableTag: Tag) extends profile.api.Table[GreatBulkUpdateDefRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_DEF") {
-    def * = (idValue, defTimestamp, userObjectidc, reason, log) <> (GreatBulkUpdateDefRow.tupled, GreatBulkUpdateDefRow.unapply)
+  class BulkUpdateDef(_tableTag: Tag) extends profile.api.Table[BulkUpdateDefRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_DEF") {
+    def * = (idValue, defTimestamp, userObjectidc, reason, log) <> (BulkUpdateDefRow.tupled, BulkUpdateDefRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(idValue), defTimestamp, userObjectidc, reason, log).shaped.<>({r=>import r._; _1.map(_=> GreatBulkUpdateDefRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(idValue), defTimestamp, userObjectidc, reason, log).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateDefRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val idValue: Rep[String] = column[String]("ID_VALUE", O.PrimaryKey, O.Length(10,varying=true))
@@ -247,24 +248,24 @@ trait BackOfficeTables {
     /** Database column LOG SqlType(CLOB) */
     val log: Rep[Option[java.sql.Clob]] = column[Option[java.sql.Clob]]("LOG")
   }
-  /** Collection-like TableQuery object for table GreatBulkUpdateDef */
-  lazy val GreatBulkUpdateDef = new TableQuery(tag => new GreatBulkUpdateDef(tag))
+  /** Collection-like TableQuery object for table BulkUpdateDef */
+  lazy val BulkUpdateDef = new TableQuery(tag => new BulkUpdateDef(tag))
 
   /** Entity class storing rows of table GreatBulkUpdateDokuments
     *  @param definitionId Database column DEFINITION_ID SqlType(VARCHAR2), Length(10,true)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(52,true)
     *  @param dokument Database column DOKUMENT SqlType(BLOB) */
-  case class GreatBulkUpdateDokumentsRow(definitionId: String, name: String, dokument: Option[java.sql.Blob])
-  /** GetResult implicit for fetching GreatBulkUpdateDokumentsRow objects using plain SQL queries */
-  implicit def GetResultGreatBulkUpdateDokumentsRow(implicit e0: GR[String], e1: GR[Option[java.sql.Blob]]): GR[GreatBulkUpdateDokumentsRow] = GR{
+  case class BulkUpdateDokumentsRow(definitionId: String, name: String, dokument: Option[java.sql.Blob])
+  /** GetResult implicit for fetching BulkUpdateDokumentsRow objects using plain SQL queries */
+  implicit def GetResultBulkUpdateDokumentsRow(implicit e0: GR[String], e1: GR[Option[java.sql.Blob]]): GR[BulkUpdateDokumentsRow] = GR{
     prs => import prs._
-      GreatBulkUpdateDokumentsRow.tupled((<<[String], <<[String], <<?[java.sql.Blob]))
+      BulkUpdateDokumentsRow.tupled((<<[String], <<[String], <<?[java.sql.Blob]))
   }
   /** Table description of table GREAT_BULK_UPDATE_DOKUMENTS. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBulkUpdateDokuments(_tableTag: Tag) extends profile.api.Table[GreatBulkUpdateDokumentsRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_DOKUMENTS") {
-    def * = (definitionId, name, dokument) <> (GreatBulkUpdateDokumentsRow.tupled, GreatBulkUpdateDokumentsRow.unapply)
+  class BulkUpdateDokuments(_tableTag: Tag) extends profile.api.Table[BulkUpdateDokumentsRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_DOKUMENTS") {
+    def * = (definitionId, name, dokument) <> (BulkUpdateDokumentsRow.tupled, BulkUpdateDokumentsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(definitionId), Rep.Some(name), dokument).shaped.<>({r=>import r._; _1.map(_=> GreatBulkUpdateDokumentsRow.tupled((_1.get, _2.get, _3)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(definitionId), Rep.Some(name), dokument).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateDokumentsRow.tupled((_1.get, _2.get, _3)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column DEFINITION_ID SqlType(VARCHAR2), Length(10,true) */
     val definitionId: Rep[String] = column[String]("DEFINITION_ID", O.Length(10,varying=true))
@@ -273,14 +274,14 @@ trait BackOfficeTables {
     /** Database column DOKUMENT SqlType(BLOB) */
     val dokument: Rep[Option[java.sql.Blob]] = column[Option[java.sql.Blob]]("DOKUMENT")
 
-    /** Primary key of GreatBulkUpdateDokuments (database name BUD_PK_DEFINITION_ID) */
+    /** Primary key of BulkUpdateDokuments (database name BUD_PK_DEFINITION_ID) */
     val pk = primaryKey("BUD_PK_DEFINITION_ID", (definitionId, name))
 
-    /** Foreign key referencing GreatBulkUpdateDef (database name BUD_FK_DEFINITION_ID) */
-    lazy val greatBulkUpdateDefFk = foreignKey("BUD_FK_DEFINITION_ID", definitionId, GreatBulkUpdateDef)(r => r.idValue, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BulkUpdateDef (database name BUD_FK_DEFINITION_ID) */
+    lazy val bulkUpdateDefFk = foreignKey("BUD_FK_DEFINITION_ID", definitionId, BulkUpdateDef)(r => r.idValue, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBulkUpdateDokuments */
-  lazy val GreatBulkUpdateDokuments = new TableQuery(tag => new GreatBulkUpdateDokuments(tag))
+  /** Collection-like TableQuery object for table BulkUpdateDokuments */
+  lazy val BulkUpdateDokuments = new TableQuery(tag => new BulkUpdateDokuments(tag))
 
   /** Entity class storing rows of table GreatBulkUpdateGuarantee
     *  @param definitionId Database column DEFINITION_ID SqlType(VARCHAR2), Length(10,true)
@@ -292,17 +293,17 @@ trait BackOfficeTables {
     *  @param debtorPortionPosition Database column DEBTOR_PORTION_POSITION SqlType(NUMBER)
     *  @param subSubstitutionValue Database column SUB_SUBSTITUTION_VALUE SqlType(VARCHAR2), Length(52,true)
     *  @param nrsSuccessful Database column NRS_SUCCESSFUL SqlType(CHAR) */
-  case class GreatBulkUpdateGuaranteeRow(definitionId: String, guaranteeId: String, version: scala.math.BigDecimal, changed: Option[Char], kind: String, kindIndex: scala.math.BigDecimal, debtorPortionPosition: scala.math.BigDecimal, subSubstitutionValue: Option[String], nrsSuccessful: Option[Char])
-  /** GetResult implicit for fetching GreatBulkUpdateGuaranteeRow objects using plain SQL queries */
-  implicit def GetResultGreatBulkUpdateGuaranteeRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[Char]], e3: GR[Option[String]]): GR[GreatBulkUpdateGuaranteeRow] = GR{
+  case class BulkUpdateGuaranteeRow(definitionId: String, guaranteeId: String, version: scala.math.BigDecimal, changed: Option[Char], kind: String, kindIndex: scala.math.BigDecimal, debtorPortionPosition: scala.math.BigDecimal, subSubstitutionValue: Option[String], nrsSuccessful: Option[Char])
+  /** GetResult implicit for fetching BulkUpdateGuaranteeRow objects using plain SQL queries */
+  implicit def GetResultBulkUpdateGuaranteeRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[Char]], e3: GR[Option[String]]): GR[BulkUpdateGuaranteeRow] = GR{
     prs => import prs._
-      GreatBulkUpdateGuaranteeRow.tupled((<<[String], <<[String], <<[scala.math.BigDecimal], <<?[Char], <<[String], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal], <<?[String], <<?[Char]))
+      BulkUpdateGuaranteeRow.tupled((<<[String], <<[String], <<[scala.math.BigDecimal], <<?[Char], <<[String], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_BULK_UPDATE_GUARANTEE. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBulkUpdateGuarantee(_tableTag: Tag) extends profile.api.Table[GreatBulkUpdateGuaranteeRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_GUARANTEE") {
-    def * = (definitionId, guaranteeId, version, changed, kind, kindIndex, debtorPortionPosition, subSubstitutionValue, nrsSuccessful) <> (GreatBulkUpdateGuaranteeRow.tupled, GreatBulkUpdateGuaranteeRow.unapply)
+  class BulkUpdateGuarantee(_tableTag: Tag) extends profile.api.Table[BulkUpdateGuaranteeRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_GUARANTEE") {
+    def * = (definitionId, guaranteeId, version, changed, kind, kindIndex, debtorPortionPosition, subSubstitutionValue, nrsSuccessful) <> (BulkUpdateGuaranteeRow.tupled, BulkUpdateGuaranteeRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(definitionId), Rep.Some(guaranteeId), Rep.Some(version), changed, Rep.Some(kind), Rep.Some(kindIndex), Rep.Some(debtorPortionPosition), subSubstitutionValue, nrsSuccessful).shaped.<>({r=>import r._; _1.map(_=> GreatBulkUpdateGuaranteeRow.tupled((_1.get, _2.get, _3.get, _4, _5.get, _6.get, _7.get, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(definitionId), Rep.Some(guaranteeId), Rep.Some(version), changed, Rep.Some(kind), Rep.Some(kindIndex), Rep.Some(debtorPortionPosition), subSubstitutionValue, nrsSuccessful).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateGuaranteeRow.tupled((_1.get, _2.get, _3.get, _4, _5.get, _6.get, _7.get, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column DEFINITION_ID SqlType(VARCHAR2), Length(10,true) */
     val definitionId: Rep[String] = column[String]("DEFINITION_ID", O.Length(10,varying=true))
@@ -323,16 +324,16 @@ trait BackOfficeTables {
     /** Database column NRS_SUCCESSFUL SqlType(CHAR) */
     val nrsSuccessful: Rep[Option[Char]] = column[Option[Char]]("NRS_SUCCESSFUL")
 
-    /** Primary key of GreatBulkUpdateGuarantee (database name BUG_PK_DEFINITION_ID) */
+    /** Primary key of BulkUpdateGuarantee (database name BUG_PK_DEFINITION_ID) */
     val pk = primaryKey("BUG_PK_DEFINITION_ID", (definitionId, guaranteeId, version, kind, kindIndex, debtorPortionPosition))
 
-    /** Foreign key referencing GreatBulkUpdateValue (database name BUG_FK_DEFINITION_ID) */
-    lazy val greatBulkUpdateValueFk = foreignKey("BUG_FK_DEFINITION_ID", (definitionId, kind, kindIndex), GreatBulkUpdateValue)(r => (r.definitionId, r.kind, r.kindIndex), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatGuarantee (database name BUG_FK_VERSION) */
-    lazy val greatGuaranteeFk = foreignKey("BUG_FK_VERSION", (guaranteeId, version), GreatGuarantee)(r => (r.fileIdValue, r.guaranteeVersion), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BulkUpdateValue (database name BUG_FK_DEFINITION_ID) */
+    lazy val bulkUpdateValueFk = foreignKey("BUG_FK_DEFINITION_ID", (definitionId, kind, kindIndex), BulkUpdateValue)(r => (r.definitionId, r.kind, r.kindIndex), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Guarantee (database name BUG_FK_VERSION) */
+    lazy val guaranteeFk = foreignKey("BUG_FK_VERSION", (guaranteeId, version), GreatGuarantee)(r => (r.fileIdValue, r.guaranteeVersion), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBulkUpdateGuarantee */
-  lazy val GreatBulkUpdateGuarantee = new TableQuery(tag => new GreatBulkUpdateGuarantee(tag))
+  /** Collection-like TableQuery object for table BulkUpdateGuarantee */
+  lazy val BulkUpdateGuarantee = new TableQuery(tag => new BulkUpdateGuarantee(tag))
 
   /** Entity class storing rows of table GreatBulkUpdateRun
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -340,17 +341,17 @@ trait BackOfficeTables {
     *  @param userObjectidc Database column USER_OBJECTIDC SqlType(VARCHAR2), Length(10,true)
     *  @param definitionIdValue Database column DEFINITION_ID_VALUE SqlType(VARCHAR2), Length(10,true)
     *  @param log Database column LOG SqlType(CLOB) */
-  case class GreatBulkUpdateRunRow(idValue: String, execTimestamp: Option[java.sql.Timestamp], userObjectidc: Option[String], definitionIdValue: Option[String], log: Option[java.sql.Clob])
-  /** GetResult implicit for fetching GreatBulkUpdateRunRow objects using plain SQL queries */
-  implicit def GetResultGreatBulkUpdateRunRow(implicit e0: GR[String], e1: GR[Option[java.sql.Timestamp]], e2: GR[Option[String]], e3: GR[Option[java.sql.Clob]]): GR[GreatBulkUpdateRunRow] = GR{
+  case class BulkUpdateRunRow(idValue: String, execTimestamp: Option[java.sql.Timestamp], userObjectidc: Option[String], definitionIdValue: Option[String], log: Option[java.sql.Clob])
+  /** GetResult implicit for fetching BulkUpdateRunRow objects using plain SQL queries */
+  implicit def GetResultBulkUpdateRunRow(implicit e0: GR[String], e1: GR[Option[java.sql.Timestamp]], e2: GR[Option[String]], e3: GR[Option[java.sql.Clob]]): GR[BulkUpdateRunRow] = GR{
     prs => import prs._
-      GreatBulkUpdateRunRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[java.sql.Clob]))
+      BulkUpdateRunRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_BULK_UPDATE_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBulkUpdateRun(_tableTag: Tag) extends profile.api.Table[GreatBulkUpdateRunRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_RUN") {
-    def * = (idValue, execTimestamp, userObjectidc, definitionIdValue, log) <> (GreatBulkUpdateRunRow.tupled, GreatBulkUpdateRunRow.unapply)
+  class BulkUpdateRun(_tableTag: Tag) extends profile.api.Table[BulkUpdateRunRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_RUN") {
+    def * = (idValue, execTimestamp, userObjectidc, definitionIdValue, log) <> (BulkUpdateRunRow.tupled, BulkUpdateRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(idValue), execTimestamp, userObjectidc, definitionIdValue, log).shaped.<>({r=>import r._; _1.map(_=> GreatBulkUpdateRunRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(idValue), execTimestamp, userObjectidc, definitionIdValue, log).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateRunRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val idValue: Rep[String] = column[String]("ID_VALUE", O.PrimaryKey, O.Length(10,varying=true))
@@ -363,11 +364,11 @@ trait BackOfficeTables {
     /** Database column LOG SqlType(CLOB) */
     val log: Rep[Option[java.sql.Clob]] = column[Option[java.sql.Clob]]("LOG")
 
-    /** Foreign key referencing GreatBulkUpdateDef (database name BUR_FK_DEFINITION_ID_VALUE) */
-    lazy val greatBulkUpdateDefFk = foreignKey("BUR_FK_DEFINITION_ID_VALUE", definitionIdValue, GreatBulkUpdateDef)(r => Rep.Some(r.idValue), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BulkUpdateDef (database name BUR_FK_DEFINITION_ID_VALUE) */
+    lazy val bulkUpdateDefFk = foreignKey("BUR_FK_DEFINITION_ID_VALUE", definitionIdValue, BulkUpdateDef)(r => Rep.Some(r.idValue), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBulkUpdateRun */
-  lazy val GreatBulkUpdateRun = new TableQuery(tag => new GreatBulkUpdateRun(tag))
+  /** Collection-like TableQuery object for table BulkUpdateRun */
+  lazy val BulkUpdateRun = new TableQuery(tag => new BulkUpdateRun(tag))
 
   /** Entity class storing rows of table GreatBulkUpdateValue
     *  @param definitionId Database column DEFINITION_ID SqlType(VARCHAR2), Length(10,true)
@@ -376,17 +377,17 @@ trait BackOfficeTables {
     *  @param newValue Database column NEW_VALUE SqlType(VARCHAR2), Length(52,true)
     *  @param subSubstitution Database column SUB_SUBSTITUTION SqlType(CHAR)
     *  @param kindIndex Database column KIND_INDEX SqlType(NUMBER) */
-  case class GreatBulkUpdateValueRow(definitionId: String, kind: String, oldValue: Option[String], newValue: Option[String], subSubstitution: Option[Char], kindIndex: scala.math.BigDecimal)
-  /** GetResult implicit for fetching GreatBulkUpdateValueRow objects using plain SQL queries */
-  implicit def GetResultGreatBulkUpdateValueRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[Char]], e3: GR[scala.math.BigDecimal]): GR[GreatBulkUpdateValueRow] = GR{
+  case class BulkUpdateValueRow(definitionId: String, kind: String, oldValue: Option[String], newValue: Option[String], subSubstitution: Option[Char], kindIndex: scala.math.BigDecimal)
+  /** GetResult implicit for fetching BulkUpdateValueRow objects using plain SQL queries */
+  implicit def GetResultBulkUpdateValueRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[Char]], e3: GR[scala.math.BigDecimal]): GR[BulkUpdateValueRow] = GR{
     prs => import prs._
-      GreatBulkUpdateValueRow.tupled((<<[String], <<[String], <<?[String], <<?[String], <<?[Char], <<[scala.math.BigDecimal]))
+      BulkUpdateValueRow.tupled((<<[String], <<[String], <<?[String], <<?[String], <<?[Char], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_BULK_UPDATE_VALUE. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBulkUpdateValue(_tableTag: Tag) extends profile.api.Table[GreatBulkUpdateValueRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_VALUE") {
-    def * = (definitionId, kind, oldValue, newValue, subSubstitution, kindIndex) <> (GreatBulkUpdateValueRow.tupled, GreatBulkUpdateValueRow.unapply)
+  class BulkUpdateValue(_tableTag: Tag) extends profile.api.Table[BulkUpdateValueRow](_tableTag, Some("WERNER2"), "GREAT_BULK_UPDATE_VALUE") {
+    def * = (definitionId, kind, oldValue, newValue, subSubstitution, kindIndex) <> (BulkUpdateValueRow.tupled, BulkUpdateValueRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(definitionId), Rep.Some(kind), oldValue, newValue, subSubstitution, Rep.Some(kindIndex)).shaped.<>({r=>import r._; _1.map(_=> GreatBulkUpdateValueRow.tupled((_1.get, _2.get, _3, _4, _5, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(definitionId), Rep.Some(kind), oldValue, newValue, subSubstitution, Rep.Some(kindIndex)).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateValueRow.tupled((_1.get, _2.get, _3, _4, _5, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column DEFINITION_ID SqlType(VARCHAR2), Length(10,true) */
     val definitionId: Rep[String] = column[String]("DEFINITION_ID", O.Length(10,varying=true))
@@ -401,29 +402,29 @@ trait BackOfficeTables {
     /** Database column KIND_INDEX SqlType(NUMBER) */
     val kindIndex: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("KIND_INDEX")
 
-    /** Primary key of GreatBulkUpdateValue (database name BUV_PK_DEFINITION_ID) */
+    /** Primary key of BulkUpdateValue (database name BUV_PK_DEFINITION_ID) */
     val pk = primaryKey("BUV_PK_DEFINITION_ID", (definitionId, kind, kindIndex))
 
-    /** Foreign key referencing GreatBulkUpdateDef (database name BUV_FK_DEFINITION_ID) */
-    lazy val greatBulkUpdateDefFk = foreignKey("BUV_FK_DEFINITION_ID", definitionId, GreatBulkUpdateDef)(r => r.idValue, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BulkUpdateDef (database name BUV_FK_DEFINITION_ID) */
+    lazy val bulkUpdateDefFk = foreignKey("BUV_FK_DEFINITION_ID", definitionId, BulkUpdateDef)(r => r.idValue, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBulkUpdateValue */
-  lazy val GreatBulkUpdateValue = new TableQuery(tag => new GreatBulkUpdateValue(tag))
+  /** Collection-like TableQuery object for table BulkUpdateValue */
+  lazy val BulkUpdateValue = new TableQuery(tag => new BulkUpdateValue(tag))
 
 
-  /** Row type of table GreatBalanceSheetReportDef */
-  type GreatBalanceSheetReportDefRow = HCons[String,HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-  /** Constructor for GreatBalanceSheetReportDefRow providing default values if available in the database schema. */
-  def GreatBalanceSheetReportDefRow(idValue: String, kind: Option[String], reportDate: Option[java.sql.Timestamp], userName: Option[String], accEmail: Option[String], b40Active: Option[Char], b40EmailSubject: Option[String], b40EmailText: Option[String], b40CoverLetterFilePath: Option[String], b40DivisionTableFilePath: Option[String], b40ParameterFilePath: Option[String], frnActive: Option[Char], frnEmailSubject: Option[String], frnEmailText: Option[String], frnCoverLetterFilePath: Option[String], frnDivisionTableFilePath: Option[String], ownActive: Option[Char], ownEmailSubject: Option[String], ownEmailText: Option[String], ownCoverLetterFilePath: Option[String], ownDivisionTableFilePath: Option[String], bareCodes: Option[String], exdActive: Option[Char], exdEmailSubject: Option[String], exdEmailText: Option[String], exdCoverLetterFilePath: Option[String], exdReceivers: Option[String], sktfActive: Option[Char], sktfEmailSubject: Option[String], sktfEmailText: Option[String], sktfCoverLetterFilePath: Option[String], sktfReceivers: Option[String], rpaActive: Option[Char], rpaEmailSubject: Option[String], rpaEmailText: Option[String], rpaCoverLetterFilePath: Option[String], rpaMasterTableFilePath: Option[String]): GreatBalanceSheetReportDefRow = {
+  /** Row type of table BalanceSheetReportDef */
+  type BalanceSheetReportDefRow = HCons[String,HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+  /** Constructor for BalanceSheetReportDefRow providing default values if available in the database schema. */
+  def BalanceSheetReportDefRow(idValue: String, kind: Option[String], reportDate: Option[java.sql.Timestamp], userName: Option[String], accEmail: Option[String], b40Active: Option[Char], b40EmailSubject: Option[String], b40EmailText: Option[String], b40CoverLetterFilePath: Option[String], b40DivisionTableFilePath: Option[String], b40ParameterFilePath: Option[String], frnActive: Option[Char], frnEmailSubject: Option[String], frnEmailText: Option[String], frnCoverLetterFilePath: Option[String], frnDivisionTableFilePath: Option[String], ownActive: Option[Char], ownEmailSubject: Option[String], ownEmailText: Option[String], ownCoverLetterFilePath: Option[String], ownDivisionTableFilePath: Option[String], bareCodes: Option[String], exdActive: Option[Char], exdEmailSubject: Option[String], exdEmailText: Option[String], exdCoverLetterFilePath: Option[String], exdReceivers: Option[String], sktfActive: Option[Char], sktfEmailSubject: Option[String], sktfEmailText: Option[String], sktfCoverLetterFilePath: Option[String], sktfReceivers: Option[String], rpaActive: Option[Char], rpaEmailSubject: Option[String], rpaEmailText: Option[String], rpaCoverLetterFilePath: Option[String], rpaMasterTableFilePath: Option[String]): BalanceSheetReportDefRow = {
     idValue :: kind :: reportDate :: userName :: accEmail :: b40Active :: b40EmailSubject :: b40EmailText :: b40CoverLetterFilePath :: b40DivisionTableFilePath :: b40ParameterFilePath :: frnActive :: frnEmailSubject :: frnEmailText :: frnCoverLetterFilePath :: frnDivisionTableFilePath :: ownActive :: ownEmailSubject :: ownEmailText :: ownCoverLetterFilePath :: ownDivisionTableFilePath :: bareCodes :: exdActive :: exdEmailSubject :: exdEmailText :: exdCoverLetterFilePath :: exdReceivers :: sktfActive :: sktfEmailSubject :: sktfEmailText :: sktfCoverLetterFilePath :: sktfReceivers :: rpaActive :: rpaEmailSubject :: rpaEmailText :: rpaCoverLetterFilePath :: rpaMasterTableFilePath :: HNil
   }
-  /** GetResult implicit for fetching GreatBalanceSheetReportDefRow objects using plain SQL queries */
-  implicit def GetResultGreatBalanceSheetReportDefRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[java.sql.Timestamp]], e3: GR[Option[Char]]): GR[GreatBalanceSheetReportDefRow] = GR{
+  /** GetResult implicit for fetching BalanceSheetReportDefRow objects using plain SQL queries */
+  implicit def GetResultBalanceSheetReportDefRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[java.sql.Timestamp]], e3: GR[Option[Char]]): GR[BalanceSheetReportDefRow] = GR{
     prs => import prs._
       <<[String] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_BALANCE_SHEET_REPORT_DEF. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBalanceSheetReportDef(_tableTag: Tag) extends profile.api.Table[GreatBalanceSheetReportDefRow](_tableTag, Some("WERNER2"), "GREAT_BALANCE_SHEET_REPORT_DEF") {
+  class BalanceSheetReportDef(_tableTag: Tag) extends profile.api.Table[BalanceSheetReportDefRow](_tableTag, Some("WERNER2"), "GREAT_BALANCE_SHEET_REPORT_DEF") {
     def * = idValue :: kind :: reportDate :: userName :: accEmail :: b40Active :: b40EmailSubject :: b40EmailText :: b40CoverLetterFilePath :: b40DivisionTableFilePath :: b40ParameterFilePath :: frnActive :: frnEmailSubject :: frnEmailText :: frnCoverLetterFilePath :: frnDivisionTableFilePath :: ownActive :: ownEmailSubject :: ownEmailText :: ownCoverLetterFilePath :: ownDivisionTableFilePath :: bareCodes :: exdActive :: exdEmailSubject :: exdEmailText :: exdCoverLetterFilePath :: exdReceivers :: sktfActive :: sktfEmailSubject :: sktfEmailText :: sktfCoverLetterFilePath :: sktfReceivers :: rpaActive :: rpaEmailSubject :: rpaEmailText :: rpaCoverLetterFilePath :: rpaMasterTableFilePath :: HNil
 
     /** Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -501,8 +502,8 @@ trait BackOfficeTables {
     /** Database column RPA_MASTER_TABLE_FILE_PATH SqlType(VARCHAR2), Length(4000,true) */
     val rpaMasterTableFilePath: Rep[Option[String]] = column[Option[String]]("RPA_MASTER_TABLE_FILE_PATH", O.Length(4000,varying=true))
   }
-  /** Collection-like TableQuery object for table GreatBalanceSheetReportDef */
-  lazy val GreatBalanceSheetReportDef = new TableQuery(tag => new GreatBalanceSheetReportDef(tag))
+  /** Collection-like TableQuery object for table BalanceSheetReportDef */
+  lazy val BalanceSheetReportDef = new TableQuery(tag => new BalanceSheetReportDef(tag))
 
   /** Entity class storing rows of table GreatBalanceSheetReportRun
     *  @param idValue Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -514,17 +515,17 @@ trait BackOfficeTables {
     *  @param zipFile Database column ZIP_FILE SqlType(BLOB)
     *  @param archived Database column ARCHIVED SqlType(CHAR)
     *  @param runKind Database column RUN_KIND SqlType(CHAR) */
-  case class GreatBalanceSheetReportRunRow(idValue: String, execTimestamp: Option[java.sql.Timestamp], userObjectidc: Option[String], status: Option[String], definitionIdValue: Option[String], zipFileLength: Option[scala.math.BigDecimal], zipFile: Option[java.sql.Blob], archived: Option[Char], runKind: Option[Char])
-  /** GetResult implicit for fetching GreatBalanceSheetReportRunRow objects using plain SQL queries */
-  implicit def GetResultGreatBalanceSheetReportRunRow(implicit e0: GR[String], e1: GR[Option[java.sql.Timestamp]], e2: GR[Option[String]], e3: GR[Option[scala.math.BigDecimal]], e4: GR[Option[java.sql.Blob]], e5: GR[Option[Char]]): GR[GreatBalanceSheetReportRunRow] = GR{
+  case class BalanceSheetReportRunRow(idValue: String, execTimestamp: Option[java.sql.Timestamp], userObjectidc: Option[String], status: Option[String], definitionIdValue: Option[String], zipFileLength: Option[scala.math.BigDecimal], zipFile: Option[java.sql.Blob], archived: Option[Char], runKind: Option[Char])
+  /** GetResult implicit for fetching BalanceSheetReportRunRow objects using plain SQL queries */
+  implicit def GetResultBalanceSheetReportRunRow(implicit e0: GR[String], e1: GR[Option[java.sql.Timestamp]], e2: GR[Option[String]], e3: GR[Option[scala.math.BigDecimal]], e4: GR[Option[java.sql.Blob]], e5: GR[Option[Char]]): GR[BalanceSheetReportRunRow] = GR{
     prs => import prs._
-      GreatBalanceSheetReportRunRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[java.sql.Blob], <<?[Char], <<?[Char]))
+      BalanceSheetReportRunRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[java.sql.Blob], <<?[Char], <<?[Char]))
   }
   /** Table description of table GREAT_BALANCE_SHEET_REPORT_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class GreatBalanceSheetReportRun(_tableTag: Tag) extends profile.api.Table[GreatBalanceSheetReportRunRow](_tableTag, Some("WERNER2"), "GREAT_BALANCE_SHEET_REPORT_RUN") {
-    def * = (idValue, execTimestamp, userObjectidc, status, definitionIdValue, zipFileLength, zipFile, archived, runKind) <> (GreatBalanceSheetReportRunRow.tupled, GreatBalanceSheetReportRunRow.unapply)
+  class BalanceSheetReportRun(_tableTag: Tag) extends profile.api.Table[BalanceSheetReportRunRow](_tableTag, Some("WERNER2"), "GREAT_BALANCE_SHEET_REPORT_RUN") {
+    def * = (idValue, execTimestamp, userObjectidc, status, definitionIdValue, zipFileLength, zipFile, archived, runKind) <> (BalanceSheetReportRunRow.tupled, BalanceSheetReportRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(idValue), execTimestamp, userObjectidc, status, definitionIdValue, zipFileLength, zipFile, archived, runKind).shaped.<>({r=>import r._; _1.map(_=> GreatBalanceSheetReportRunRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(idValue), execTimestamp, userObjectidc, status, definitionIdValue, zipFileLength, zipFile, archived, runKind).shaped.<>({r=>import r._; _1.map(_=> BalanceSheetReportRunRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val idValue: Rep[String] = column[String]("ID_VALUE", O.PrimaryKey, O.Length(10,varying=true))
@@ -545,8 +546,8 @@ trait BackOfficeTables {
     /** Database column RUN_KIND SqlType(CHAR) */
     val runKind: Rep[Option[Char]] = column[Option[Char]]("RUN_KIND")
   }
-  /** Collection-like TableQuery object for table GreatBalanceSheetReportRun */
-  lazy val GreatBalanceSheetReportRun = new TableQuery(tag => new GreatBalanceSheetReportRun(tag))
+  /** Collection-like TableQuery object for table BalanceSheetReportRun */
+  lazy val BalanceSheetReportRun = new TableQuery(tag => new BalanceSheetReportRun(tag))
 
   /** Entity class storing rows of table GreatBareBillingRun
     *  @param billingRunIdc Database column BILLING_RUN_IDC SqlType(VARCHAR2), Length(10,true)
@@ -578,9 +579,9 @@ trait BackOfficeTables {
     val pk = primaryKey("BBR_PK_BILLING_RUN_IDC", (billingRunIdc, bare, endDate, onlyFlagged))
 
     /** Foreign key referencing GreatBareDependants (database name BBR_FK_BARE) */
-    lazy val greatBareDependantsFk = foreignKey("BBR_FK_BARE", bare, GreatBareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBareDependantsFk = foreignKey("BBR_FK_BARE", bare, BareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatBillingRun (database name BBR_FK_BILLING_RUN_IDC) */
-    lazy val greatBillingRunFk = foreignKey("BBR_FK_BILLING_RUN_IDC", billingRunIdc, GreatBillingRun)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBillingRunFk = foreignKey("BBR_FK_BILLING_RUN_IDC", billingRunIdc, BillingRun)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatBareBillingRun */
   lazy val GreatBareBillingRun = new TableQuery(tag => new GreatBareBillingRun(tag))
@@ -614,7 +615,7 @@ trait BackOfficeTables {
     val pk = primaryKey("GCRBD_PK_BARE_CODE", (bareCode, commisionReceiverId, kind))
 
     /** Foreign key referencing GreatBareDependants (database name GCRBD_FK_BARE_CODE) */
-    lazy val greatBareDependantsFk = foreignKey("GCRBD_FK_BARE_CODE", bareCode, GreatBareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBareDependantsFk = foreignKey("GCRBD_FK_BARE_CODE", bareCode, BareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCommissionReceiver (database name GCRBD_FK_COMMISION_RECEIVER_ID) */
     lazy val greatCommissionReceiverFk = foreignKey("GCRBD_FK_COMMISION_RECEIVER_ID", commisionReceiverId, GreatCommissionReceiver)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
@@ -785,17 +786,17 @@ trait BackOfficeTables {
     val cancelledBookEntry: Rep[Option[Char]] = column[Option[Char]]("CANCELLED_BOOK_ENTRY")
 
     /** Foreign key referencing GreatBareDependants (database name CIT_FK_BARE) */
-    lazy val greatBareDependantsFk = foreignKey("CIT_FK_BARE", bare :: HNil, GreatBareDependants)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBareDependantsFk = foreignKey("CIT_FK_BARE", bare :: HNil, BareDependants)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatBookEntry (database name CIT_FK_BOOK_ENTRY_IDC) */
-    lazy val greatBookEntryFk = foreignKey("CIT_FK_BOOK_ENTRY_IDC", bookEntryIdc :: HNil, GreatBookEntry)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBookEntryFk = foreignKey("CIT_FK_BOOK_ENTRY_IDC", bookEntryIdc :: HNil, BookEntry)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCommissionReceiver (database name CIT_FK_COMMISSION_RECEIVER) */
     lazy val greatCommissionReceiverFk = foreignKey("CIT_FK_COMMISSION_RECEIVER", commissionReceiver :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name CIT_FK_TARGET_AMOUNT_CUR) */
-    lazy val greatCurrencyFk = foreignKey("CIT_FK_TARGET_AMOUNT_CUR", targetAmountCur :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("CIT_FK_TARGET_AMOUNT_CUR", targetAmountCur :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGuaranteeFile (database name CIT_FK_FILE_ID_VALUE) */
     lazy val greatGuaranteeFileFk = foreignKey("CIT_FK_FILE_ID_VALUE", fileIdValue :: HNil, GreatGuaranteeFile)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name CIT_FK_ORG_ID) */
-    lazy val greatOrgFk = foreignKey("CIT_FK_ORG_ID", orgId :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk = foreignKey("CIT_FK_ORG_ID", orgId :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatCostItem */
   lazy val GreatCostItem = new TableQuery(tag => new GreatCostItem(tag))
@@ -865,19 +866,19 @@ trait BackOfficeTables {
     val billingRunIdc: Rep[Option[String]] = column[Option[String]]("BILLING_RUN_IDC", O.Length(10,varying=true))
 
     /** Foreign key referencing GreatAccountingArea (database name INV_FK_INVOICE_ARE) */
-    lazy val greatAccountingAreaFk = foreignKey("INV_FK_INVOICE_ARE", invoiceAre :: HNil, GreatAccountingArea)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatAccountingAreaFk = foreignKey("INV_FK_INVOICE_ARE", invoiceAre :: HNil, AccountingArea)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatBillingRun (database name INV_FK_BILLING_RUN_IDC) */
-    lazy val greatBillingRunFk = foreignKey("INV_FK_BILLING_RUN_IDC", billingRunIdc :: HNil, GreatBillingRun)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBillingRunFk = foreignKey("INV_FK_BILLING_RUN_IDC", billingRunIdc :: HNil, BillingRun)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCommissionReceiver (database name INV_FK_COMMISSION_RECEIVER) */
     lazy val greatCommissionReceiverFk = foreignKey("INV_FK_COMMISSION_RECEIVER", commissionReceiver :: HNil, GreatCommissionReceiver)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name INV_FK_AMOUNT_CUR) */
-    lazy val greatCurrencyFk = foreignKey("INV_FK_AMOUNT_CUR", amountCur :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("INV_FK_AMOUNT_CUR", amountCur :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGuaranteeFile (database name INV_FK_FILE_ID_VALUE) */
     lazy val greatGuaranteeFileFk = foreignKey("INV_FK_FILE_ID_VALUE", fileIdValue :: HNil, GreatGuaranteeFile)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name INV_FK_INVOICE_ORG) */
-    lazy val greatOrgFk6 = foreignKey("INV_FK_INVOICE_ORG", invoiceOrg :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk6 = foreignKey("INV_FK_INVOICE_ORG", invoiceOrg :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name INV_FK_ISSUERS_ORG) */
-    lazy val greatOrgFk7 = foreignKey("INV_FK_ISSUERS_ORG", issuersOrg :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk7 = foreignKey("INV_FK_ISSUERS_ORG", issuersOrg :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatInvoice */
   lazy val GreatInvoice = new TableQuery(tag => new GreatInvoice(tag))
@@ -1150,7 +1151,7 @@ trait BackOfficeTables {
     val orderItem: Rep[Option[String]] = column[Option[String]]("ORDER_ITEM", O.Length(6,varying=true))
 
     /** Foreign key referencing GreatCurrency (database name ILI_FK_AMOUNT_CUR) */
-    lazy val greatCurrencyFk = foreignKey("ILI_FK_AMOUNT_CUR", amountCur, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("ILI_FK_AMOUNT_CUR", amountCur, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatInvoice (database name ILI_FK_INVOICE_IDC) */
     lazy val greatInvoiceFk = foreignKey("ILI_FK_INVOICE_IDC", invoiceIdc, GreatInvoice)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
@@ -1178,7 +1179,7 @@ trait BackOfficeTables {
     val currentInvoiceNumber: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("CURRENT_INVOICE_NUMBER")
 
     /** Foreign key referencing GreatBareDependants (database name INVN_FK_BARE_GROUP_ID) */
-    lazy val greatBareDependantsFk = foreignKey("INVN_FK_BARE_GROUP_ID", bareGroupId, GreatBareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBareDependantsFk = foreignKey("INVN_FK_BARE_GROUP_ID", bareGroupId, BareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatInvoiceNumber */
   lazy val GreatInvoiceNumber = new TableQuery(tag => new GreatInvoiceNumber(tag))
@@ -1255,9 +1256,9 @@ trait BackOfficeTables {
     val violationsString: Rep[Option[java.sql.Clob]] = column[Option[java.sql.Clob]]("VIOLATIONS_STRING")
 
     /** Foreign key referencing GreatBareDependants (database name INVP_FK_BARE_GROUP) */
-    lazy val greatBareDependantsFk = foreignKey("INVP_FK_BARE_GROUP", bareGroup, GreatBareDependants)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatBareDependantsFk = foreignKey("INVP_FK_BARE_GROUP", bareGroup, BareDependants)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name INVP_FK_INVOICED_AMOUNT_CURR0) */
-    lazy val greatCurrencyFk = foreignKey("INVP_FK_INVOICED_AMOUNT_CURR0", invoicedAmountCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("INVP_FK_INVOICED_AMOUNT_CURR0", invoicedAmountCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (kind,fiscalYear) (database name INVP_CDX0) */
     val index1 = index("INVP_CDX0", (kind, fiscalYear))
@@ -1370,9 +1371,9 @@ trait BackOfficeTables {
     val additionalPaymentPosition: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("ADDITIONAL_PAYMENT_POSITION")
 
     /** Foreign key referencing GreatCurrency (database name PAYM_FK_CURRENCY) */
-    lazy val greatCurrencyFk = foreignKey("PAYM_FK_CURRENCY", currency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("PAYM_FK_CURRENCY", currency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatOrg (database name PAYM_FK_INVOICE_ORG_ID) */
-    lazy val greatOrgFk = foreignKey("PAYM_FK_INVOICE_ORG_ID", invoiceOrgId :: HNil, GreatOrg)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatOrgFk = foreignKey("PAYM_FK_INVOICE_ORG_ID", invoiceOrgId :: HNil, Org)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (fileIdValue) (database name PAYM_IDX0) */
     val index1 = index("PAYM_IDX0", fileIdValue :: HNil)
@@ -1421,9 +1422,9 @@ trait BackOfficeTables {
     val percentage: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("PERCENTAGE")
 
     /** Foreign key referencing GreatCurrency (database name PSE_FK_AMOUNT_CURRENCY) */
-    lazy val greatCurrencyFk = foreignKey("PSE_FK_AMOUNT_CURRENCY", amountCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("PSE_FK_AMOUNT_CURRENCY", amountCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGlineContract (database name PSE_FK_LINE_ID) */
-    lazy val greatGlineContractFk = foreignKey("PSE_FK_LINE_ID", lineId, GreatGlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatGlineContractFk = foreignKey("PSE_FK_LINE_ID", lineId, GlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatPriceScaleEntry */
   lazy val GreatPriceScaleEntry = new TableQuery(tag => new GreatPriceScaleEntry(tag))
@@ -1473,9 +1474,9 @@ trait BackOfficeTables {
     val pk = primaryKey("PSEH_PK_OBJECTIDC", (objectidc, lineVersion))
 
     /** Foreign key referencing GreatCurrency (database name PSEH_FK_AMOUNT_CURRENCY) */
-    lazy val greatCurrencyFk = foreignKey("PSEH_FK_AMOUNT_CURRENCY", amountCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk = foreignKey("PSEH_FK_AMOUNT_CURRENCY", amountCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatGlineContractHistory (database name PSEH_FK_LINE_VERSION) */
-    lazy val greatGlineContractHistoryFk = foreignKey("PSEH_FK_LINE_VERSION", (lineId, lineVersion), GreatGlineContractHistory)(r => (r.objectidc, r.objectversionc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatGlineContractHistoryFk = foreignKey("PSEH_FK_LINE_VERSION", (lineId, lineVersion), GlineContractHistory)(r => (r.objectidc, r.objectversionc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatPriceScaleEntryHist */
   lazy val GreatPriceScaleEntryHist = new TableQuery(tag => new GreatPriceScaleEntryHist(tag))
@@ -1535,13 +1536,13 @@ trait BackOfficeTables {
     val calcReservesOrigCurrency: Rep[Option[String]] = column[Option[String]]("CALC_RESERVES_ORIG_CURRENCY", O.Length(3,varying=false))
 
     /** Foreign key referencing GreatCurrency (database name QRES_FK_BASE_LIABILITY_CURRE0) */
-    lazy val greatCurrencyFk1 = foreignKey("QRES_FK_BASE_LIABILITY_CURRE0", baseLiabilityCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk1 = foreignKey("QRES_FK_BASE_LIABILITY_CURRE0", baseLiabilityCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name QRES_FK_CALC_RESERVES_ORIG_C3) */
-    lazy val greatCurrencyFk2 = foreignKey("QRES_FK_CALC_RESERVES_ORIG_C3", calcReservesOrigCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk2 = foreignKey("QRES_FK_CALC_RESERVES_ORIG_C3", calcReservesOrigCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name QRES_FK_HGB_CALCULATED_CURRE1) */
-    lazy val greatCurrencyFk3 = foreignKey("QRES_FK_HGB_CALCULATED_CURRE1", hgbCalculatedCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk3 = foreignKey("QRES_FK_HGB_CALCULATED_CURRE1", hgbCalculatedCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
     /** Foreign key referencing GreatCurrency (database name QRES_FK_USG_CALCULATED_CURRE2) */
-    lazy val greatCurrencyFk4 = foreignKey("QRES_FK_USG_CALCULATED_CURRE2", usgCalculatedCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatCurrencyFk4 = foreignKey("QRES_FK_USG_CALCULATED_CURRE2", usgCalculatedCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
 
     /** Index over (debtorPortionId) (database name QRES_IDX0) */
     val index1 = index("QRES_IDX0", debtorPortionId)
@@ -1584,7 +1585,7 @@ trait BackOfficeTables {
     val state: Rep[Option[String]] = column[Option[String]]("STATE", O.Length(32,varying=true))
 
     /** Foreign key referencing GreatDivisionUser (database name RC_FK_FROM_USER) */
-    lazy val greatDivisionUserFk = foreignKey("RC_FK_FROM_USER", fromUser, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    lazy val greatDivisionUserFk = foreignKey("RC_FK_FROM_USER", fromUser, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table GreatReconciliationProcess */
   lazy val GreatReconciliationProcess = new TableQuery(tag => new GreatReconciliationProcess(tag))

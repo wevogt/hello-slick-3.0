@@ -20,9 +20,10 @@ trait MasterDataTables {
   import model.great.GuaranteeAllTables._
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(GreatAccountingArea.schema, GreatAccountingAreaHistory.schema, GreatBusinessPartner.schema, GreatBusinessPartnerHistory.schema, GreatCountry.schema, GreatCountryHistory.schema, GreatCurrency.schema, GreatCurrencyHistory.schema, GreatFxRates.schema, GreatGlineAccount.schema, GreatGlineAccountHistory.schema, GreatGlineContract.schema, GreatGlineContractHistory.schema, GreatGlineReservation.schema, GreatGlineReservationHist.schema, GreatGlineReservations.schema, GreatGlineReservationsHist.schema, GreatLanguage.schema, GreatLatestFxRates.schema, GreatOrg.schema, GreatOrgHistory.schema, GreatRatings.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(AccountingArea.schema, AccountingAreaHistory.schema, BusinessPartner.schema, BusinessPartnerHistory.schema, Country.schema, CountryHistory.schema, Currency.schema, CurrencyHistory.schema, FxRates.schema, GlineAccount.schema, GlineAccountHistory.schema, GlineContract.schema, GlineContractHistory.schema, GlineReservation.schema, GlineReservationHist.schema, GlineReservations.schema, GlineReservationsHist.schema, Language.schema, LatestFxRates.schema, Org.schema, OrgHistory.schema, Ratings.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
+  val tablePrefix = "GREAT_"
 
   /** Entity class storing rows of table GreatAccountingArea
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -39,18 +40,18 @@ trait MasterDataTables {
     *  @param active Database column ACTIVE SqlType(CHAR)
     *  @param hgbRating Database column HGB_RATING SqlType(CHAR), Length(3,false)
     *  @param usgRating Database column USG_RATING SqlType(CHAR), Length(3,false) */
-  case class GreatAccountingAreaRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], name: Option[String], `type`: Option[Char], iso3166Alpha3Code: Option[String], reserveRate: Option[scala.math.BigDecimal], defaultRateOverwritten: Option[Char], usgReserveRate: Option[scala.math.BigDecimal], extern: Option[Char], active: Option[Char], hgbRating: Option[String], usgRating: Option[String])
-  /** GetResult implicit for fetching GreatAccountingAreaRow objects using plain SQL queries */
-  implicit def GetResultGreatAccountingAreaRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[GreatAccountingAreaRow] = GR{
+  case class AccountingAreaRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], name: Option[String], `type`: Option[Char], iso3166Alpha3Code: Option[String], reserveRate: Option[scala.math.BigDecimal], defaultRateOverwritten: Option[Char], usgReserveRate: Option[scala.math.BigDecimal], extern: Option[Char], active: Option[Char], hgbRating: Option[String], usgRating: Option[String])
+  /** GetResult implicit for fetching AccountingAreaRow objects using plain SQL queries */
+  implicit def GetResultAccountingAreaRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[AccountingAreaRow] = GR{
     prs => import prs._
-      GreatAccountingAreaRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[Char], <<?[String], <<?[scala.math.BigDecimal], <<?[Char], <<?[scala.math.BigDecimal], <<?[Char], <<?[Char], <<?[String], <<?[String]))
+      AccountingAreaRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[Char], <<?[String], <<?[scala.math.BigDecimal], <<?[Char], <<?[scala.math.BigDecimal], <<?[Char], <<?[Char], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_ACCOUNTING_AREA. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class GreatAccountingArea(_tableTag: Tag) extends profile.api.Table[GreatAccountingAreaRow](_tableTag, Some("WERNER2"), "GREAT_ACCOUNTING_AREA") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating) <> (GreatAccountingAreaRow.tupled, GreatAccountingAreaRow.unapply)
+  class AccountingArea(_tableTag: Tag) extends profile.api.Table[AccountingAreaRow](_tableTag, Some("WERNER2"), tablePrefix + "ACCOUNTING_AREA") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating) <> (AccountingAreaRow.tupled, AccountingAreaRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating).shaped.<>({r=>import r._; _1.map(_=> GreatAccountingAreaRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating).shaped.<>({r=>import r._; _1.map(_=> AccountingAreaRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -82,11 +83,11 @@ trait MasterDataTables {
     /** Database column USG_RATING SqlType(CHAR), Length(3,false) */
     val usgRating: Rep[Option[String]] = column[Option[String]]("USG_RATING", O.Length(3,varying=false))
 
-    /** Foreign key referencing GreatCountry (database name AA_FK_ISO_3166_ALPHA3_CODE) */
-    lazy val greatCountryFk = foreignKey("AA_FK_ISO_3166_ALPHA3_CODE", iso3166Alpha3Code, GreatCountry)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Country (database name AA_FK_ISO_3166_ALPHA3_CODE) */
+    lazy val countryFk = foreignKey("AA_FK_ISO_3166_ALPHA3_CODE", iso3166Alpha3Code, Country)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatAccountingArea */
-  lazy val GreatAccountingArea = new TableQuery(tag => new GreatAccountingArea(tag))
+  /** Collection-like TableQuery object for table AccountingArea */
+  lazy val AccountingArea = new TableQuery(tag => new AccountingArea(tag))
 
   /** Entity class storing rows of table GreatAccountingAreaHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -106,18 +107,18 @@ trait MasterDataTables {
     *  @param active Database column ACTIVE SqlType(CHAR)
     *  @param hgbRating Database column HGB_RATING SqlType(CHAR), Length(3,false)
     *  @param usgRating Database column USG_RATING SqlType(CHAR), Length(3,false) */
-  case class GreatAccountingAreaHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], name: Option[String], `type`: Option[Char], iso3166Alpha3Code: Option[String], reserveRate: Option[scala.math.BigDecimal], defaultRateOverwritten: Option[Char], usgReserveRate: Option[scala.math.BigDecimal], extern: Option[Char], active: Option[Char], hgbRating: Option[String], usgRating: Option[String])
-  /** GetResult implicit for fetching GreatAccountingAreaHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatAccountingAreaHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]], e6: GR[Option[scala.math.BigDecimal]]): GR[GreatAccountingAreaHistoryRow] = GR{
+  case class AccountingAreaHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], name: Option[String], `type`: Option[Char], iso3166Alpha3Code: Option[String], reserveRate: Option[scala.math.BigDecimal], defaultRateOverwritten: Option[Char], usgReserveRate: Option[scala.math.BigDecimal], extern: Option[Char], active: Option[Char], hgbRating: Option[String], usgRating: Option[String])
+  /** GetResult implicit for fetching AccountingAreaHistoryRow objects using plain SQL queries */
+  implicit def GetResultAccountingAreaHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]], e6: GR[Option[scala.math.BigDecimal]]): GR[AccountingAreaHistoryRow] = GR{
     prs => import prs._
-      GreatAccountingAreaHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[Char], <<?[String], <<?[scala.math.BigDecimal], <<?[Char], <<?[scala.math.BigDecimal], <<?[Char], <<?[Char], <<?[String], <<?[String]))
+      AccountingAreaHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[Char], <<?[String], <<?[scala.math.BigDecimal], <<?[Char], <<?[scala.math.BigDecimal], <<?[Char], <<?[Char], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_ACCOUNTING_AREA_HISTORY. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class GreatAccountingAreaHistory(_tableTag: Tag) extends profile.api.Table[GreatAccountingAreaHistoryRow](_tableTag, Some("WERNER2"), "GREAT_ACCOUNTING_AREA_HISTORY") {
-    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating) <> (GreatAccountingAreaHistoryRow.tupled, GreatAccountingAreaHistoryRow.unapply)
+  class AccountingAreaHistory(_tableTag: Tag) extends profile.api.Table[AccountingAreaHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "ACCOUNTING_AREA_HISTORY") {
+    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating) <> (AccountingAreaHistoryRow.tupled, AccountingAreaHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating).shaped.<>({r=>import r._; _1.map(_=> GreatAccountingAreaHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating).shaped.<>({r=>import r._; _1.map(_=> AccountingAreaHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -155,11 +156,11 @@ trait MasterDataTables {
     /** Database column USG_RATING SqlType(CHAR), Length(3,false) */
     val usgRating: Rep[Option[String]] = column[Option[String]]("USG_RATING", O.Length(3,varying=false))
 
-    /** Primary key of GreatAccountingAreaHistory (database name AAHIS_PK_OBJECTIDC) */
+    /** Primary key of AccountingAreaHistory (database name AAHIS_PK_OBJECTIDC) */
     val pk = primaryKey("AAHIS_PK_OBJECTIDC", (objectidc, objectversionc))
   }
-  /** Collection-like TableQuery object for table GreatAccountingAreaHistory */
-  lazy val GreatAccountingAreaHistory = new TableQuery(tag => new GreatAccountingAreaHistory(tag))
+  /** Collection-like TableQuery object for table AccountingAreaHistory */
+  lazy val AccountingAreaHistory = new TableQuery(tag => new AccountingAreaHistory(tag))
 
   /** Entity class storing rows of table GreatCountry
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -175,17 +176,17 @@ trait MasterDataTables {
     *  @param hgbForeignOtherRating Database column HGB_FOREIGN_OTHER_RATING SqlType(CHAR), Length(3,false)
     *  @param usgForeignUnitedRating Database column USG_FOREIGN_UNITED_RATING SqlType(CHAR), Length(3,false)
     *  @param usgForeignOtherRating Database column USG_FOREIGN_OTHER_RATING SqlType(CHAR), Length(3,false) */
-  case class GreatCountryRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], iso3166Alpha2Code: Option[String], hgbForeignUnited: Option[scala.math.BigDecimal], hgbForeignOther: Option[scala.math.BigDecimal], usgForeignUnited: Option[scala.math.BigDecimal], usgForeignOther: Option[scala.math.BigDecimal], hgbForeignUnitedRating: Option[String], hgbForeignOtherRating: Option[String], usgForeignUnitedRating: Option[String], usgForeignOtherRating: Option[String])
-  /** GetResult implicit for fetching GreatCountryRow objects using plain SQL queries */
-  implicit def GetResultGreatCountryRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]]): GR[GreatCountryRow] = GR{
+  case class CountryRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], iso3166Alpha2Code: Option[String], hgbForeignUnited: Option[scala.math.BigDecimal], hgbForeignOther: Option[scala.math.BigDecimal], usgForeignUnited: Option[scala.math.BigDecimal], usgForeignOther: Option[scala.math.BigDecimal], hgbForeignUnitedRating: Option[String], hgbForeignOtherRating: Option[String], usgForeignUnitedRating: Option[String], usgForeignOtherRating: Option[String])
+  /** GetResult implicit for fetching CountryRow objects using plain SQL queries */
+  implicit def GetResultCountryRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]]): GR[CountryRow] = GR{
     prs => import prs._
-      GreatCountryRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String]))
+      CountryRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_COUNTRY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatCountry(_tableTag: Tag) extends profile.api.Table[GreatCountryRow](_tableTag, Some("WERNER2"), "GREAT_COUNTRY") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating) <> (GreatCountryRow.tupled, GreatCountryRow.unapply)
+  class Country(_tableTag: Tag) extends profile.api.Table[CountryRow](_tableTag, Some("WERNER2"), tablePrefix + "COUNTRY") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating) <> (CountryRow.tupled, CountryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating).shaped.<>({r=>import r._; _1.map(_=> GreatCountryRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating).shaped.<>({r=>import r._; _1.map(_=> CountryRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -214,8 +215,8 @@ trait MasterDataTables {
     /** Database column USG_FOREIGN_OTHER_RATING SqlType(CHAR), Length(3,false) */
     val usgForeignOtherRating: Rep[Option[String]] = column[Option[String]]("USG_FOREIGN_OTHER_RATING", O.Length(3,varying=false))
   }
-  /** Collection-like TableQuery object for table GreatCountry */
-  lazy val GreatCountry = new TableQuery(tag => new GreatCountry(tag))
+  /** Collection-like TableQuery object for table Country */
+  lazy val Country = new TableQuery(tag => new Country(tag))
 
   /** Entity class storing rows of table GreatCountryHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -234,17 +235,17 @@ trait MasterDataTables {
     *  @param hgbForeignOtherRating Database column HGB_FOREIGN_OTHER_RATING SqlType(CHAR), Length(3,false)
     *  @param usgForeignUnitedRating Database column USG_FOREIGN_UNITED_RATING SqlType(CHAR), Length(3,false)
     *  @param usgForeignOtherRating Database column USG_FOREIGN_OTHER_RATING SqlType(CHAR), Length(3,false) */
-  case class GreatCountryHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], iso3166Alpha2Code: Option[String], hgbForeignUnited: Option[scala.math.BigDecimal], hgbForeignOther: Option[scala.math.BigDecimal], usgForeignUnited: Option[scala.math.BigDecimal], usgForeignOther: Option[scala.math.BigDecimal], hgbForeignUnitedRating: Option[String], hgbForeignOtherRating: Option[String], usgForeignUnitedRating: Option[String], usgForeignOtherRating: Option[String])
-  /** GetResult implicit for fetching GreatCountryHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatCountryHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[scala.math.BigDecimal]]): GR[GreatCountryHistoryRow] = GR{
+  case class CountryHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], iso3166Alpha2Code: Option[String], hgbForeignUnited: Option[scala.math.BigDecimal], hgbForeignOther: Option[scala.math.BigDecimal], usgForeignUnited: Option[scala.math.BigDecimal], usgForeignOther: Option[scala.math.BigDecimal], hgbForeignUnitedRating: Option[String], hgbForeignOtherRating: Option[String], usgForeignUnitedRating: Option[String], usgForeignOtherRating: Option[String])
+  /** GetResult implicit for fetching CountryHistoryRow objects using plain SQL queries */
+  implicit def GetResultCountryHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[scala.math.BigDecimal]]): GR[CountryHistoryRow] = GR{
     prs => import prs._
-      GreatCountryHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String]))
+      CountryHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_COUNTRY_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatCountryHistory(_tableTag: Tag) extends profile.api.Table[GreatCountryHistoryRow](_tableTag, Some("WERNER2"), "GREAT_COUNTRY_HISTORY") {
-    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating) <> (GreatCountryHistoryRow.tupled, GreatCountryHistoryRow.unapply)
+  class CountryHistory(_tableTag: Tag) extends profile.api.Table[CountryHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "COUNTRY_HISTORY") {
+    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating) <> (CountryHistoryRow.tupled, CountryHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating).shaped.<>({r=>import r._; _1.map(_=> GreatCountryHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating).shaped.<>({r=>import r._; _1.map(_=> CountryHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -279,11 +280,11 @@ trait MasterDataTables {
     /** Database column USG_FOREIGN_OTHER_RATING SqlType(CHAR), Length(3,false) */
     val usgForeignOtherRating: Rep[Option[String]] = column[Option[String]]("USG_FOREIGN_OTHER_RATING", O.Length(3,varying=false))
 
-    /** Primary key of GreatCountryHistory (database name CH_PK_OBJECTIDC) */
+    /** Primary key of CountryHistory (database name CH_PK_OBJECTIDC) */
     val pk = primaryKey("CH_PK_OBJECTIDC", (objectidc, objectversionc))
   }
-  /** Collection-like TableQuery object for table GreatCountryHistory */
-  lazy val GreatCountryHistory = new TableQuery(tag => new GreatCountryHistory(tag))
+  /** Collection-like TableQuery object for table CountryHistory */
+  lazy val CountryHistory = new TableQuery(tag => new CountryHistory(tag))
 
   /** Entity class storing rows of table GreatCurrency
     *  @param objectidc Database column OBJECTIDC SqlType(CHAR), PrimaryKey, Length(3,false)
@@ -297,17 +298,17 @@ trait MasterDataTables {
     *  @param startDate Database column START_DATE SqlType(DATE)
     *  @param endDate Database column END_DATE SqlType(DATE)
     *  @param fxtype Database column FXTYPE SqlType(CHAR) */
-  case class GreatCurrencyRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], numDecimalDigits: scala.math.BigDecimal, textDe: Option[String], textEn: Option[String], textEs: Option[String], startDate: Option[java.sql.Timestamp], endDate: Option[java.sql.Timestamp], fxtype: Option[Char])
-  /** GetResult implicit for fetching GreatCurrencyRow objects using plain SQL queries */
-  implicit def GetResultGreatCurrencyRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[scala.math.BigDecimal], e5: GR[Option[Char]]): GR[GreatCurrencyRow] = GR{
+  case class CurrencyRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], numDecimalDigits: scala.math.BigDecimal, textDe: Option[String], textEn: Option[String], textEs: Option[String], startDate: Option[java.sql.Timestamp], endDate: Option[java.sql.Timestamp], fxtype: Option[Char])
+  /** GetResult implicit for fetching CurrencyRow objects using plain SQL queries */
+  implicit def GetResultCurrencyRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[scala.math.BigDecimal], e5: GR[Option[Char]]): GR[CurrencyRow] = GR{
     prs => import prs._
-      GreatCurrencyRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char]))
+      CurrencyRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char]))
   }
   /** Table description of table GREAT_CURRENCY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatCurrency(_tableTag: Tag) extends profile.api.Table[GreatCurrencyRow](_tableTag, Some("WERNER2"), "GREAT_CURRENCY") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, numDecimalDigits, textDe, textEn, textEs, startDate, endDate, fxtype) <> (GreatCurrencyRow.tupled, GreatCurrencyRow.unapply)
+  class Currency(_tableTag: Tag) extends profile.api.Table[CurrencyRow](_tableTag, Some("WERNER2"), tablePrefix + "CURRENCY") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, numDecimalDigits, textDe, textEn, textEs, startDate, endDate, fxtype) <> (CurrencyRow.tupled, CurrencyRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(numDecimalDigits), textDe, textEn, textEs, startDate, endDate, fxtype).shaped.<>({r=>import r._; _1.map(_=> GreatCurrencyRow.tupled((_1.get, _2, _3, _4, _5.get, _6, _7, _8, _9, _10, _11)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(numDecimalDigits), textDe, textEn, textEs, startDate, endDate, fxtype).shaped.<>({r=>import r._; _1.map(_=> CurrencyRow.tupled((_1.get, _2, _3, _4, _5.get, _6, _7, _8, _9, _10, _11)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(CHAR), PrimaryKey, Length(3,false) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(3,varying=false))
@@ -332,8 +333,8 @@ trait MasterDataTables {
     /** Database column FXTYPE SqlType(CHAR) */
     val fxtype: Rep[Option[Char]] = column[Option[Char]]("FXTYPE")
   }
-  /** Collection-like TableQuery object for table GreatCurrency */
-  lazy val GreatCurrency = new TableQuery(tag => new GreatCurrency(tag))
+  /** Collection-like TableQuery object for table Currency */
+  lazy val Currency = new TableQuery(tag => new Currency(tag))
 
   /** Entity class storing rows of table GreatCurrencyHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -350,17 +351,17 @@ trait MasterDataTables {
     *  @param startDate Database column START_DATE SqlType(DATE)
     *  @param endDate Database column END_DATE SqlType(DATE)
     *  @param fxtype Database column FXTYPE SqlType(CHAR) */
-  case class GreatCurrencyHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], numDecimalDigits: scala.math.BigDecimal, textDe: Option[String], textEn: Option[String], textEs: Option[String], startDate: Option[java.sql.Timestamp], endDate: Option[java.sql.Timestamp], fxtype: Option[Char])
-  /** GetResult implicit for fetching GreatCurrencyHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatCurrencyHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[GreatCurrencyHistoryRow] = GR{
+  case class CurrencyHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], numDecimalDigits: scala.math.BigDecimal, textDe: Option[String], textEn: Option[String], textEs: Option[String], startDate: Option[java.sql.Timestamp], endDate: Option[java.sql.Timestamp], fxtype: Option[Char])
+  /** GetResult implicit for fetching CurrencyHistoryRow objects using plain SQL queries */
+  implicit def GetResultCurrencyHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[CurrencyHistoryRow] = GR{
     prs => import prs._
-      GreatCurrencyHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char]))
+      CurrencyHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char]))
   }
   /** Table description of table GREAT_CURRENCY_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatCurrencyHistory(_tableTag: Tag) extends profile.api.Table[GreatCurrencyHistoryRow](_tableTag, Some("WERNER2"), "GREAT_CURRENCY_HISTORY") {
-    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, numDecimalDigits, textDe, textEn, textEs, startDate, endDate, fxtype) <> (GreatCurrencyHistoryRow.tupled, GreatCurrencyHistoryRow.unapply)
+  class CurrencyHistory(_tableTag: Tag) extends profile.api.Table[CurrencyHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "CURRENCY_HISTORY") {
+    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, numDecimalDigits, textDe, textEn, textEs, startDate, endDate, fxtype) <> (CurrencyHistoryRow.tupled, CurrencyHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, Rep.Some(numDecimalDigits), textDe, textEn, textEs, startDate, endDate, fxtype).shaped.<>({r=>import r._; _1.map(_=> GreatCurrencyHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8.get, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, Rep.Some(numDecimalDigits), textDe, textEn, textEs, startDate, endDate, fxtype).shaped.<>({r=>import r._; _1.map(_=> CurrencyHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8.get, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -391,28 +392,28 @@ trait MasterDataTables {
     /** Database column FXTYPE SqlType(CHAR) */
     val fxtype: Rep[Option[Char]] = column[Option[Char]]("FXTYPE")
 
-    /** Primary key of GreatCurrencyHistory (database name CURRH_PK_OBJECTIDC) */
+    /** Primary key of CurrencyHistory (database name CURRH_PK_OBJECTIDC) */
     val pk = primaryKey("CURRH_PK_OBJECTIDC", (objectidc, objectversionc))
   }
-  /** Collection-like TableQuery object for table GreatCurrencyHistory */
-  lazy val GreatCurrencyHistory = new TableQuery(tag => new GreatCurrencyHistory(tag))
+  /** Collection-like TableQuery object for table CurrencyHistory */
+  lazy val CurrencyHistory = new TableQuery(tag => new CurrencyHistory(tag))
 
 
 
-  /** Row type of table GreatBusinessPartner */
-  type GreatBusinessPartnerRow = HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-  /** Constructor for GreatBusinessPartnerRow providing default values if available in the database schema. */
-  def GreatBusinessPartnerRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], bic: Option[String], name: Option[String], appendix1: Option[String], appendix2: Option[String], appendix3: Option[String], street: Option[String], zip: Option[String], city: Option[String], iso3166Alpha3Code: Option[String], telephone: Option[String], telefax: Option[String], email: Option[String], conditions: Option[String], commentary: Option[String], active: Option[Char], contactUserKey1: Option[String], contactUserKey2: Option[String], contactUserKey3: Option[String], contactUserKey4: Option[String], duns: Option[String], dunsDo: Option[String], dunsGu: Option[String], ifa: Option[String], region: Option[String], telephoneCmd: Option[String], cmdStatus: Option[Char], `type`: Option[Char], migration: Option[String], temporary: Option[Char], gmsId: Option[String], globalGmsId: Option[String], gmsCheck: Option[Char], spRating: Option[String], spRatingDate: Option[java.sql.Timestamp], fitchRating: Option[String], fitchRatingDate: Option[java.sql.Timestamp], moodyRating: Option[String], moodyRatingDate: Option[java.sql.Timestamp], lcCommentary: Option[String], lcBics: Option[String], lcConsultant1: Option[String], lcConsultant2: Option[String], lcTransactionmanager1: Option[String], lcTransactionmanager2: Option[String]): GreatBusinessPartnerRow = {
+  /** Row type of table BusinessPartner */
+  type BusinessPartnerRow = HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+  /** Constructor for BusinessPartnerRow providing default values if available in the database schema. */
+  def BusinessPartnerRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], bic: Option[String], name: Option[String], appendix1: Option[String], appendix2: Option[String], appendix3: Option[String], street: Option[String], zip: Option[String], city: Option[String], iso3166Alpha3Code: Option[String], telephone: Option[String], telefax: Option[String], email: Option[String], conditions: Option[String], commentary: Option[String], active: Option[Char], contactUserKey1: Option[String], contactUserKey2: Option[String], contactUserKey3: Option[String], contactUserKey4: Option[String], duns: Option[String], dunsDo: Option[String], dunsGu: Option[String], ifa: Option[String], region: Option[String], telephoneCmd: Option[String], cmdStatus: Option[Char], `type`: Option[Char], migration: Option[String], temporary: Option[Char], gmsId: Option[String], globalGmsId: Option[String], gmsCheck: Option[Char], spRating: Option[String], spRatingDate: Option[java.sql.Timestamp], fitchRating: Option[String], fitchRatingDate: Option[java.sql.Timestamp], moodyRating: Option[String], moodyRatingDate: Option[java.sql.Timestamp], lcCommentary: Option[String], lcBics: Option[String], lcConsultant1: Option[String], lcConsultant2: Option[String], lcTransactionmanager1: Option[String], lcTransactionmanager2: Option[String]): BusinessPartnerRow = {
     objectidc :: objectversionc :: lastuserc :: updatetimec :: bic :: name :: appendix1 :: appendix2 :: appendix3 :: street :: zip :: city :: iso3166Alpha3Code :: telephone :: telefax :: email :: conditions :: commentary :: active :: contactUserKey1 :: contactUserKey2 :: contactUserKey3 :: contactUserKey4 :: duns :: dunsDo :: dunsGu :: ifa :: region :: telephoneCmd :: cmdStatus :: `type` :: migration :: temporary :: gmsId :: globalGmsId :: gmsCheck :: spRating :: spRatingDate :: fitchRating :: fitchRatingDate :: moodyRating :: moodyRatingDate :: lcCommentary :: lcBics :: lcConsultant1 :: lcConsultant2 :: lcTransactionmanager1 :: lcTransactionmanager2 :: HNil
   }
-  /** GetResult implicit for fetching GreatBusinessPartnerRow objects using plain SQL queries */
-  implicit def GetResultGreatBusinessPartnerRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[GreatBusinessPartnerRow] = GR{
+  /** GetResult implicit for fetching BusinessPartnerRow objects using plain SQL queries */
+  implicit def GetResultBusinessPartnerRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[BusinessPartnerRow] = GR{
     prs => import prs._
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_BUSINESS_PARTNER. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class GreatBusinessPartner(_tableTag: Tag) extends profile.api.Table[GreatBusinessPartnerRow](_tableTag, Some("WERNER2"), "GREAT_BUSINESS_PARTNER") {
+  class BusinessPartner(_tableTag: Tag) extends profile.api.Table[BusinessPartnerRow](_tableTag, Some("WERNER2"), tablePrefix + "BUSINESS_PARTNER") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: bic :: name :: appendix1 :: appendix2 :: appendix3 :: street :: zip :: city :: iso3166Alpha3Code :: telephone :: telefax :: email :: conditions :: commentary :: active :: contactUserKey1 :: contactUserKey2 :: contactUserKey3 :: contactUserKey4 :: duns :: dunsDo :: dunsGu :: ifa :: region :: telephoneCmd :: cmdStatus :: `type` :: migration :: temporary :: gmsId :: globalGmsId :: gmsCheck :: spRating :: spRatingDate :: fitchRating :: fitchRatingDate :: moodyRating :: moodyRatingDate :: lcCommentary :: lcBics :: lcConsultant1 :: lcConsultant2 :: lcTransactionmanager1 :: lcTransactionmanager2 :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -513,42 +514,42 @@ trait MasterDataTables {
     /** Database column LC_TRANSACTIONMANAGER_2 SqlType(VARCHAR2), Length(10,true) */
     val lcTransactionmanager2: Rep[Option[String]] = column[Option[String]]("LC_TRANSACTIONMANAGER_2", O.Length(10,varying=true))
 
-    /** Foreign key referencing GreatCountry (database name BA_FK_ISO_3166_ALPHA3_CODE) */
-    lazy val greatCountryFk = foreignKey("BA_FK_ISO_3166_ALPHA3_CODE", iso3166Alpha3Code :: HNil, GreatCountry)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_CONTACT_USER_KEY_1) */
-    lazy val greatDivisionUserFk2 = foreignKey("BA_FK_CONTACT_USER_KEY_1", contactUserKey1 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_CONTACT_USER_KEY_2) */
-    lazy val greatDivisionUserFk3 = foreignKey("BA_FK_CONTACT_USER_KEY_2", contactUserKey2 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_CONTACT_USER_KEY_3) */
-    lazy val greatDivisionUserFk4 = foreignKey("BA_FK_CONTACT_USER_KEY_3", contactUserKey3 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_CONTACT_USER_KEY_4) */
-    lazy val greatDivisionUserFk5 = foreignKey("BA_FK_CONTACT_USER_KEY_4", contactUserKey4 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_LC_CONSULTANT_1) */
-    lazy val greatDivisionUserFk6 = foreignKey("BA_FK_LC_CONSULTANT_1", lcConsultant1 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_LC_CONSULTANT_2) */
-    lazy val greatDivisionUserFk7 = foreignKey("BA_FK_LC_CONSULTANT_2", lcConsultant2 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_LC_TRANSACTIONMANAGER_1) */
-    lazy val greatDivisionUserFk8 = foreignKey("BA_FK_LC_TRANSACTIONMANAGER_1", lcTransactionmanager1 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BA_FK_LC_TRANSACTIONMANAGER_2) */
-    lazy val greatDivisionUserFk9 = foreignKey("BA_FK_LC_TRANSACTIONMANAGER_2", lcTransactionmanager2 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Country (database name BA_FK_ISO_3166_ALPHA3_CODE) */
+    lazy val countryFk = foreignKey("BA_FK_ISO_3166_ALPHA3_CODE", iso3166Alpha3Code :: HNil, Country)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_CONTACT_USER_KEY_1) */
+    lazy val divisionUserFk2 = foreignKey("BA_FK_CONTACT_USER_KEY_1", contactUserKey1 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_CONTACT_USER_KEY_2) */
+    lazy val divisionUserFk3 = foreignKey("BA_FK_CONTACT_USER_KEY_2", contactUserKey2 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_CONTACT_USER_KEY_3) */
+    lazy val divisionUserFk4 = foreignKey("BA_FK_CONTACT_USER_KEY_3", contactUserKey3 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_CONTACT_USER_KEY_4) */
+    lazy val divisionUserFk5 = foreignKey("BA_FK_CONTACT_USER_KEY_4", contactUserKey4 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_LC_CONSULTANT_1) */
+    lazy val divisionUserFk6 = foreignKey("BA_FK_LC_CONSULTANT_1", lcConsultant1 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_LC_CONSULTANT_2) */
+    lazy val divisionUserFk7 = foreignKey("BA_FK_LC_CONSULTANT_2", lcConsultant2 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_LC_TRANSACTIONMANAGER_1) */
+    lazy val divisionUserFk8 = foreignKey("BA_FK_LC_TRANSACTIONMANAGER_1", lcTransactionmanager1 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BA_FK_LC_TRANSACTIONMANAGER_2) */
+    lazy val divisionUserFk9 = foreignKey("BA_FK_LC_TRANSACTIONMANAGER_2", lcTransactionmanager2 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBusinessPartner */
-  lazy val GreatBusinessPartner = new TableQuery(tag => new GreatBusinessPartner(tag))
+  /** Collection-like TableQuery object for table BusinessPartner */
+  lazy val BusinessPartner = new TableQuery(tag => new BusinessPartner(tag))
 
-  /** Row type of table GreatBusinessPartnerHistory */
-  type GreatBusinessPartnerHistoryRow = HCons[String,HCons[scala.math.BigDecimal,HCons[Option[String],HCons[String,HCons[String,HCons[Char,HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-  /** Constructor for GreatBusinessPartnerHistoryRow providing default values if available in the database schema. */
-  def GreatBusinessPartnerHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], bic: Option[String], name: Option[String], appendix1: Option[String], appendix2: Option[String], appendix3: Option[String], street: Option[String], zip: Option[String], city: Option[String], iso3166Alpha3Code: Option[String], telephone: Option[String], telefax: Option[String], email: Option[String], conditions: Option[String], commentary: Option[String], active: Option[Char], contactUserKey1: Option[String], contactUserKey2: Option[String], contactUserKey3: Option[String], contactUserKey4: Option[String], duns: Option[String], dunsDo: Option[String], dunsGu: Option[String], ifa: Option[String], region: Option[String], telephoneCmd: Option[String], cmdStatus: Option[Char], `type`: Option[Char], migration: Option[String], temporary: Option[Char], gmsId: Option[String], globalGmsId: Option[String], gmsCheck: Option[Char], spRating: Option[String], spRatingDate: Option[java.sql.Timestamp], fitchRating: Option[String], fitchRatingDate: Option[java.sql.Timestamp], moodyRating: Option[String], moodyRatingDate: Option[java.sql.Timestamp], lcCommentary: Option[String], lcBics: Option[String], lcConsultant1: Option[String], lcConsultant2: Option[String], lcTransactionmanager1: Option[String], lcTransactionmanager2: Option[String]): GreatBusinessPartnerHistoryRow = {
+  /** Row type of table BusinessPartnerHistory */
+  type BusinessPartnerHistoryRow = HCons[String,HCons[scala.math.BigDecimal,HCons[Option[String],HCons[String,HCons[String,HCons[Char,HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[String],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+  /** Constructor for BusinessPartnerHistoryRow providing default values if available in the database schema. */
+  def BusinessPartnerHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], bic: Option[String], name: Option[String], appendix1: Option[String], appendix2: Option[String], appendix3: Option[String], street: Option[String], zip: Option[String], city: Option[String], iso3166Alpha3Code: Option[String], telephone: Option[String], telefax: Option[String], email: Option[String], conditions: Option[String], commentary: Option[String], active: Option[Char], contactUserKey1: Option[String], contactUserKey2: Option[String], contactUserKey3: Option[String], contactUserKey4: Option[String], duns: Option[String], dunsDo: Option[String], dunsGu: Option[String], ifa: Option[String], region: Option[String], telephoneCmd: Option[String], cmdStatus: Option[Char], `type`: Option[Char], migration: Option[String], temporary: Option[Char], gmsId: Option[String], globalGmsId: Option[String], gmsCheck: Option[Char], spRating: Option[String], spRatingDate: Option[java.sql.Timestamp], fitchRating: Option[String], fitchRatingDate: Option[java.sql.Timestamp], moodyRating: Option[String], moodyRatingDate: Option[java.sql.Timestamp], lcCommentary: Option[String], lcBics: Option[String], lcConsultant1: Option[String], lcConsultant2: Option[String], lcTransactionmanager1: Option[String], lcTransactionmanager2: Option[String]): BusinessPartnerHistoryRow = {
     objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: bic :: name :: appendix1 :: appendix2 :: appendix3 :: street :: zip :: city :: iso3166Alpha3Code :: telephone :: telefax :: email :: conditions :: commentary :: active :: contactUserKey1 :: contactUserKey2 :: contactUserKey3 :: contactUserKey4 :: duns :: dunsDo :: dunsGu :: ifa :: region :: telephoneCmd :: cmdStatus :: `type` :: migration :: temporary :: gmsId :: globalGmsId :: gmsCheck :: spRating :: spRatingDate :: fitchRating :: fitchRatingDate :: moodyRating :: moodyRatingDate :: lcCommentary :: lcBics :: lcConsultant1 :: lcConsultant2 :: lcTransactionmanager1 :: lcTransactionmanager2 :: HNil
   }
-  /** GetResult implicit for fetching GreatBusinessPartnerHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatBusinessPartnerHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[GreatBusinessPartnerHistoryRow] = GR{
+  /** GetResult implicit for fetching BusinessPartnerHistoryRow objects using plain SQL queries */
+  implicit def GetResultBusinessPartnerHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[BusinessPartnerHistoryRow] = GR{
     prs => import prs._
       <<[String] :: <<[scala.math.BigDecimal] :: <<?[String] :: <<[String] :: <<[String] :: <<[Char] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_BUSINESS_PARTNER_HISTORY. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class GreatBusinessPartnerHistory(_tableTag: Tag) extends profile.api.Table[GreatBusinessPartnerHistoryRow](_tableTag, Some("WERNER2"), "GREAT_BUSINESS_PARTNER_HISTORY") {
+  class BusinessPartnerHistory(_tableTag: Tag) extends profile.api.Table[BusinessPartnerHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "BUSINESS_PARTNER_HISTORY") {
     def * = objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: bic :: name :: appendix1 :: appendix2 :: appendix3 :: street :: zip :: city :: iso3166Alpha3Code :: telephone :: telefax :: email :: conditions :: commentary :: active :: contactUserKey1 :: contactUserKey2 :: contactUserKey3 :: contactUserKey4 :: duns :: dunsDo :: dunsGu :: ifa :: region :: telephoneCmd :: cmdStatus :: `type` :: migration :: temporary :: gmsId :: globalGmsId :: gmsCheck :: spRating :: spRatingDate :: fitchRating :: fitchRatingDate :: moodyRating :: moodyRatingDate :: lcCommentary :: lcBics :: lcConsultant1 :: lcConsultant2 :: lcTransactionmanager1 :: lcTransactionmanager2 :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
@@ -655,28 +656,28 @@ trait MasterDataTables {
     /** Database column LC_TRANSACTIONMANAGER_2 SqlType(VARCHAR2), Length(10,true) */
     val lcTransactionmanager2: Rep[Option[String]] = column[Option[String]]("LC_TRANSACTIONMANAGER_2", O.Length(10,varying=true))
 
-    /** Primary key of GreatBusinessPartnerHistory (database name BANKH_PK_OBJECTIDC) */
+    /** Primary key of BusinessPartnerHistory (database name BANKH_PK_OBJECTIDC) */
     val pk = primaryKey("BANKH_PK_OBJECTIDC", objectidc :: objectversionc :: HNil)
 
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_CONTACT_USER_KEY_1) */
-    lazy val greatDivisionUserFk1 = foreignKey("BANKH_FK_CONTACT_USER_KEY_1", contactUserKey1 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_CONTACT_USER_KEY_2) */
-    lazy val greatDivisionUserFk2 = foreignKey("BANKH_FK_CONTACT_USER_KEY_2", contactUserKey2 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_CONTACT_USER_KEY_3) */
-    lazy val greatDivisionUserFk3 = foreignKey("BANKH_FK_CONTACT_USER_KEY_3", contactUserKey3 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_CONTACT_USER_KEY_4) */
-    lazy val greatDivisionUserFk4 = foreignKey("BANKH_FK_CONTACT_USER_KEY_4", contactUserKey4 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_LC_CONSULTANT_1) */
-    lazy val greatDivisionUserFk5 = foreignKey("BANKH_FK_LC_CONSULTANT_1", lcConsultant1 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_LC_CONSULTANT_2) */
-    lazy val greatDivisionUserFk6 = foreignKey("BANKH_FK_LC_CONSULTANT_2", lcConsultant2 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_LC_TRANSACTIONMANAG6) */
-    lazy val greatDivisionUserFk7 = foreignKey("BANKH_FK_LC_TRANSACTIONMANAG6", lcTransactionmanager1 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name BANKH_FK_LC_TRANSACTIONMANAG7) */
-    lazy val greatDivisionUserFk8 = foreignKey("BANKH_FK_LC_TRANSACTIONMANAG7", lcTransactionmanager2 :: HNil, GreatDivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_CONTACT_USER_KEY_1) */
+    lazy val divisionUserFk1 = foreignKey("BANKH_FK_CONTACT_USER_KEY_1", contactUserKey1 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_CONTACT_USER_KEY_2) */
+    lazy val divisionUserFk2 = foreignKey("BANKH_FK_CONTACT_USER_KEY_2", contactUserKey2 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_CONTACT_USER_KEY_3) */
+    lazy val divisionUserFk3 = foreignKey("BANKH_FK_CONTACT_USER_KEY_3", contactUserKey3 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_CONTACT_USER_KEY_4) */
+    lazy val divisionUserFk4 = foreignKey("BANKH_FK_CONTACT_USER_KEY_4", contactUserKey4 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_LC_CONSULTANT_1) */
+    lazy val divisionUserFk5 = foreignKey("BANKH_FK_LC_CONSULTANT_1", lcConsultant1 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_LC_CONSULTANT_2) */
+    lazy val divisionUserFk6 = foreignKey("BANKH_FK_LC_CONSULTANT_2", lcConsultant2 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_LC_TRANSACTIONMANAG6) */
+    lazy val divisionUserFk7 = foreignKey("BANKH_FK_LC_TRANSACTIONMANAG6", lcTransactionmanager1 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name BANKH_FK_LC_TRANSACTIONMANAG7) */
+    lazy val divisionUserFk8 = foreignKey("BANKH_FK_LC_TRANSACTIONMANAG7", lcTransactionmanager2 :: HNil, DivisionUser)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatBusinessPartnerHistory */
-  lazy val GreatBusinessPartnerHistory = new TableQuery(tag => new GreatBusinessPartnerHistory(tag))
+  /** Collection-like TableQuery object for table BusinessPartnerHistory */
+  lazy val BusinessPartnerHistory = new TableQuery(tag => new BusinessPartnerHistory(tag))
 
 
   /** Entity class storing rows of table GreatFxRates
@@ -684,17 +685,17 @@ trait MasterDataTables {
     *  @param fxdate Database column FXDATE SqlType(DATE)
     *  @param isoCode Database column ISO_CODE SqlType(CHAR), Length(3,false)
     *  @param rate Database column RATE SqlType(NUMBER) */
-  case class GreatFxRatesRow(fxtype: Char, fxdate: java.sql.Timestamp, isoCode: String, rate: scala.math.BigDecimal)
-  /** GetResult implicit for fetching GreatFxRatesRow objects using plain SQL queries */
-  implicit def GetResultGreatFxRatesRow(implicit e0: GR[Char], e1: GR[java.sql.Timestamp], e2: GR[String], e3: GR[scala.math.BigDecimal]): GR[GreatFxRatesRow] = GR{
+  case class FxRatesRow(fxtype: Char, fxdate: java.sql.Timestamp, isoCode: String, rate: scala.math.BigDecimal)
+  /** GetResult implicit for fetching FxRatesRow objects using plain SQL queries */
+  implicit def GetResultFxRatesRow(implicit e0: GR[Char], e1: GR[java.sql.Timestamp], e2: GR[String], e3: GR[scala.math.BigDecimal]): GR[FxRatesRow] = GR{
     prs => import prs._
-      GreatFxRatesRow.tupled((<<[Char], <<[java.sql.Timestamp], <<[String], <<[scala.math.BigDecimal]))
+      FxRatesRow.tupled((<<[Char], <<[java.sql.Timestamp], <<[String], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_FX_RATES. Objects of this class serve as prototypes for rows in queries. */
-  class GreatFxRates(_tableTag: Tag) extends profile.api.Table[GreatFxRatesRow](_tableTag, Some("WERNER2"), "GREAT_FX_RATES") {
-    def * = (fxtype, fxdate, isoCode, rate) <> (GreatFxRatesRow.tupled, GreatFxRatesRow.unapply)
+  class FxRates(_tableTag: Tag) extends profile.api.Table[FxRatesRow](_tableTag, Some("WERNER2"), tablePrefix + "FX_RATES") {
+    def * = (fxtype, fxdate, isoCode, rate) <> (FxRatesRow.tupled, FxRatesRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(fxtype), Rep.Some(fxdate), Rep.Some(isoCode), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> GreatFxRatesRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(fxtype), Rep.Some(fxdate), Rep.Some(isoCode), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> FxRatesRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column FXTYPE SqlType(CHAR) */
     val fxtype: Rep[Char] = column[Char]("FXTYPE")
@@ -705,28 +706,28 @@ trait MasterDataTables {
     /** Database column RATE SqlType(NUMBER) */
     val rate: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("RATE")
 
-    /** Primary key of GreatFxRates (database name FX_PK_FXTYPE) */
+    /** Primary key of FxRates (database name FX_PK_FXTYPE) */
     val pk = primaryKey("FX_PK_FXTYPE", (fxtype, fxdate, isoCode))
   }
-  /** Collection-like TableQuery object for table GreatFxRates */
-  lazy val GreatFxRates = new TableQuery(tag => new GreatFxRates(tag))
+  /** Collection-like TableQuery object for table FxRates */
+  lazy val FxRates = new TableQuery(tag => new FxRates(tag))
 
 
   /** Entity class storing rows of table GreatLanguage
     *  @param iso639Code Database column ISO_639_CODE SqlType(CHAR), PrimaryKey, Length(2,false)
     *  @param name Database column NAME SqlType(VARCHAR2), Length(30,true)
     *  @param systemLanguage Database column SYSTEM_LANGUAGE SqlType(CHAR) */
-  case class GreatLanguageRow(iso639Code: String, name: Option[String], systemLanguage: Option[Char])
-  /** GetResult implicit for fetching GreatLanguageRow objects using plain SQL queries */
-  implicit def GetResultGreatLanguageRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[Char]]): GR[GreatLanguageRow] = GR{
+  case class LanguageRow(iso639Code: String, name: Option[String], systemLanguage: Option[Char])
+  /** GetResult implicit for fetching LanguageRow objects using plain SQL queries */
+  implicit def GetResultLanguageRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[Char]]): GR[LanguageRow] = GR{
     prs => import prs._
-      GreatLanguageRow.tupled((<<[String], <<?[String], <<?[Char]))
+      LanguageRow.tupled((<<[String], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_LANGUAGE. Objects of this class serve as prototypes for rows in queries. */
-  class GreatLanguage(_tableTag: Tag) extends profile.api.Table[GreatLanguageRow](_tableTag, Some("WERNER2"), "GREAT_LANGUAGE") {
-    def * = (iso639Code, name, systemLanguage) <> (GreatLanguageRow.tupled, GreatLanguageRow.unapply)
+  class Language(_tableTag: Tag) extends profile.api.Table[LanguageRow](_tableTag, Some("WERNER2"), tablePrefix + "LANGUAGE") {
+    def * = (iso639Code, name, systemLanguage) <> (LanguageRow.tupled, LanguageRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(iso639Code), name, systemLanguage).shaped.<>({r=>import r._; _1.map(_=> GreatLanguageRow.tupled((_1.get, _2, _3)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(iso639Code), name, systemLanguage).shaped.<>({r=>import r._; _1.map(_=> LanguageRow.tupled((_1.get, _2, _3)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ISO_639_CODE SqlType(CHAR), PrimaryKey, Length(2,false) */
     val iso639Code: Rep[String] = column[String]("ISO_639_CODE", O.PrimaryKey, O.Length(2,varying=false))
@@ -735,31 +736,31 @@ trait MasterDataTables {
     /** Database column SYSTEM_LANGUAGE SqlType(CHAR) */
     val systemLanguage: Rep[Option[Char]] = column[Option[Char]]("SYSTEM_LANGUAGE")
   }
-  /** Collection-like TableQuery object for table GreatLanguage */
-  lazy val GreatLanguage = new TableQuery(tag => new GreatLanguage(tag))
+  /** Collection-like TableQuery object for table Language */
+  lazy val Language = new TableQuery(tag => new Language(tag))
 
   /** Entity class storing rows of table GreatLatestFxRates
     *  @param isoCode Database column ISO_CODE SqlType(CHAR), PrimaryKey, Length(3,false)
     *  @param rate Database column RATE SqlType(NUMBER) */
-  case class GreatLatestFxRatesRow(isoCode: String, rate: scala.math.BigDecimal)
-  /** GetResult implicit for fetching GreatLatestFxRatesRow objects using plain SQL queries */
-  implicit def GetResultGreatLatestFxRatesRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal]): GR[GreatLatestFxRatesRow] = GR{
+  case class LatestFxRatesRow(isoCode: String, rate: scala.math.BigDecimal)
+  /** GetResult implicit for fetching LatestFxRatesRow objects using plain SQL queries */
+  implicit def GetResultLatestFxRatesRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal]): GR[LatestFxRatesRow] = GR{
     prs => import prs._
-      GreatLatestFxRatesRow.tupled((<<[String], <<[scala.math.BigDecimal]))
+      LatestFxRatesRow.tupled((<<[String], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_LATEST_FX_RATES. Objects of this class serve as prototypes for rows in queries. */
-  class GreatLatestFxRates(_tableTag: Tag) extends profile.api.Table[GreatLatestFxRatesRow](_tableTag, Some("WERNER2"), "GREAT_LATEST_FX_RATES") {
-    def * = (isoCode, rate) <> (GreatLatestFxRatesRow.tupled, GreatLatestFxRatesRow.unapply)
+  class LatestFxRates(_tableTag: Tag) extends profile.api.Table[LatestFxRatesRow](_tableTag, Some("WERNER2"), tablePrefix + "LATEST_FX_RATES") {
+    def * = (isoCode, rate) <> (LatestFxRatesRow.tupled, LatestFxRatesRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(isoCode), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> GreatLatestFxRatesRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(isoCode), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> LatestFxRatesRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ISO_CODE SqlType(CHAR), PrimaryKey, Length(3,false) */
     val isoCode: Rep[String] = column[String]("ISO_CODE", O.PrimaryKey, O.Length(3,varying=false))
     /** Database column RATE SqlType(NUMBER) */
     val rate: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("RATE")
   }
-  /** Collection-like TableQuery object for table GreatLatestFxRates */
-  lazy val GreatLatestFxRates = new TableQuery(tag => new GreatLatestFxRates(tag))
+  /** Collection-like TableQuery object for table LatestFxRates */
+  lazy val LatestFxRates = new TableQuery(tag => new LatestFxRates(tag))
 
 
 
@@ -778,17 +779,17 @@ trait MasterDataTables {
     *  @param address Database column ADDRESS SqlType(VARCHAR2), Length(160,true)
     *  @param temporary Database column TEMPORARY SqlType(CHAR)
     *  @param divisionShortNameOld Database column DIVISION_SHORT_NAME_OLD SqlType(VARCHAR2), Length(3,true) */
-  case class GreatOrgRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], shortName: Option[String], areCode: Option[String], functions: Option[String], divisionShortName: Option[String], external: Option[Char], active: Option[Char], ifa: Option[String], address: Option[String], temporary: Option[Char], divisionShortNameOld: Option[String])
-  /** GetResult implicit for fetching GreatOrgRow objects using plain SQL queries */
-  implicit def GetResultGreatOrgRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[GreatOrgRow] = GR{
+  case class OrgRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], shortName: Option[String], areCode: Option[String], functions: Option[String], divisionShortName: Option[String], external: Option[Char], active: Option[Char], ifa: Option[String], address: Option[String], temporary: Option[Char], divisionShortNameOld: Option[String])
+  /** GetResult implicit for fetching OrgRow objects using plain SQL queries */
+  implicit def GetResultOrgRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[OrgRow] = GR{
     prs => import prs._
-      GreatOrgRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String], <<?[Char], <<?[String]))
+      OrgRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_ORG. Objects of this class serve as prototypes for rows in queries. */
-  class GreatOrg(_tableTag: Tag) extends profile.api.Table[GreatOrgRow](_tableTag, Some("WERNER2"), "GREAT_ORG") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld) <> (GreatOrgRow.tupled, GreatOrgRow.unapply)
+  class Org(_tableTag: Tag) extends profile.api.Table[OrgRow](_tableTag, Some("WERNER2"), tablePrefix + "ORG") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld) <> (OrgRow.tupled, OrgRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld).shaped.<>({r=>import r._; _1.map(_=> GreatOrgRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld).shaped.<>({r=>import r._; _1.map(_=> OrgRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -819,11 +820,11 @@ trait MasterDataTables {
     /** Database column DIVISION_SHORT_NAME_OLD SqlType(VARCHAR2), Length(3,true) */
     val divisionShortNameOld: Rep[Option[String]] = column[Option[String]]("DIVISION_SHORT_NAME_OLD", O.Length(3,varying=true))
 
-    /** Foreign key referencing GreatAccountingArea (database name ORG_FK_ARE_CODE) */
-    lazy val greatAccountingAreaFk = foreignKey("ORG_FK_ARE_CODE", areCode, GreatAccountingArea)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing AccountingArea (database name ORG_FK_ARE_CODE) */
+    lazy val accountingAreaFk = foreignKey("ORG_FK_ARE_CODE", areCode, AccountingArea)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatOrg */
-  lazy val GreatOrg = new TableQuery(tag => new GreatOrg(tag))
+  /** Collection-like TableQuery object for table Org */
+  lazy val Org = new TableQuery(tag => new Org(tag))
 
   /** Entity class storing rows of table GreatOrgHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -843,17 +844,17 @@ trait MasterDataTables {
     *  @param address Database column ADDRESS SqlType(VARCHAR2), Length(160,true)
     *  @param temporary Database column TEMPORARY SqlType(CHAR)
     *  @param divisionShortNameOld Database column DIVISION_SHORT_NAME_OLD SqlType(VARCHAR2), Length(3,true) */
-  case class GreatOrgHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], shortName: Option[String], areCode: Option[String], functions: Option[String], divisionShortName: Option[String], external: Option[Char], active: Option[Char], ifa: Option[String], address: Option[String], temporary: Option[Char], divisionShortNameOld: Option[String])
-  /** GetResult implicit for fetching GreatOrgHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatOrgHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[GreatOrgHistoryRow] = GR{
+  case class OrgHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], shortName: Option[String], areCode: Option[String], functions: Option[String], divisionShortName: Option[String], external: Option[Char], active: Option[Char], ifa: Option[String], address: Option[String], temporary: Option[Char], divisionShortNameOld: Option[String])
+  /** GetResult implicit for fetching OrgHistoryRow objects using plain SQL queries */
+  implicit def GetResultOrgHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[OrgHistoryRow] = GR{
     prs => import prs._
-      GreatOrgHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String], <<?[Char], <<?[String]))
+      OrgHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_ORG_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatOrgHistory(_tableTag: Tag) extends profile.api.Table[GreatOrgHistoryRow](_tableTag, Some("WERNER2"), "GREAT_ORG_HISTORY") {
-    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld) <> (GreatOrgHistoryRow.tupled, GreatOrgHistoryRow.unapply)
+  class OrgHistory(_tableTag: Tag) extends profile.api.Table[OrgHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "ORG_HISTORY") {
+    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld) <> (OrgHistoryRow.tupled, OrgHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld).shaped.<>({r=>import r._; _1.map(_=> GreatOrgHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld).shaped.<>({r=>import r._; _1.map(_=> OrgHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -890,11 +891,11 @@ trait MasterDataTables {
     /** Database column DIVISION_SHORT_NAME_OLD SqlType(VARCHAR2), Length(3,true) */
     val divisionShortNameOld: Rep[Option[String]] = column[Option[String]]("DIVISION_SHORT_NAME_OLD", O.Length(3,varying=true))
 
-    /** Primary key of GreatOrgHistory (database name ORGH_PK_OBJECTIDC) */
+    /** Primary key of OrgHistory (database name ORGH_PK_OBJECTIDC) */
     val pk = primaryKey("ORGH_PK_OBJECTIDC", (objectidc, objectversionc))
   }
-  /** Collection-like TableQuery object for table GreatOrgHistory */
-  lazy val GreatOrgHistory = new TableQuery(tag => new GreatOrgHistory(tag))
+  /** Collection-like TableQuery object for table OrgHistory */
+  lazy val OrgHistory = new TableQuery(tag => new OrgHistory(tag))
 
 
 
@@ -902,17 +903,17 @@ trait MasterDataTables {
     *  @param code Database column CODE SqlType(CHAR), Length(3,false)
     *  @param lifetime Database column LIFETIME SqlType(NUMBER)
     *  @param rate Database column RATE SqlType(NUMBER) */
-  case class GreatRatingsRow(code: String, lifetime: scala.math.BigDecimal, rate: scala.math.BigDecimal)
-  /** GetResult implicit for fetching GreatRatingsRow objects using plain SQL queries */
-  implicit def GetResultGreatRatingsRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal]): GR[GreatRatingsRow] = GR{
+  case class RatingsRow(code: String, lifetime: scala.math.BigDecimal, rate: scala.math.BigDecimal)
+  /** GetResult implicit for fetching RatingsRow objects using plain SQL queries */
+  implicit def GetResultRatingsRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal]): GR[RatingsRow] = GR{
     prs => import prs._
-      GreatRatingsRow.tupled((<<[String], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal]))
+      RatingsRow.tupled((<<[String], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_RATINGS. Objects of this class serve as prototypes for rows in queries. */
-  class GreatRatings(_tableTag: Tag) extends profile.api.Table[GreatRatingsRow](_tableTag, Some("WERNER2"), "GREAT_RATINGS") {
-    def * = (code, lifetime, rate) <> (GreatRatingsRow.tupled, GreatRatingsRow.unapply)
+  class Ratings(_tableTag: Tag) extends profile.api.Table[RatingsRow](_tableTag, Some("WERNER2"), tablePrefix + "RATINGS") {
+    def * = (code, lifetime, rate) <> (RatingsRow.tupled, RatingsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(code), Rep.Some(lifetime), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> GreatRatingsRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(code), Rep.Some(lifetime), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> RatingsRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column CODE SqlType(CHAR), Length(3,false) */
     val code: Rep[String] = column[String]("CODE", O.Length(3,varying=false))
@@ -921,11 +922,11 @@ trait MasterDataTables {
     /** Database column RATE SqlType(NUMBER) */
     val rate: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("RATE")
 
-    /** Primary key of GreatRatings (database name RA_PK_CODE) */
+    /** Primary key of Ratings (database name RA_PK_CODE) */
     val pk = primaryKey("RA_PK_CODE", (code, lifetime))
   }
-  /** Collection-like TableQuery object for table GreatRatings */
-  lazy val GreatRatings = new TableQuery(tag => new GreatRatings(tag))
+  /** Collection-like TableQuery object for table Ratings */
+  lazy val Ratings = new TableQuery(tag => new Ratings(tag))
 
 
   /** Entity class storing rows of table GreatGlineAccount
@@ -944,17 +945,17 @@ trait MasterDataTables {
     *  @param expiringFlag Database column EXPIRING_FLAG SqlType(CHAR)
     *  @param fixedLimitFlag Database column FIXED_LIMIT_FLAG SqlType(CHAR)
     *  @param losId Database column LOS_ID SqlType(VARCHAR2), Length(10,true) */
-  case class GreatGlineAccountRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], activeFlag: Char, contractId: String, businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], upperConsumptionPercentage: Option[scala.math.BigDecimal], accountNumber: scala.math.BigDecimal, name: String, expiringFlag: Option[Char], fixedLimitFlag: Option[Char], losId: Option[String])
-  /** GetResult implicit for fetching GreatGlineAccountRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineAccountRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Char], e5: GR[scala.math.BigDecimal], e6: GR[Option[Char]]): GR[GreatGlineAccountRow] = GR{
+  case class GlineAccountRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], activeFlag: Char, contractId: String, businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], upperConsumptionPercentage: Option[scala.math.BigDecimal], accountNumber: scala.math.BigDecimal, name: String, expiringFlag: Option[Char], fixedLimitFlag: Option[Char], losId: Option[String])
+  /** GetResult implicit for fetching GlineAccountRow objects using plain SQL queries */
+  implicit def GetResultGlineAccountRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Char], e5: GR[scala.math.BigDecimal], e6: GR[Option[Char]]): GR[GlineAccountRow] = GR{
     prs => import prs._
-      GreatGlineAccountRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[Char], <<[String], <<[String], <<[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[scala.math.BigDecimal], <<[String], <<?[Char], <<?[Char], <<?[String]))
+      GlineAccountRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[Char], <<[String], <<[String], <<[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[scala.math.BigDecimal], <<[String], <<?[Char], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_ACCOUNT. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineAccount(_tableTag: Tag) extends profile.api.Table[GreatGlineAccountRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_ACCOUNT") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, activeFlag, contractId, businessPartnerId, bareId, limit, upperConsumptionPercentage, accountNumber, name, expiringFlag, fixedLimitFlag, losId) <> (GreatGlineAccountRow.tupled, GreatGlineAccountRow.unapply)
+  class GlineAccount(_tableTag: Tag) extends profile.api.Table[GlineAccountRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_ACCOUNT") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, activeFlag, contractId, businessPartnerId, bareId, limit, upperConsumptionPercentage, accountNumber, name, expiringFlag, fixedLimitFlag, losId) <> (GlineAccountRow.tupled, GlineAccountRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(activeFlag), Rep.Some(contractId), Rep.Some(businessPartnerId), Rep.Some(bareId), limit, upperConsumptionPercentage, Rep.Some(accountNumber), Rep.Some(name), expiringFlag, fixedLimitFlag, losId).shaped.<>({r=>import r._; _1.map(_=> GreatGlineAccountRow.tupled((_1.get, _2, _3, _4, _5.get, _6.get, _7.get, _8.get, _9, _10, _11.get, _12.get, _13, _14, _15)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(activeFlag), Rep.Some(contractId), Rep.Some(businessPartnerId), Rep.Some(bareId), limit, upperConsumptionPercentage, Rep.Some(accountNumber), Rep.Some(name), expiringFlag, fixedLimitFlag, losId).shaped.<>({r=>import r._; _1.map(_=> GlineAccountRow.tupled((_1.get, _2, _3, _4, _5.get, _6.get, _7.get, _8.get, _9, _10, _11.get, _12.get, _13, _14, _15)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -987,17 +988,17 @@ trait MasterDataTables {
     /** Database column LOS_ID SqlType(VARCHAR2), Length(10,true) */
     val losId: Rep[Option[String]] = column[Option[String]]("LOS_ID", O.Length(10,varying=true))
 
-    /** Foreign key referencing GreatBareDependants (database name GLA_FK_BARE_ID) */
-    lazy val greatBareDependantsFk = foreignKey("GLA_FK_BARE_ID", bareId, GreatBareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatBusinessPartner (database name GLA_FK_BUSINESS_PARTNER_ID) */
-    lazy val greatBusinessPartnerFk = foreignKey("GLA_FK_BUSINESS_PARTNER_ID", businessPartnerId, GreatBusinessPartner)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatGlineContract (database name GLA_FK_CONTRACT_ID) */
-    lazy val greatGlineContractFk = foreignKey("GLA_FK_CONTRACT_ID", contractId, GreatGlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatGuaranteeFile (database name GLA_FK_LOS_ID) */
-    lazy val greatGuaranteeFileFk = foreignKey("GLA_FK_LOS_ID", losId, GreatGuaranteeFile)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BareDependants (database name GLA_FK_BARE_ID) */
+    lazy val bareDependantsFk = foreignKey("GLA_FK_BARE_ID", bareId, BareDependants)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BusinessPartner (database name GLA_FK_BUSINESS_PARTNER_ID) */
+    lazy val businessPartnerFk = foreignKey("GLA_FK_BUSINESS_PARTNER_ID", businessPartnerId, BusinessPartner)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing GlineContract (database name GLA_FK_CONTRACT_ID) */
+    lazy val glineContractFk = foreignKey("GLA_FK_CONTRACT_ID", contractId, GlineContract)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing GuaranteeFile (database name GLA_FK_LOS_ID) */
+    lazy val guaranteeFileFk = foreignKey("GLA_FK_LOS_ID", losId, GreatGuaranteeFile)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatGlineAccount */
-  lazy val GreatGlineAccount = new TableQuery(tag => new GreatGlineAccount(tag))
+  /** Collection-like TableQuery object for table GlineAccount */
+  lazy val GlineAccount = new TableQuery(tag => new GlineAccount(tag))
 
   /** Entity class storing rows of table GreatGlineAccountHistory
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -1018,17 +1019,17 @@ trait MasterDataTables {
     *  @param expiringFlag Database column EXPIRING_FLAG SqlType(CHAR)
     *  @param fixedLimitFlag Database column FIXED_LIMIT_FLAG SqlType(CHAR)
     *  @param losId Database column LOS_ID SqlType(VARCHAR2), Length(10,true) */
-  case class GreatGlineAccountHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], activeFlag: Char, contractId: String, businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], upperConsumptionPercentage: Option[scala.math.BigDecimal], lineNumber: String, name: String, expiringFlag: Option[Char], fixedLimitFlag: Option[Char], losId: Option[String])
-  /** GetResult implicit for fetching GreatGlineAccountHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineAccountHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[scala.math.BigDecimal]], e6: GR[Option[Char]]): GR[GreatGlineAccountHistoryRow] = GR{
+  case class GlineAccountHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], activeFlag: Char, contractId: String, businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], upperConsumptionPercentage: Option[scala.math.BigDecimal], lineNumber: String, name: String, expiringFlag: Option[Char], fixedLimitFlag: Option[Char], losId: Option[String])
+  /** GetResult implicit for fetching GlineAccountHistoryRow objects using plain SQL queries */
+  implicit def GetResultGlineAccountHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[scala.math.BigDecimal]], e6: GR[Option[Char]]): GR[GlineAccountHistoryRow] = GR{
     prs => import prs._
-      GreatGlineAccountHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<[Char], <<[String], <<[String], <<[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[String], <<[String], <<?[Char], <<?[Char], <<?[String]))
+      GlineAccountHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<[Char], <<[String], <<[String], <<[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[String], <<[String], <<?[Char], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_ACCOUNT_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineAccountHistory(_tableTag: Tag) extends profile.api.Table[GreatGlineAccountHistoryRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_ACCOUNT_HISTORY") {
-    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, activeFlag, contractId, businessPartnerId, bareId, limit, upperConsumptionPercentage, lineNumber, name, expiringFlag, fixedLimitFlag, losId) <> (GreatGlineAccountHistoryRow.tupled, GreatGlineAccountHistoryRow.unapply)
+  class GlineAccountHistory(_tableTag: Tag) extends profile.api.Table[GlineAccountHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_ACCOUNT_HISTORY") {
+    def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, activeFlag, contractId, businessPartnerId, bareId, limit, upperConsumptionPercentage, lineNumber, name, expiringFlag, fixedLimitFlag, losId) <> (GlineAccountHistoryRow.tupled, GlineAccountHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, Rep.Some(activeFlag), Rep.Some(contractId), Rep.Some(businessPartnerId), Rep.Some(bareId), limit, upperConsumptionPercentage, Rep.Some(lineNumber), Rep.Some(name), expiringFlag, fixedLimitFlag, losId).shaped.<>({r=>import r._; _1.map(_=> GreatGlineAccountHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8.get, _9.get, _10.get, _11.get, _12, _13, _14.get, _15.get, _16, _17, _18)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, Rep.Some(activeFlag), Rep.Some(contractId), Rep.Some(businessPartnerId), Rep.Some(bareId), limit, upperConsumptionPercentage, Rep.Some(lineNumber), Rep.Some(name), expiringFlag, fixedLimitFlag, losId).shaped.<>({r=>import r._; _1.map(_=> GlineAccountHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8.get, _9.get, _10.get, _11.get, _12, _13, _14.get, _15.get, _16, _17, _18)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -1067,25 +1068,25 @@ trait MasterDataTables {
     /** Database column LOS_ID SqlType(VARCHAR2), Length(10,true) */
     val losId: Rep[Option[String]] = column[Option[String]]("LOS_ID", O.Length(10,varying=true))
 
-    /** Primary key of GreatGlineAccountHistory (database name GLAH_PK_OBJECTIDC) */
+    /** Primary key of GlineAccountHistory (database name GLAH_PK_OBJECTIDC) */
     val pk = primaryKey("GLAH_PK_OBJECTIDC", (objectidc, objectversionc))
   }
-  /** Collection-like TableQuery object for table GreatGlineAccountHistory */
-  lazy val GreatGlineAccountHistory = new TableQuery(tag => new GreatGlineAccountHistory(tag))
+  /** Collection-like TableQuery object for table GlineAccountHistory */
+  lazy val GlineAccountHistory = new TableQuery(tag => new GlineAccountHistory(tag))
 
-  /** Row type of table GreatGlineContract */
-  type GreatGlineContractRow = HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[String,HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[java.sql.Timestamp,HCons[java.sql.Timestamp,HCons[Char,HCons[Char,HCons[Char,HCons[Char,HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[Char],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[Char],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-  /** Constructor for GreatGlineContractRow providing default values if available in the database schema. */
-  def GreatGlineContractRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], currency: Option[String], startDate: java.sql.Timestamp, endDate: java.sql.Timestamp, externalLimitFlag: Char, externalStartDateFlag: Char, externalEndDateFlag: Char, usageRestrictedFlag: Char, usageRestrictedReason: Option[String], reminderStartDate: Option[java.sql.Timestamp], reminderPeriod: Option[Char], currencyPeriodType: Option[Char], interestDayQuotient: Option[Char], commentary: Option[String], responsibleUsers: Option[String], upperConsumptionPercentage: Option[scala.math.BigDecimal], activeFlag: Option[Char], contractNumber: Option[scala.math.BigDecimal], name: Option[String], expiringFlag: Option[Char], fixedLimitFlag: Option[Char], conditionsCommentary: Option[String], contractType: Option[Char], tappApprovalId: Option[String], contractLang: Option[String], contractUnderlyingLaw: Option[String], contrBasedonSiemensStandard: Option[Char], coverageOfFacility: Option[String], additionalCoverageInfo: Option[String], commitmentFeePercentage: Option[scala.math.BigDecimal], onetimeSetupfeeAmount: Option[scala.math.BigDecimal], onetimeSetupfeeWkz: Option[String], onetimeSetupfeePercentage: Option[scala.math.BigDecimal], utilizationFeeAmount: Option[scala.math.BigDecimal], utilizationFeeWkz: Option[String], utilizationFeePercentage: Option[scala.math.BigDecimal], interestratePercentage: Option[scala.math.BigDecimal], referenceratePercentage: Option[scala.math.BigDecimal], creditspreadPercentage: Option[scala.math.BigDecimal], otherFees: Option[String], ratingtrgCl: Option[Char], quotRatingtrgCl: Option[String], changeOfControltrg: Option[Char], quotChangeOfControltrg: Option[String], crossdefaultTrgCl: Option[Char], quotCrossdefaulttrgCl: Option[String], materialAdverseChtrgCl: Option[Char], quotMaterialAdverseChtrgCl: Option[String], anyOtherRelTrgProv: Option[Char], quotOtherRelTrgCl: Option[String], resultOfTrgCls: Option[String], financialCovenant: Option[Char], quotFinancialCovenant: Option[String], resultOfFinancialCovenant: Option[String], informationCovenant: Option[Char], quotInformationCovenant: Option[String], resultOfInformationCovenant: Option[String], otherCovenant: Option[Char], quotOtherCovenant: Option[String], resultOfOtherCovenant: Option[String], contractContainsNoCovenants: Option[Char]): GreatGlineContractRow = {
+  /** Row type of table GlineContract */
+  type GlineContractRow = HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[String,HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[java.sql.Timestamp,HCons[java.sql.Timestamp,HCons[Char,HCons[Char,HCons[Char,HCons[Char,HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[Char],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[Char],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+  /** Constructor for GlineContractRow providing default values if available in the database schema. */
+  def GlineContractRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], currency: Option[String], startDate: java.sql.Timestamp, endDate: java.sql.Timestamp, externalLimitFlag: Char, externalStartDateFlag: Char, externalEndDateFlag: Char, usageRestrictedFlag: Char, usageRestrictedReason: Option[String], reminderStartDate: Option[java.sql.Timestamp], reminderPeriod: Option[Char], currencyPeriodType: Option[Char], interestDayQuotient: Option[Char], commentary: Option[String], responsibleUsers: Option[String], upperConsumptionPercentage: Option[scala.math.BigDecimal], activeFlag: Option[Char], contractNumber: Option[scala.math.BigDecimal], name: Option[String], expiringFlag: Option[Char], fixedLimitFlag: Option[Char], conditionsCommentary: Option[String], contractType: Option[Char], tappApprovalId: Option[String], contractLang: Option[String], contractUnderlyingLaw: Option[String], contrBasedonSiemensStandard: Option[Char], coverageOfFacility: Option[String], additionalCoverageInfo: Option[String], commitmentFeePercentage: Option[scala.math.BigDecimal], onetimeSetupfeeAmount: Option[scala.math.BigDecimal], onetimeSetupfeeWkz: Option[String], onetimeSetupfeePercentage: Option[scala.math.BigDecimal], utilizationFeeAmount: Option[scala.math.BigDecimal], utilizationFeeWkz: Option[String], utilizationFeePercentage: Option[scala.math.BigDecimal], interestratePercentage: Option[scala.math.BigDecimal], referenceratePercentage: Option[scala.math.BigDecimal], creditspreadPercentage: Option[scala.math.BigDecimal], otherFees: Option[String], ratingtrgCl: Option[Char], quotRatingtrgCl: Option[String], changeOfControltrg: Option[Char], quotChangeOfControltrg: Option[String], crossdefaultTrgCl: Option[Char], quotCrossdefaulttrgCl: Option[String], materialAdverseChtrgCl: Option[Char], quotMaterialAdverseChtrgCl: Option[String], anyOtherRelTrgProv: Option[Char], quotOtherRelTrgCl: Option[String], resultOfTrgCls: Option[String], financialCovenant: Option[Char], quotFinancialCovenant: Option[String], resultOfFinancialCovenant: Option[String], informationCovenant: Option[Char], quotInformationCovenant: Option[String], resultOfInformationCovenant: Option[String], otherCovenant: Option[Char], quotOtherCovenant: Option[String], resultOfOtherCovenant: Option[String], contractContainsNoCovenants: Option[Char]): GlineContractRow = {
     objectidc :: objectversionc :: lastuserc :: updatetimec :: businessPartnerId :: bareId :: limit :: currency :: startDate :: endDate :: externalLimitFlag :: externalStartDateFlag :: externalEndDateFlag :: usageRestrictedFlag :: usageRestrictedReason :: reminderStartDate :: reminderPeriod :: currencyPeriodType :: interestDayQuotient :: commentary :: responsibleUsers :: upperConsumptionPercentage :: activeFlag :: contractNumber :: name :: expiringFlag :: fixedLimitFlag :: conditionsCommentary :: contractType :: tappApprovalId :: contractLang :: contractUnderlyingLaw :: contrBasedonSiemensStandard :: coverageOfFacility :: additionalCoverageInfo :: commitmentFeePercentage :: onetimeSetupfeeAmount :: onetimeSetupfeeWkz :: onetimeSetupfeePercentage :: utilizationFeeAmount :: utilizationFeeWkz :: utilizationFeePercentage :: interestratePercentage :: referenceratePercentage :: creditspreadPercentage :: otherFees :: ratingtrgCl :: quotRatingtrgCl :: changeOfControltrg :: quotChangeOfControltrg :: crossdefaultTrgCl :: quotCrossdefaulttrgCl :: materialAdverseChtrgCl :: quotMaterialAdverseChtrgCl :: anyOtherRelTrgProv :: quotOtherRelTrgCl :: resultOfTrgCls :: financialCovenant :: quotFinancialCovenant :: resultOfFinancialCovenant :: informationCovenant :: quotInformationCovenant :: resultOfInformationCovenant :: otherCovenant :: quotOtherCovenant :: resultOfOtherCovenant :: contractContainsNoCovenants :: HNil
   }
-  /** GetResult implicit for fetching GreatGlineContractRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineContractRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[java.sql.Timestamp], e5: GR[Char], e6: GR[Option[Char]]): GR[GreatGlineContractRow] = GR{
+  /** GetResult implicit for fetching GlineContractRow objects using plain SQL queries */
+  implicit def GetResultGlineContractRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]], e4: GR[java.sql.Timestamp], e5: GR[Char], e6: GR[Option[Char]]): GR[GlineContractRow] = GR{
     prs => import prs._
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<[String] :: <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<[java.sql.Timestamp] :: <<[java.sql.Timestamp] :: <<[Char] :: <<[Char] :: <<[Char] :: <<[Char] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: HNil
   }
   /** Table description of table GREAT_GLINE_CONTRACT. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineContract(_tableTag: Tag) extends profile.api.Table[GreatGlineContractRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_CONTRACT") {
+  class GlineContract(_tableTag: Tag) extends profile.api.Table[GlineContractRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_CONTRACT") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: businessPartnerId :: bareId :: limit :: currency :: startDate :: endDate :: externalLimitFlag :: externalStartDateFlag :: externalEndDateFlag :: usageRestrictedFlag :: usageRestrictedReason :: reminderStartDate :: reminderPeriod :: currencyPeriodType :: interestDayQuotient :: commentary :: responsibleUsers :: upperConsumptionPercentage :: activeFlag :: contractNumber :: name :: expiringFlag :: fixedLimitFlag :: conditionsCommentary :: contractType :: tappApprovalId :: contractLang :: contractUnderlyingLaw :: contrBasedonSiemensStandard :: coverageOfFacility :: additionalCoverageInfo :: commitmentFeePercentage :: onetimeSetupfeeAmount :: onetimeSetupfeeWkz :: onetimeSetupfeePercentage :: utilizationFeeAmount :: utilizationFeeWkz :: utilizationFeePercentage :: interestratePercentage :: referenceratePercentage :: creditspreadPercentage :: otherFees :: ratingtrgCl :: quotRatingtrgCl :: changeOfControltrg :: quotChangeOfControltrg :: crossdefaultTrgCl :: quotCrossdefaulttrgCl :: materialAdverseChtrgCl :: quotMaterialAdverseChtrgCl :: anyOtherRelTrgProv :: quotOtherRelTrgCl :: resultOfTrgCls :: financialCovenant :: quotFinancialCovenant :: resultOfFinancialCovenant :: informationCovenant :: quotInformationCovenant :: resultOfInformationCovenant :: otherCovenant :: quotOtherCovenant :: resultOfOtherCovenant :: contractContainsNoCovenants :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -1223,29 +1224,29 @@ trait MasterDataTables {
     /** Database column CONTRACT_CONTAINS_NO_COVENANTS SqlType(VARCHAR2) */
     val contractContainsNoCovenants: Rep[Option[Char]] = column[Option[Char]]("CONTRACT_CONTAINS_NO_COVENANTS")
 
-    /** Foreign key referencing GreatBareDependants (database name GLC_FK_BARE_ID) */
-    lazy val greatBareDependantsFk = foreignKey("GLC_FK_BARE_ID", bareId :: HNil, GreatBareDependants)(r => r.objectidc :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatBusinessPartner (database name GLC_FK_BUSINESS_PARTNER_ID) */
-    lazy val greatBusinessPartnerFk = foreignKey("GLC_FK_BUSINESS_PARTNER_ID", businessPartnerId :: HNil, GreatBusinessPartner)(r => r.objectidc :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatCurrency (database name GLC_FK_CURRENCY) */
-    lazy val greatCurrencyFk = foreignKey("GLC_FK_CURRENCY", currency :: HNil, GreatCurrency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BareDependants (database name GLC_FK_BARE_ID) */
+    lazy val bareDependantsFk = foreignKey("GLC_FK_BARE_ID", bareId :: HNil, BareDependants)(r => r.objectidc :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing BusinessPartner (database name GLC_FK_BUSINESS_PARTNER_ID) */
+    lazy val businessPartnerFk = foreignKey("GLC_FK_BUSINESS_PARTNER_ID", businessPartnerId :: HNil, BusinessPartner)(r => r.objectidc :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Currency (database name GLC_FK_CURRENCY) */
+    lazy val currencyFk = foreignKey("GLC_FK_CURRENCY", currency :: HNil, Currency)(r => Rep.Some(r.objectidc) :: HNil, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatGlineContract */
-  lazy val GreatGlineContract = new TableQuery(tag => new GreatGlineContract(tag))
+  /** Collection-like TableQuery object for table GlineContract */
+  lazy val GlineContract = new TableQuery(tag => new GlineContract(tag))
 
-  /** Row type of table GreatGlineContractHistory */
-  type GreatGlineContractHistoryRow = HCons[String,HCons[scala.math.BigDecimal,HCons[Option[String],HCons[String,HCons[String,HCons[Char,HCons[Option[java.sql.Timestamp],HCons[String,HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[java.sql.Timestamp,HCons[java.sql.Timestamp,HCons[Char,HCons[Char,HCons[Char,HCons[Char,HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[Char],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-  /** Constructor for GreatGlineContractHistoryRow providing default values if available in the database schema. */
-  def GreatGlineContractHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], currency: Option[String], startDate: java.sql.Timestamp, endDate: java.sql.Timestamp, externalLimitFlag: Char, externalStartDateFlag: Char, externalEndDateFlag: Char, usageRestrictedFlag: Char, usageRestrictedReason: Option[String], reminderStartDate: Option[java.sql.Timestamp], reminderPeriod: Option[Char], currencyPeriodType: Option[Char], interestDayQuotient: Option[Char], commentary: Option[String], responsibleUsers: Option[String], upperConsumptionPercentage: Option[scala.math.BigDecimal], activeFlag: Option[Char], contractNumber: Option[String], name: Option[String], expiringFlag: Option[Char], fixedLimitFlag: Option[Char], conditionsCommentary: Option[String], contractType: Option[Char], tappApprovalId: Option[String], contractLang: Option[String], contractUnderlyingLaw: Option[String], contrBasedonSiemensStandard: Option[Char], coverageOfFacility: Option[String], additionalCoverageInfo: Option[String], commitmentFeePercentage: Option[scala.math.BigDecimal], onetimeSetupfeeAmount: Option[scala.math.BigDecimal], onetimeSetupfeeWkz: Option[String], onetimeSetupfeePercentage: Option[scala.math.BigDecimal], utilizationFeeAmount: Option[scala.math.BigDecimal], utilizationFeeWkz: Option[String], utilizationFeePercentage: Option[scala.math.BigDecimal], interestratePercentage: Option[scala.math.BigDecimal], referenceratePercentage: Option[scala.math.BigDecimal], creditspreadPercentage: Option[scala.math.BigDecimal], otherFees: Option[String], ratingtrgCl: Option[Char], quotRatingtrgCl: Option[String], changeOfControltrg: Option[Char], quotChangeOfControltrg: Option[String], crossdefaultTrgCl: Option[Char], quotCrossdefaulttrgCl: Option[String], materialAdverseChtrgCl: Option[Char], quotMaterialAdverseChtrgCl: Option[String], anyOtherRelTrgProv: Option[Char], quotOtherRelTrgCl: Option[String], resultOfTrgCls: Option[String], financialCovenant: Option[Char], quotFinancialCovenant: Option[String], resultOfFinancialCovenant: Option[String], informationCovenant: Option[Char], quotInformationCovenant: Option[String], resultOfInformationCovenant: Option[String], otherCovenant: Option[Char], quotOtherCovenant: Option[String], resultOfOtherCovenant: Option[String], contractContainsNoCovenants: Option[Char]): GreatGlineContractHistoryRow = {
+  /** Row type of table GlineContractHistory */
+  type GlineContractHistoryRow = HCons[String,HCons[scala.math.BigDecimal,HCons[Option[String],HCons[String,HCons[String,HCons[Char,HCons[Option[java.sql.Timestamp],HCons[String,HCons[String,HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[java.sql.Timestamp,HCons[java.sql.Timestamp,HCons[Char,HCons[Char,HCons[Char,HCons[Char,HCons[Option[String],HCons[Option[java.sql.Timestamp],HCons[Option[Char],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[scala.math.BigDecimal],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HCons[Option[String],HCons[Option[String],HCons[Option[Char],HNil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+  /** Constructor for GlineContractHistoryRow providing default values if available in the database schema. */
+  def GlineContractHistoryRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatereasonc: String, updatecategoryc: String, activec: Char, updatetimec: Option[java.sql.Timestamp], businessPartnerId: String, bareId: String, limit: Option[scala.math.BigDecimal], currency: Option[String], startDate: java.sql.Timestamp, endDate: java.sql.Timestamp, externalLimitFlag: Char, externalStartDateFlag: Char, externalEndDateFlag: Char, usageRestrictedFlag: Char, usageRestrictedReason: Option[String], reminderStartDate: Option[java.sql.Timestamp], reminderPeriod: Option[Char], currencyPeriodType: Option[Char], interestDayQuotient: Option[Char], commentary: Option[String], responsibleUsers: Option[String], upperConsumptionPercentage: Option[scala.math.BigDecimal], activeFlag: Option[Char], contractNumber: Option[String], name: Option[String], expiringFlag: Option[Char], fixedLimitFlag: Option[Char], conditionsCommentary: Option[String], contractType: Option[Char], tappApprovalId: Option[String], contractLang: Option[String], contractUnderlyingLaw: Option[String], contrBasedonSiemensStandard: Option[Char], coverageOfFacility: Option[String], additionalCoverageInfo: Option[String], commitmentFeePercentage: Option[scala.math.BigDecimal], onetimeSetupfeeAmount: Option[scala.math.BigDecimal], onetimeSetupfeeWkz: Option[String], onetimeSetupfeePercentage: Option[scala.math.BigDecimal], utilizationFeeAmount: Option[scala.math.BigDecimal], utilizationFeeWkz: Option[String], utilizationFeePercentage: Option[scala.math.BigDecimal], interestratePercentage: Option[scala.math.BigDecimal], referenceratePercentage: Option[scala.math.BigDecimal], creditspreadPercentage: Option[scala.math.BigDecimal], otherFees: Option[String], ratingtrgCl: Option[Char], quotRatingtrgCl: Option[String], changeOfControltrg: Option[Char], quotChangeOfControltrg: Option[String], crossdefaultTrgCl: Option[Char], quotCrossdefaulttrgCl: Option[String], materialAdverseChtrgCl: Option[Char], quotMaterialAdverseChtrgCl: Option[String], anyOtherRelTrgProv: Option[Char], quotOtherRelTrgCl: Option[String], resultOfTrgCls: Option[String], financialCovenant: Option[Char], quotFinancialCovenant: Option[String], resultOfFinancialCovenant: Option[String], informationCovenant: Option[Char], quotInformationCovenant: Option[String], resultOfInformationCovenant: Option[String], otherCovenant: Option[Char], quotOtherCovenant: Option[String], resultOfOtherCovenant: Option[String], contractContainsNoCovenants: Option[Char]): GlineContractHistoryRow = {
     objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: businessPartnerId :: bareId :: limit :: currency :: startDate :: endDate :: externalLimitFlag :: externalStartDateFlag :: externalEndDateFlag :: usageRestrictedFlag :: usageRestrictedReason :: reminderStartDate :: reminderPeriod :: currencyPeriodType :: interestDayQuotient :: commentary :: responsibleUsers :: upperConsumptionPercentage :: activeFlag :: contractNumber :: name :: expiringFlag :: fixedLimitFlag :: conditionsCommentary :: contractType :: tappApprovalId :: contractLang :: contractUnderlyingLaw :: contrBasedonSiemensStandard :: coverageOfFacility :: additionalCoverageInfo :: commitmentFeePercentage :: onetimeSetupfeeAmount :: onetimeSetupfeeWkz :: onetimeSetupfeePercentage :: utilizationFeeAmount :: utilizationFeeWkz :: utilizationFeePercentage :: interestratePercentage :: referenceratePercentage :: creditspreadPercentage :: otherFees :: ratingtrgCl :: quotRatingtrgCl :: changeOfControltrg :: quotChangeOfControltrg :: crossdefaultTrgCl :: quotCrossdefaulttrgCl :: materialAdverseChtrgCl :: quotMaterialAdverseChtrgCl :: anyOtherRelTrgProv :: quotOtherRelTrgCl :: resultOfTrgCls :: financialCovenant :: quotFinancialCovenant :: resultOfFinancialCovenant :: informationCovenant :: quotInformationCovenant :: resultOfInformationCovenant :: otherCovenant :: quotOtherCovenant :: resultOfOtherCovenant :: contractContainsNoCovenants :: HNil
   }
-  /** GetResult implicit for fetching GreatGlineContractHistoryRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineContractHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[scala.math.BigDecimal]], e6: GR[java.sql.Timestamp], e7: GR[Option[Char]]): GR[GreatGlineContractHistoryRow] = GR{
+  /** GetResult implicit for fetching GlineContractHistoryRow objects using plain SQL queries */
+  implicit def GetResultGlineContractHistoryRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Char], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[scala.math.BigDecimal]], e6: GR[java.sql.Timestamp], e7: GR[Option[Char]]): GR[GlineContractHistoryRow] = GR{
     prs => import prs._
       <<[String] :: <<[scala.math.BigDecimal] :: <<?[String] :: <<[String] :: <<[String] :: <<[Char] :: <<?[java.sql.Timestamp] :: <<[String] :: <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<[java.sql.Timestamp] :: <<[java.sql.Timestamp] :: <<[Char] :: <<[Char] :: <<[Char] :: <<[Char] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: HNil
   }
   /** Table description of table GREAT_GLINE_CONTRACT_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineContractHistory(_tableTag: Tag) extends profile.api.Table[GreatGlineContractHistoryRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_CONTRACT_HISTORY") {
+  class GlineContractHistory(_tableTag: Tag) extends profile.api.Table[GlineContractHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_CONTRACT_HISTORY") {
     def * = objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: businessPartnerId :: bareId :: limit :: currency :: startDate :: endDate :: externalLimitFlag :: externalStartDateFlag :: externalEndDateFlag :: usageRestrictedFlag :: usageRestrictedReason :: reminderStartDate :: reminderPeriod :: currencyPeriodType :: interestDayQuotient :: commentary :: responsibleUsers :: upperConsumptionPercentage :: activeFlag :: contractNumber :: name :: expiringFlag :: fixedLimitFlag :: conditionsCommentary :: contractType :: tappApprovalId :: contractLang :: contractUnderlyingLaw :: contrBasedonSiemensStandard :: coverageOfFacility :: additionalCoverageInfo :: commitmentFeePercentage :: onetimeSetupfeeAmount :: onetimeSetupfeeWkz :: onetimeSetupfeePercentage :: utilizationFeeAmount :: utilizationFeeWkz :: utilizationFeePercentage :: interestratePercentage :: referenceratePercentage :: creditspreadPercentage :: otherFees :: ratingtrgCl :: quotRatingtrgCl :: changeOfControltrg :: quotChangeOfControltrg :: crossdefaultTrgCl :: quotCrossdefaulttrgCl :: materialAdverseChtrgCl :: quotMaterialAdverseChtrgCl :: anyOtherRelTrgProv :: quotOtherRelTrgCl :: resultOfTrgCls :: financialCovenant :: quotFinancialCovenant :: resultOfFinancialCovenant :: informationCovenant :: quotInformationCovenant :: resultOfInformationCovenant :: otherCovenant :: quotOtherCovenant :: resultOfOtherCovenant :: contractContainsNoCovenants :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
@@ -1389,11 +1390,11 @@ trait MasterDataTables {
     /** Database column CONTRACT_CONTAINS_NO_COVENANTS SqlType(VARCHAR2) */
     val contractContainsNoCovenants: Rep[Option[Char]] = column[Option[Char]]("CONTRACT_CONTAINS_NO_COVENANTS")
 
-    /** Primary key of GreatGlineContractHistory (database name GLCH_PK_OBJECTIDC) */
+    /** Primary key of GlineContractHistory (database name GLCH_PK_OBJECTIDC) */
     val pk = primaryKey("GLCH_PK_OBJECTIDC", objectidc :: objectversionc :: HNil)
   }
-  /** Collection-like TableQuery object for table GreatGlineContractHistory */
-  lazy val GreatGlineContractHistory = new TableQuery(tag => new GreatGlineContractHistory(tag))
+  /** Collection-like TableQuery object for table GlineContractHistory */
+  lazy val GlineContractHistory = new TableQuery(tag => new GlineContractHistory(tag))
 
   /** Entity class storing rows of table GreatGlineReservation
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -1416,17 +1417,17 @@ trait MasterDataTables {
     *  @param firstEntryFlag Database column FIRST_ENTRY_FLAG SqlType(CHAR)
     *  @param conditions Database column CONDITIONS SqlType(VARCHAR2), Length(1024,true)
     *  @param commentary Database column COMMENTARY SqlType(VARCHAR2), Length(1024,true) */
-  case class GreatGlineReservationRow(objectidc: String, parentId: Option[String], parentVersion: Option[scala.math.BigDecimal], reservedAmount: Option[scala.math.BigDecimal], reservedAmountCurrency: Option[String], project: Option[String], ownerId: Option[String], reservationTimestamp: Option[java.sql.Timestamp], expiryDate: Option[java.sql.Timestamp], reminderStartDate: Option[java.sql.Timestamp], reminderPeriodType: Option[Char], guaranteeEndDate: Option[java.sql.Timestamp], guaranteePartnerOrgId: Option[String], guaranteeRespAppId: Option[String], guaranteeRespAppName: Option[String], guaranteeId: Option[String], reservationType: Option[Char], firstEntryFlag: Option[Char], conditions: Option[String], commentary: Option[String])
-  /** GetResult implicit for fetching GreatGlineReservationRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineReservationRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[scala.math.BigDecimal]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[GreatGlineReservationRow] = GR{
+  case class GlineReservationRow(objectidc: String, parentId: Option[String], parentVersion: Option[scala.math.BigDecimal], reservedAmount: Option[scala.math.BigDecimal], reservedAmountCurrency: Option[String], project: Option[String], ownerId: Option[String], reservationTimestamp: Option[java.sql.Timestamp], expiryDate: Option[java.sql.Timestamp], reminderStartDate: Option[java.sql.Timestamp], reminderPeriodType: Option[Char], guaranteeEndDate: Option[java.sql.Timestamp], guaranteePartnerOrgId: Option[String], guaranteeRespAppId: Option[String], guaranteeRespAppName: Option[String], guaranteeId: Option[String], reservationType: Option[Char], firstEntryFlag: Option[Char], conditions: Option[String], commentary: Option[String])
+  /** GetResult implicit for fetching GlineReservationRow objects using plain SQL queries */
+  implicit def GetResultGlineReservationRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[Option[scala.math.BigDecimal]], e3: GR[Option[java.sql.Timestamp]], e4: GR[Option[Char]]): GR[GlineReservationRow] = GR{
     prs => import prs._
-      GreatGlineReservationRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String]))
+      GlineReservationRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATION. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineReservation(_tableTag: Tag) extends profile.api.Table[GreatGlineReservationRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_RESERVATION") {
-    def * = (objectidc, parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary) <> (GreatGlineReservationRow.tupled, GreatGlineReservationRow.unapply)
+  class GlineReservation(_tableTag: Tag) extends profile.api.Table[GlineReservationRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATION") {
+    def * = (objectidc, parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary) <> (GlineReservationRow.tupled, GlineReservationRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary).shaped.<>({r=>import r._; _1.map(_=> GreatGlineReservationRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary).shaped.<>({r=>import r._; _1.map(_=> GlineReservationRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -1469,19 +1470,19 @@ trait MasterDataTables {
     /** Database column COMMENTARY SqlType(VARCHAR2), Length(1024,true) */
     val commentary: Rep[Option[String]] = column[Option[String]]("COMMENTARY", O.Length(1024,varying=true))
 
-    /** Foreign key referencing GreatCurrency (database name GLRV_FK_RESERVED_AMOUNT_CURR1) */
-    lazy val greatCurrencyFk = foreignKey("GLRV_FK_RESERVED_AMOUNT_CURR1", reservedAmountCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name GLRV_FK_GUARANTEE_RESP_APP_ID) */
-    lazy val greatDivisionUserFk2 = foreignKey("GLRV_FK_GUARANTEE_RESP_APP_ID", guaranteeRespAppId, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name GLRV_FK_OWNER_ID) */
-    lazy val greatDivisionUserFk3 = foreignKey("GLRV_FK_OWNER_ID", ownerId, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatGlineReservations (database name GLRV_FK_PARENT_ID) */
-    lazy val greatGlineReservationsFk = foreignKey("GLRV_FK_PARENT_ID", parentId, GreatGlineReservations)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatOrg (database name GLRV_FK_GUARANTEE_PARTNER_OR3) */
-    lazy val greatOrgFk = foreignKey("GLRV_FK_GUARANTEE_PARTNER_OR3", guaranteePartnerOrgId, GreatOrg)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Currency (database name GLRV_FK_RESERVED_AMOUNT_CURR1) */
+    lazy val currencyFk = foreignKey("GLRV_FK_RESERVED_AMOUNT_CURR1", reservedAmountCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name GLRV_FK_GUARANTEE_RESP_APP_ID) */
+    lazy val divisionUserFk2 = foreignKey("GLRV_FK_GUARANTEE_RESP_APP_ID", guaranteeRespAppId, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name GLRV_FK_OWNER_ID) */
+    lazy val divisionUserFk3 = foreignKey("GLRV_FK_OWNER_ID", ownerId, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing GlineReservations (database name GLRV_FK_PARENT_ID) */
+    lazy val glineReservationsFk = foreignKey("GLRV_FK_PARENT_ID", parentId, GlineReservations)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Org (database name GLRV_FK_GUARANTEE_PARTNER_OR3) */
+    lazy val orgFk = foreignKey("GLRV_FK_GUARANTEE_PARTNER_OR3", guaranteePartnerOrgId, Org)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatGlineReservation */
-  lazy val GreatGlineReservation = new TableQuery(tag => new GreatGlineReservation(tag))
+  /** Collection-like TableQuery object for table GlineReservation */
+  lazy val GlineReservation = new TableQuery(tag => new GlineReservation(tag))
 
   /** Entity class storing rows of table GreatGlineReservationHist
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -1504,17 +1505,17 @@ trait MasterDataTables {
     *  @param firstEntryFlag Database column FIRST_ENTRY_FLAG SqlType(CHAR)
     *  @param conditions Database column CONDITIONS SqlType(VARCHAR2), Length(1024,true)
     *  @param commentary Database column COMMENTARY SqlType(VARCHAR2), Length(1024,true) */
-  case class GreatGlineReservationHistRow(objectidc: String, parentId: Option[String], parentVersion: scala.math.BigDecimal, reservedAmount: Option[scala.math.BigDecimal], reservedAmountCurrency: Option[String], project: Option[String], ownerId: Option[String], reservationTimestamp: Option[java.sql.Timestamp], expiryDate: Option[java.sql.Timestamp], reminderStartDate: Option[java.sql.Timestamp], reminderPeriodType: Option[Char], guaranteeEndDate: Option[java.sql.Timestamp], guaranteePartnerOrgId: Option[String], guaranteeRespAppId: Option[String], guaranteeRespAppName: Option[String], guaranteeId: Option[String], reservationType: Option[Char], firstEntryFlag: Option[Char], conditions: Option[String], commentary: Option[String])
-  /** GetResult implicit for fetching GreatGlineReservationHistRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineReservationHistRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[scala.math.BigDecimal], e3: GR[Option[scala.math.BigDecimal]], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[GreatGlineReservationHistRow] = GR{
+  case class GlineReservationHistRow(objectidc: String, parentId: Option[String], parentVersion: scala.math.BigDecimal, reservedAmount: Option[scala.math.BigDecimal], reservedAmountCurrency: Option[String], project: Option[String], ownerId: Option[String], reservationTimestamp: Option[java.sql.Timestamp], expiryDate: Option[java.sql.Timestamp], reminderStartDate: Option[java.sql.Timestamp], reminderPeriodType: Option[Char], guaranteeEndDate: Option[java.sql.Timestamp], guaranteePartnerOrgId: Option[String], guaranteeRespAppId: Option[String], guaranteeRespAppName: Option[String], guaranteeId: Option[String], reservationType: Option[Char], firstEntryFlag: Option[Char], conditions: Option[String], commentary: Option[String])
+  /** GetResult implicit for fetching GlineReservationHistRow objects using plain SQL queries */
+  implicit def GetResultGlineReservationHistRow(implicit e0: GR[String], e1: GR[Option[String]], e2: GR[scala.math.BigDecimal], e3: GR[Option[scala.math.BigDecimal]], e4: GR[Option[java.sql.Timestamp]], e5: GR[Option[Char]]): GR[GlineReservationHistRow] = GR{
     prs => import prs._
-      GreatGlineReservationHistRow.tupled((<<[String], <<?[String], <<[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String]))
+      GlineReservationHistRow.tupled((<<[String], <<?[String], <<[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATION_HIST. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineReservationHist(_tableTag: Tag) extends profile.api.Table[GreatGlineReservationHistRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_RESERVATION_HIST") {
-    def * = (objectidc, parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary) <> (GreatGlineReservationHistRow.tupled, GreatGlineReservationHistRow.unapply)
+  class GlineReservationHist(_tableTag: Tag) extends profile.api.Table[GlineReservationHistRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATION_HIST") {
+    def * = (objectidc, parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary) <> (GlineReservationHistRow.tupled, GlineReservationHistRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), parentId, Rep.Some(parentVersion), reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary).shaped.<>({r=>import r._; _1.map(_=> GreatGlineReservationHistRow.tupled((_1.get, _2, _3.get, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), parentId, Rep.Some(parentVersion), reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary).shaped.<>({r=>import r._; _1.map(_=> GlineReservationHistRow.tupled((_1.get, _2, _3.get, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -1557,40 +1558,40 @@ trait MasterDataTables {
     /** Database column COMMENTARY SqlType(VARCHAR2), Length(1024,true) */
     val commentary: Rep[Option[String]] = column[Option[String]]("COMMENTARY", O.Length(1024,varying=true))
 
-    /** Primary key of GreatGlineReservationHist (database name GLRVH_PK_OBJECTIDC) */
+    /** Primary key of GlineReservationHist (database name GLRVH_PK_OBJECTIDC) */
     val pk = primaryKey("GLRVH_PK_OBJECTIDC", (objectidc, parentVersion))
 
-    /** Foreign key referencing GreatCurrency (database name GLRVH_FK_RESERVED_AMOUNT_CUR1) */
-    lazy val greatCurrencyFk = foreignKey("GLRVH_FK_RESERVED_AMOUNT_CUR1", reservedAmountCurrency, GreatCurrency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name GLRVH_FK_GUARANTEE_RESP_APP_ID) */
-    lazy val greatDivisionUserFk2 = foreignKey("GLRVH_FK_GUARANTEE_RESP_APP_ID", guaranteeRespAppId, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatDivisionUser (database name GLRVH_FK_OWNER_ID) */
-    lazy val greatDivisionUserFk3 = foreignKey("GLRVH_FK_OWNER_ID", ownerId, GreatDivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatGlineReservationsHist (database name GLRVH_FK_PARENT_VERSION) */
-    lazy val greatGlineReservationsHistFk = foreignKey("GLRVH_FK_PARENT_VERSION", (parentId, parentVersion), GreatGlineReservationsHist)(r => (Rep.Some(r.objectidc), r.objectversionc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-    /** Foreign key referencing GreatOrg (database name GLRVH_FK_GUARANTEE_PARTNER_O3) */
-    lazy val greatOrgFk = foreignKey("GLRVH_FK_GUARANTEE_PARTNER_O3", guaranteePartnerOrgId, GreatOrg)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Currency (database name GLRVH_FK_RESERVED_AMOUNT_CUR1) */
+    lazy val currencyFk = foreignKey("GLRVH_FK_RESERVED_AMOUNT_CUR1", reservedAmountCurrency, Currency)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name GLRVH_FK_GUARANTEE_RESP_APP_ID) */
+    lazy val divisionUserFk2 = foreignKey("GLRVH_FK_GUARANTEE_RESP_APP_ID", guaranteeRespAppId, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing DivisionUser (database name GLRVH_FK_OWNER_ID) */
+    lazy val divisionUserFk3 = foreignKey("GLRVH_FK_OWNER_ID", ownerId, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing GlineReservationsHist (database name GLRVH_FK_PARENT_VERSION) */
+    lazy val glineReservationsHistFk = foreignKey("GLRVH_FK_PARENT_VERSION", (parentId, parentVersion), GlineReservationsHist)(r => (Rep.Some(r.objectidc), r.objectversionc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing Org (database name GLRVH_FK_GUARANTEE_PARTNER_O3) */
+    lazy val orgFk = foreignKey("GLRVH_FK_GUARANTEE_PARTNER_O3", guaranteePartnerOrgId, Org)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatGlineReservationHist */
-  lazy val GreatGlineReservationHist = new TableQuery(tag => new GreatGlineReservationHist(tag))
+  /** Collection-like TableQuery object for table GlineReservationHist */
+  lazy val GlineReservationHist = new TableQuery(tag => new GlineReservationHist(tag))
 
-  /** Entity class storing rows of table GreatGlineReservations
+  /** Entity class storing rows of table GlineReservations
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
     *  @param objectversionc Database column OBJECTVERSIONC SqlType(NUMBER)
     *  @param lastuserc Database column LASTUSERC SqlType(VARCHAR2), Length(40,true)
     *  @param updatetimec Database column UPDATETIMEC SqlType(DATE)
     *  @param lineAccountId Database column LINE_ACCOUNT_ID SqlType(VARCHAR2), Length(10,true) */
-  case class GreatGlineReservationsRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], lineAccountId: String)
-  /** GetResult implicit for fetching GreatGlineReservationsRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineReservationsRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]]): GR[GreatGlineReservationsRow] = GR{
+  case class GlineReservationsRow(objectidc: String, objectversionc: Option[scala.math.BigDecimal], lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], lineAccountId: String)
+  /** GetResult implicit for fetching GlineReservationsRow objects using plain SQL queries */
+  implicit def GetResultGlineReservationsRow(implicit e0: GR[String], e1: GR[Option[scala.math.BigDecimal]], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]]): GR[GlineReservationsRow] = GR{
     prs => import prs._
-      GreatGlineReservationsRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[String]))
+      GlineReservationsRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATIONS. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineReservations(_tableTag: Tag) extends profile.api.Table[GreatGlineReservationsRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_RESERVATIONS") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, lineAccountId) <> (GreatGlineReservationsRow.tupled, GreatGlineReservationsRow.unapply)
+  class GlineReservations(_tableTag: Tag) extends profile.api.Table[GlineReservationsRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATIONS") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, lineAccountId) <> (GlineReservationsRow.tupled, GlineReservationsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(lineAccountId)).shaped.<>({r=>import r._; _1.map(_=> GreatGlineReservationsRow.tupled((_1.get, _2, _3, _4, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(lineAccountId)).shaped.<>({r=>import r._; _1.map(_=> GlineReservationsRow.tupled((_1.get, _2, _3, _4, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.PrimaryKey, O.Length(10,varying=true))
@@ -1603,11 +1604,11 @@ trait MasterDataTables {
     /** Database column LINE_ACCOUNT_ID SqlType(VARCHAR2), Length(10,true) */
     val lineAccountId: Rep[String] = column[String]("LINE_ACCOUNT_ID", O.Length(10,varying=true))
 
-    /** Foreign key referencing GreatGlineAccount (database name GLRVS_FK_LINE_ACCOUNT_ID) */
-    lazy val greatGlineAccountFk = foreignKey("GLRVS_FK_LINE_ACCOUNT_ID", lineAccountId, GreatGlineAccount)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+    /** Foreign key referencing GlineAccount (database name GLRVS_FK_LINE_ACCOUNT_ID) */
+    lazy val glineAccountFk = foreignKey("GLRVS_FK_LINE_ACCOUNT_ID", lineAccountId, GlineAccount)(r => r.objectidc, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
   }
-  /** Collection-like TableQuery object for table GreatGlineReservations */
-  lazy val GreatGlineReservations = new TableQuery(tag => new GreatGlineReservations(tag))
+  /** Collection-like TableQuery object for table GlineReservations */
+  lazy val GlineReservations = new TableQuery(tag => new GlineReservations(tag))
 
   /** Entity class storing rows of table GreatGlineReservationsHist
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true)
@@ -1617,17 +1618,17 @@ trait MasterDataTables {
     *  @param updatereasonc Database column UPDATEREASONC SqlType(VARCHAR2), Length(10,true)
     *  @param updatecategoryc Database column UPDATECATEGORYC SqlType(VARCHAR2), Length(20,true)
     *  @param lineAccountId Database column LINE_ACCOUNT_ID SqlType(VARCHAR2), Length(10,true) */
-  case class GreatGlineReservationsHistRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], updatereasonc: String, updatecategoryc: String, lineAccountId: String)
-  /** GetResult implicit for fetching GreatGlineReservationsHistRow objects using plain SQL queries */
-  implicit def GetResultGreatGlineReservationsHistRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]]): GR[GreatGlineReservationsHistRow] = GR{
+  case class GlineReservationsHistRow(objectidc: String, objectversionc: scala.math.BigDecimal, lastuserc: Option[String], updatetimec: Option[java.sql.Timestamp], updatereasonc: String, updatecategoryc: String, lineAccountId: String)
+  /** GetResult implicit for fetching GlineReservationsHistRow objects using plain SQL queries */
+  implicit def GetResultGlineReservationsHistRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal], e2: GR[Option[String]], e3: GR[Option[java.sql.Timestamp]]): GR[GlineReservationsHistRow] = GR{
     prs => import prs._
-      GreatGlineReservationsHistRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[String], <<[String], <<[String]))
+      GlineReservationsHistRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[String], <<[String], <<[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATIONS_HIST. Objects of this class serve as prototypes for rows in queries. */
-  class GreatGlineReservationsHist(_tableTag: Tag) extends profile.api.Table[GreatGlineReservationsHistRow](_tableTag, Some("WERNER2"), "GREAT_GLINE_RESERVATIONS_HIST") {
-    def * = (objectidc, objectversionc, lastuserc, updatetimec, updatereasonc, updatecategoryc, lineAccountId) <> (GreatGlineReservationsHistRow.tupled, GreatGlineReservationsHistRow.unapply)
+  class GlineReservationsHist(_tableTag: Tag) extends profile.api.Table[GlineReservationsHistRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATIONS_HIST") {
+    def * = (objectidc, objectversionc, lastuserc, updatetimec, updatereasonc, updatecategoryc, lineAccountId) <> (GlineReservationsHistRow.tupled, GlineReservationsHistRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, updatetimec, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(lineAccountId)).shaped.<>({r=>import r._; _1.map(_=> GreatGlineReservationsHistRow.tupled((_1.get, _2.get, _3, _4, _5.get, _6.get, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, updatetimec, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(lineAccountId)).shaped.<>({r=>import r._; _1.map(_=> GlineReservationsHistRow.tupled((_1.get, _2.get, _3, _4, _5.get, _6.get, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
     val objectidc: Rep[String] = column[String]("OBJECTIDC", O.Length(10,varying=true))
@@ -1644,11 +1645,11 @@ trait MasterDataTables {
     /** Database column LINE_ACCOUNT_ID SqlType(VARCHAR2), Length(10,true) */
     val lineAccountId: Rep[String] = column[String]("LINE_ACCOUNT_ID", O.Length(10,varying=true))
 
-    /** Primary key of GreatGlineReservationsHist (database name GLRVSH_PK_OBJECTIDC) */
+    /** Primary key of GlineReservationsHist (database name GLRVSH_PK_OBJECTIDC) */
     val pk = primaryKey("GLRVSH_PK_OBJECTIDC", (objectidc, objectversionc))
   }
-  /** Collection-like TableQuery object for table GreatGlineReservationsHist */
-  lazy val GreatGlineReservationsHist = new TableQuery(tag => new GreatGlineReservationsHist(tag))
+  /** Collection-like TableQuery object for table GlineReservationsHist */
+  lazy val GlineReservationsHist = new TableQuery(tag => new GlineReservationsHist(tag))
 
 
 }
