@@ -22,7 +22,7 @@ trait GuaranteeTables {
   import model.great.AdminTables._
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(AccountConsumption.schema, AnnotatedAmount.schema, Consumption.schema, ContractConsumption.schema, DebtorPortion.schema, Exemptions.schema, Gassociation.schema, GassociationHistory.schema, GassociationMember.schema, Guarantee.schema, GuaranteeAttachment.schema, GuaranteeFile.schema, GuaranteeScheduler2.schema, Request.schema, Settlement.schema, SviewConstraint.schema, UnitAttributeChoice.schema, UnitAttributes.schema, WorkflowStep.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(AccountConsumption.schema, AnnotatedAmount.schema, Consumption.schema, ContractConsumption.schema, DebtorPortion.schema, Exemptions.schema, Gassociation.schema, GassociationHistory.schema, GassociationMember.schema, Guarantee.schema, GuaranteeAttachment.schema, GuaranteeFile.schema, GuaranteeScheduler2.schema, Request.schema, Settlement.schema, UnitAttributeChoice.schema, UnitAttributes.schema, WorkflowStep.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
   val tablePrefix = "GREAT_"
@@ -1106,29 +1106,6 @@ trait GuaranteeTables {
   /** Collection-like TableQuery object for table Settlement */
   lazy val Settlement = new TableQuery(tag => new Settlement(tag))
 
-  /** Entity class storing rows of table SviewConstraint
-   *  @param userIdc Database column USER_IDC SqlType(VARCHAR2), Length(10,true)
-   *  @param constraint Database column CONSTRAINT SqlType(VARCHAR2), Length(30,true) */
-  case class SviewConstraintRow(userIdc: Option[String], constraint: Option[String])
-  /** GetResult implicit for fetching SviewConstraintRow objects using plain SQL queries */
-  implicit def GetResultSviewConstraintRow(implicit e0: GR[Option[String]]): GR[SviewConstraintRow] = GR{
-    prs => import prs._
-    SviewConstraintRow.tupled((<<?[String], <<?[String]))
-  }
-  /** Table description of table GREAT_SVIEW_CONSTRAINT. Objects of this class serve as prototypes for rows in queries. */
-  class SviewConstraint(_tableTag: Tag) extends profile.api.Table[SviewConstraintRow](_tableTag, Some("WERNER2"), tablePrefix + "SVIEW_CONSTRAINT") {
-    def * = (userIdc, constraint) <> (SviewConstraintRow.tupled, SviewConstraintRow.unapply)
-
-    /** Database column USER_IDC SqlType(VARCHAR2), Length(10,true) */
-    val userIdc: Rep[Option[String]] = column[Option[String]]("USER_IDC", O.Length(10,varying=true))
-    /** Database column CONSTRAINT SqlType(VARCHAR2), Length(30,true) */
-    val constraint: Rep[Option[String]] = column[Option[String]]("CONSTRAINT", O.Length(30,varying=true))
-
-    /** Foreign key referencing DivisionUser (database name SVIEW_FK_USER_IDC) */
-    lazy val divisionUserFk = foreignKey("SVIEW_FK_USER_IDC", userIdc, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-  }
-  /** Collection-like TableQuery object for table SviewConstraint */
-  lazy val SviewConstraint = new TableQuery(tag => new SviewConstraint(tag))
 
   /** Entity class storing rows of table UnitAttributeChoice
    *  @param id Database column ID SqlType(NUMBER), PrimaryKey

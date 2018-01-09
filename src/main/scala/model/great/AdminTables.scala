@@ -21,7 +21,7 @@ trait AdminTables {
 
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array (BareDependants.schema, BareDependantsHistory.schema, BareRights.schema, BusinessUnits.schema, Division.schema, DivisioncodeInSector.schema, DivisionLimits.schema, DivisionReportRight.schema, DivisionUser.schema, DownloadColumn.schema, DownloadFormat.schema, DownloadFormatRef.schema, GroupStructure.schema, GroupStructureHistory.schema, Person.schema, User.schema, UserAccount.schema, UserDeputies.schema, UserGroup.schema, UserInDivision.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array (BareDependants.schema, BareDependantsHistory.schema, BareRights.schema, BusinessUnits.schema, Division.schema, DivisioncodeInSector.schema, DivisionLimits.schema, DivisionReportRight.schema, DivisionUser.schema, DownloadColumn.schema, DownloadFormat.schema, DownloadFormatRef.schema, GroupStructure.schema, GroupStructureHistory.schema, Person.schema, SviewConstraint.schema, User.schema, UserAccount.schema, UserDeputies.schema, UserGroup.schema, UserInDivision.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
   // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" furr Common setzten um in der DB eine Struktur zu erhalten
@@ -1400,5 +1400,30 @@ trait AdminTables {
   }
   /** Collection-like TableQuery object for table AppInGroup */
   lazy val AppInGroup = new TableQuery(tag => new AppInGroup(tag))
+
+  /** Entity class storing rows of table SviewConstraint
+    *  @param userIdc Database column USER_IDC SqlType(VARCHAR2), Length(10,true)
+    *  @param constraint Database column CONSTRAINT SqlType(VARCHAR2), Length(30,true) */
+  case class SviewConstraintRow(userIdc: Option[String], constraint: Option[String])
+  /** GetResult implicit for fetching SviewConstraintRow objects using plain SQL queries */
+  implicit def GetResultSviewConstraintRow(implicit e0: GR[Option[String]]): GR[SviewConstraintRow] = GR{
+    prs => import prs._
+      SviewConstraintRow.tupled((<<?[String], <<?[String]))
+  }
+  /** Table description of table GREAT_SVIEW_CONSTRAINT. Objects of this class serve as prototypes for rows in queries. */
+  class SviewConstraint(_tableTag: Tag) extends profile.api.Table[SviewConstraintRow](_tableTag, Some("WERNER2"), tablePrefix + "SVIEW_CONSTRAINT") {
+    def * = (userIdc, constraint) <> (SviewConstraintRow.tupled, SviewConstraintRow.unapply)
+
+    /** Database column USER_IDC SqlType(VARCHAR2), Length(10,true) */
+    val userIdc: Rep[Option[String]] = column[Option[String]]("USER_IDC", O.Length(10,varying=true))
+    /** Database column CONSTRAINT SqlType(VARCHAR2), Length(30,true) */
+    val constraint: Rep[Option[String]] = column[Option[String]]("CONSTRAINT", O.Length(30,varying=true))
+
+    /** Foreign key referencing DivisionUser (database name SVIEW_FK_USER_IDC) */
+    lazy val divisionUserFk = foreignKey("SVIEW_FK_USER_IDC", userIdc, DivisionUser)(r => Rep.Some(r.objectidc), onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+  }
+  /** Collection-like TableQuery object for table SviewConstraint */
+  lazy val SviewConstraint = new TableQuery(tag => new SviewConstraint(tag))
+
 
 }
