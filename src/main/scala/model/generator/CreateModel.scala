@@ -17,7 +17,7 @@ import slick.jdbc.OracleProfile.api._
 */
 object CreateModel extends App {
 
-  override def main(args: Array[String]): Unit = {
+//  def main(args: Array[String]): Unit = {
     val dbConfig = "slick-oracle-great"  // in application.conf
     val db = Database.forConfig(dbConfig)
     val tablesAndViews = MTable.getTables(None, Some("WERNER2"), Some("GREAT_%"), Some(Seq("TABLE", "VIEW"))) //TABLE, and VIEW represent metadata, i.e. get database objects which are tables and views
@@ -41,6 +41,6 @@ object CreateModel extends App {
       codegenFuture.map(_.writeToFile("slick.jdbc.OracleProfile", path, "greatdomain", "GreatReverseEngineered", "GreatAllTables.scala")), 5 minutes)
 
     println("... CodeGeneration finished")
-  }
+// }
 
 }
