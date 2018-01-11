@@ -43,8 +43,6 @@ trait CommonTables {
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(key), who, when, what, division).shaped.<>({r=>import r._; _1.map(_=> AuditLogRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
-    def += (who, when, what, division) <> (AuditLogRow.tupled, AuditLogRow.unapply)
-
     /** Database column KEY SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
     val key: Rep[String] = column[String]("KEY", O.PrimaryKey, O.Length(10,varying=true))
     /** Database column WHO SqlType(VARCHAR2), Length(10,true) */

@@ -1,5 +1,5 @@
-//import org.h2.engine.Database
 
+//import org.h2.engine.Database
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
@@ -10,7 +10,7 @@ import scala.concurrent.duration.Duration
 //import slick.driver.HsqldbDriver.api._
 
 // The main application
-object HelloSlick_3 extends App {
+object GreatDBSetup extends App {
 
 //  val db = Database.forConfig("great-test")
 //  val db = Database.forConfig("h2mem1")
