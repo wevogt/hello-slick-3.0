@@ -1,23 +1,21 @@
 package model.great
 
 object AdminTables extends {
-  val profile = slick.jdbc.OracleProfile
+//  val profile = slick.jdbc.OracleProfile
+  val profile = slick.jdbc.H2Profile
 } with AdminTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait AdminTables {
   val profile: slick.jdbc.JdbcProfile
   import profile.api._
-  import slick.model.ForeignKeyAction
   import slick.collection.heterogeneous._
   import slick.collection.heterogeneous.syntax._
+  import slick.model.ForeignKeyAction
   // NOTE: GetResult mappers for plain SQL are only generated for tables where Slick knows how to map the types of all columns.
-  import slick.jdbc.{GetResult => GR}
-
-  import model.great.MasterDataTables._
-  import model.great.CommonTables._
   import model.great.BackOfficeTables._
-  import model.great.GuaranteeTables._
+  import model.great.MasterDataTables._
+  import slick.jdbc.{GetResult => GR}
 
 
   /** DDL for all tables. Call .create to execute. */

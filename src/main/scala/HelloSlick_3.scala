@@ -3,9 +3,8 @@
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.Await
 import scala.concurrent.duration.Duration
-
 //import slick.driver.H2Driver.api._
 //import slick.driver.PostgresDriver.api._
 //import slick.driver.HsqldbDriver.api._
@@ -18,7 +17,7 @@ object HelloSlick_3 extends App {
   //val db = Database.forConfig("hsqlslickdb")
   //val db = Database.forConfig("pgtest")
 
-  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-test")
+  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
   import dbConfig.profile.api._
   import slick.dbio.DBIO
   import slick.lifted
@@ -30,20 +29,41 @@ object HelloSlick_3 extends App {
   try {
 
     // The query interface for the Suppliers table
+
     val suppliers: TableQuery[Suppliers] = lifted.TableQuery[Suppliers]
 
     // the query interface for the Coffees table
     val coffees: TableQuery[Coffees] = lifted.TableQuery[Coffees]
 
+    val auditLog: TableQuery[model.great.CommonTables.AuditLog] = lifted.TableQuery[model.great.CommonTables.AuditLog]
+    val persons: TableQuery[model.great.AdminTables.Person] = lifted.TableQuery[model.great.AdminTables.Person]
+//    val commonTables: TableQuery[model.great.CommonTables.schema] = lifted.TableQuery[model.great.CommonTables]
+
     val setupAction: DBIO[Unit] = DBIO.seq(
       // Create the schema by combining the DDLs for the Suppliers and Coffees
       // tables using the query interfaces
-      (suppliers.schema ++ coffees.schema).create,
+      (suppliers.schema ++ coffees.schema ++
+        model.great.AdminTables.Person.schema ++
+        model.great.MasterDataTables.Country.schema ++
+        model.great.MasterDataTables.Language.schema ++
+        model.great.MasterDataTables.AccountingArea.schema ++
+        model.great.AdminTables.UserAccount.schema ++
+        model.great.AdminTables.Division.schema ++
+        model.great.AdminTables.DivisionUser.schema ++
+        model.great.AdminTables.UserGroup.schema ++
+        model.great.CommonTables.MessageEvent.schema ++
+        model.great.CommonTables.MessageInfo.schema ++
+        model.great.CommonTables.MessageAttachment.schema ++
+        auditLog.schema).create,
+//      (model.great.CommonTables.schema.createStatements),
 
       // Insert some suppliers
       suppliers += (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199"),
       suppliers += ( 49, "Superior Coffee", "1 Party Place", "Mendocino", "CA", "95460"),
       suppliers += (150, "The High Ground", "100 Coffee Lane", "Meadows", "CA", "93966")
+
+//      ,persons += (001, )
+//      ,auditLog += model.great.CommonTables.AuditLogRow("Bond", Nil , "test what", "division").
     )
 
     val setupFuture: Future[Unit] = dbConfig.db.run(setupAction)
