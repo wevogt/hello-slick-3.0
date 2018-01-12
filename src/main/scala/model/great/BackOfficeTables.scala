@@ -1,8 +1,6 @@
 package model.great
 
-object BackOfficeTables extends {
-  val profile = slick.jdbc.OracleProfile
-} with BackOfficeTables
+object BackOfficeTables extends DbProfile with BackOfficeTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait BackOfficeTables {
@@ -13,17 +11,16 @@ trait BackOfficeTables {
   import slick.collection.heterogeneous.syntax._
   // NOTE: GetResult mappers for plain SQL are only generated for tables where Slick knows how to map the types of all columns.
   import slick.jdbc.{GetResult => GR}
-
   import model.great.MasterDataTables._
   import model.great.AdminTables._
-  import model.great.CommonTables._
   import model.great.GuaranteeTables._
 
   /** DDL for all tables. Call .create to execute. */
   lazy val schema: profile.SchemaDescription = Array(BalanceSheetReportDef.schema, BalanceSheetReportRun.schema, BareBillingRun.schema, BillingRun.schema, BookEntry.schema, BookEntryRelation.schema, BulkUpdateDef.schema, BulkUpdateDokuments.schema, BulkUpdateGuarantee.schema, BulkUpdateRun.schema, BulkUpdateValue.schema, CommissionRecBareDep.schema, CommissionReceiver.schema, CommissionReceiverHist.schema, CostItem.schema, Invoice.schema, InvoiceEvent.schema, InvoiceEvidence.schema, InvoiceEvidencePos.schema, InvoiceLineItem.schema, InvoiceNumber.schema, InvoicePass.schema, InvPassCalendar.schema, Payment.schema, PriceScaleEntry.schema, PriceScaleEntryHist.schema, QuarterlyReserves.schema, ReconciliationProcess.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def gddl = schema
-  val tablePrefix = "GREAT_"
+  val tablePrefix = "WVO_"
+  private val schemaOwner = "SCOTT"
 
   /** Entity class storing rows of table BillingRun
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -48,7 +45,7 @@ trait BackOfficeTables {
       BillingRunRow.tupled((<<[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[String], <<?[java.sql.Timestamp], <<?[Char], <<?[Char], <<?[java.sql.Blob], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_BILLING_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class BillingRun(_tableTag: Tag) extends profile.api.Table[BillingRunRow](_tableTag, Some("WERNER2"), tablePrefix + "BILLING_RUN") {
+  class BillingRun(_tableTag: Tag) extends profile.api.Table[BillingRunRow](_tableTag, Some(schemaOwner), tablePrefix + "BILLING_RUN") {
     def * = (objectidc, bareGroup, execStart, execEnd, status, userAccount, endDate, onlyFlagged, nrsValidation, protocol, protocolLength, transportDescription, transportStatus, concernedBaren, testMode) <> (BillingRunRow.tupled, BillingRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), bareGroup, execStart, execEnd, status, userAccount, endDate, onlyFlagged, nrsValidation, protocol, protocolLength, transportDescription, transportStatus, concernedBaren, testMode).shaped.<>({r=>import r._; _1.map(_=> BillingRunRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -121,7 +118,7 @@ trait BackOfficeTables {
       BookEntryRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_BOOK_ENTRY. Objects of this class serve as prototypes for rows in queries. */
-  class BookEntry(_tableTag: Tag) extends profile.api.Table[BookEntryRow](_tableTag, Some("WERNER2"), tablePrefix + "BOOK_ENTRY") {
+  class BookEntry(_tableTag: Tag) extends profile.api.Table[BookEntryRow](_tableTag, Some(schemaOwner), tablePrefix + "BOOK_ENTRY") {
     def * = (objectidc, fileIdValue, debtorPosition, preciseCostType, valueDate, periodOfPerformanceBegin, periodOfPerformanceEnd, materialNumber, bare, commissionReceiver, targetAmount, targetAmountCur, purpose, invoiceOrgId, invoiceOrgName, orderNumber, orderItem, reason, additionalPaymentPosition, cancelledBookEntryIdValue, invoiceLineItemIdValue) <> (BookEntryRow.tupled, BookEntryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), fileIdValue, debtorPosition, preciseCostType, valueDate, periodOfPerformanceBegin, periodOfPerformanceEnd, materialNumber, bare, commissionReceiver, targetAmount, targetAmountCur, purpose, invoiceOrgId, invoiceOrgName, orderNumber, orderItem, reason, additionalPaymentPosition, cancelledBookEntryIdValue, invoiceLineItemIdValue).shaped.<>({r=>import r._; _1.map(_=> BookEntryRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -198,7 +195,7 @@ trait BackOfficeTables {
       BookEntryRelationRow.tupled((<<[String], <<[String]))
   }
   /** Table description of table GREAT_BOOK_ENTRY_RELATION. Objects of this class serve as prototypes for rows in queries. */
-  class BookEntryRelation(_tableTag: Tag) extends profile.api.Table[BookEntryRelationRow](_tableTag, Some("WERNER2"), tablePrefix + "BOOK_ENTRY_RELATION") {
+  class BookEntryRelation(_tableTag: Tag) extends profile.api.Table[BookEntryRelationRow](_tableTag, Some(schemaOwner), tablePrefix + "BOOK_ENTRY_RELATION") {
     def * = (masterBookEntryIdc, detailBookEntryIdc) <> (BookEntryRelationRow.tupled, BookEntryRelationRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(masterBookEntryIdc), Rep.Some(detailBookEntryIdc)).shaped.<>({r=>import r._; _1.map(_=> BookEntryRelationRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -232,7 +229,7 @@ trait BackOfficeTables {
       BulkUpdateDefRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_BULK_UPDATE_DEF. Objects of this class serve as prototypes for rows in queries. */
-  class BulkUpdateDef(_tableTag: Tag) extends profile.api.Table[BulkUpdateDefRow](_tableTag, Some("WERNER2"), tablePrefix + "BULK_UPDATE_DEF") {
+  class BulkUpdateDef(_tableTag: Tag) extends profile.api.Table[BulkUpdateDefRow](_tableTag, Some(schemaOwner), tablePrefix + "BULK_UPDATE_DEF") {
     def * = (idValue, defTimestamp, userObjectidc, reason, log) <> (BulkUpdateDefRow.tupled, BulkUpdateDefRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(idValue), defTimestamp, userObjectidc, reason, log).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateDefRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -262,7 +259,7 @@ trait BackOfficeTables {
       BulkUpdateDokumentsRow.tupled((<<[String], <<[String], <<?[java.sql.Blob]))
   }
   /** Table description of table GREAT_BULK_UPDATE_DOKUMENTS. Objects of this class serve as prototypes for rows in queries. */
-  class BulkUpdateDokuments(_tableTag: Tag) extends profile.api.Table[BulkUpdateDokumentsRow](_tableTag, Some("WERNER2"), tablePrefix + "BULK_UPDATE_DOKUMENTS") {
+  class BulkUpdateDokuments(_tableTag: Tag) extends profile.api.Table[BulkUpdateDokumentsRow](_tableTag, Some(schemaOwner), tablePrefix + "BULK_UPDATE_DOKUMENTS") {
     def * = (definitionId, name, dokument) <> (BulkUpdateDokumentsRow.tupled, BulkUpdateDokumentsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(definitionId), Rep.Some(name), dokument).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateDokumentsRow.tupled((_1.get, _2.get, _3)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -300,7 +297,7 @@ trait BackOfficeTables {
       BulkUpdateGuaranteeRow.tupled((<<[String], <<[String], <<[scala.math.BigDecimal], <<?[Char], <<[String], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_BULK_UPDATE_GUARANTEE. Objects of this class serve as prototypes for rows in queries. */
-  class BulkUpdateGuarantee(_tableTag: Tag) extends profile.api.Table[BulkUpdateGuaranteeRow](_tableTag, Some("WERNER2"), tablePrefix + "BULK_UPDATE_GUARANTEE") {
+  class BulkUpdateGuarantee(_tableTag: Tag) extends profile.api.Table[BulkUpdateGuaranteeRow](_tableTag, Some(schemaOwner), tablePrefix + "BULK_UPDATE_GUARANTEE") {
     def * = (definitionId, guaranteeId, version, changed, kind, kindIndex, debtorPortionPosition, subSubstitutionValue, nrsSuccessful) <> (BulkUpdateGuaranteeRow.tupled, BulkUpdateGuaranteeRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(definitionId), Rep.Some(guaranteeId), Rep.Some(version), changed, Rep.Some(kind), Rep.Some(kindIndex), Rep.Some(debtorPortionPosition), subSubstitutionValue, nrsSuccessful).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateGuaranteeRow.tupled((_1.get, _2.get, _3.get, _4, _5.get, _6.get, _7.get, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -348,7 +345,7 @@ trait BackOfficeTables {
       BulkUpdateRunRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_BULK_UPDATE_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class BulkUpdateRun(_tableTag: Tag) extends profile.api.Table[BulkUpdateRunRow](_tableTag, Some("WERNER2"), tablePrefix + "BULK_UPDATE_RUN") {
+  class BulkUpdateRun(_tableTag: Tag) extends profile.api.Table[BulkUpdateRunRow](_tableTag, Some(schemaOwner), tablePrefix + "BULK_UPDATE_RUN") {
     def * = (idValue, execTimestamp, userObjectidc, definitionIdValue, log) <> (BulkUpdateRunRow.tupled, BulkUpdateRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(idValue), execTimestamp, userObjectidc, definitionIdValue, log).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateRunRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -384,7 +381,7 @@ trait BackOfficeTables {
       BulkUpdateValueRow.tupled((<<[String], <<[String], <<?[String], <<?[String], <<?[Char], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_BULK_UPDATE_VALUE. Objects of this class serve as prototypes for rows in queries. */
-  class BulkUpdateValue(_tableTag: Tag) extends profile.api.Table[BulkUpdateValueRow](_tableTag, Some("WERNER2"), tablePrefix + "BULK_UPDATE_VALUE") {
+  class BulkUpdateValue(_tableTag: Tag) extends profile.api.Table[BulkUpdateValueRow](_tableTag, Some(schemaOwner), tablePrefix + "BULK_UPDATE_VALUE") {
     def * = (definitionId, kind, oldValue, newValue, subSubstitution, kindIndex) <> (BulkUpdateValueRow.tupled, BulkUpdateValueRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(definitionId), Rep.Some(kind), oldValue, newValue, subSubstitution, Rep.Some(kindIndex)).shaped.<>({r=>import r._; _1.map(_=> BulkUpdateValueRow.tupled((_1.get, _2.get, _3, _4, _5, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -424,7 +421,7 @@ trait BackOfficeTables {
       <<[String] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_BALANCE_SHEET_REPORT_DEF. Objects of this class serve as prototypes for rows in queries. */
-  class BalanceSheetReportDef(_tableTag: Tag) extends profile.api.Table[BalanceSheetReportDefRow](_tableTag, Some("WERNER2"), tablePrefix + "BALANCE_SHEET_REPORT_DEF") {
+  class BalanceSheetReportDef(_tableTag: Tag) extends profile.api.Table[BalanceSheetReportDefRow](_tableTag, Some(schemaOwner), tablePrefix + "BALANCE_SHEET_REPORT_DEF") {
     def * = idValue :: kind :: reportDate :: userName :: accEmail :: b40Active :: b40EmailSubject :: b40EmailText :: b40CoverLetterFilePath :: b40DivisionTableFilePath :: b40ParameterFilePath :: frnActive :: frnEmailSubject :: frnEmailText :: frnCoverLetterFilePath :: frnDivisionTableFilePath :: ownActive :: ownEmailSubject :: ownEmailText :: ownCoverLetterFilePath :: ownDivisionTableFilePath :: bareCodes :: exdActive :: exdEmailSubject :: exdEmailText :: exdCoverLetterFilePath :: exdReceivers :: sktfActive :: sktfEmailSubject :: sktfEmailText :: sktfCoverLetterFilePath :: sktfReceivers :: rpaActive :: rpaEmailSubject :: rpaEmailText :: rpaCoverLetterFilePath :: rpaMasterTableFilePath :: HNil
 
     /** Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -522,7 +519,7 @@ trait BackOfficeTables {
       BalanceSheetReportRunRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[java.sql.Blob], <<?[Char], <<?[Char]))
   }
   /** Table description of table GREAT_BALANCE_SHEET_REPORT_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class BalanceSheetReportRun(_tableTag: Tag) extends profile.api.Table[BalanceSheetReportRunRow](_tableTag, Some("WERNER2"), tablePrefix + "BALANCE_SHEET_REPORT_RUN") {
+  class BalanceSheetReportRun(_tableTag: Tag) extends profile.api.Table[BalanceSheetReportRunRow](_tableTag, Some(schemaOwner), tablePrefix + "BALANCE_SHEET_REPORT_RUN") {
     def * = (idValue, execTimestamp, userObjectidc, status, definitionIdValue, zipFileLength, zipFile, archived, runKind) <> (BalanceSheetReportRunRow.tupled, BalanceSheetReportRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(idValue), execTimestamp, userObjectidc, status, definitionIdValue, zipFileLength, zipFile, archived, runKind).shaped.<>({r=>import r._; _1.map(_=> BalanceSheetReportRunRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -561,7 +558,7 @@ trait BackOfficeTables {
       BareBillingRunRow.tupled((<<[String], <<[String], <<[java.sql.Timestamp], <<[Char]))
   }
   /** Table description of table GREAT_BARE_BILLING_RUN. Objects of this class serve as prototypes for rows in queries. */
-  class BareBillingRun(_tableTag: Tag) extends profile.api.Table[BareBillingRunRow](_tableTag, Some("WERNER2"), tablePrefix + "BARE_BILLING_RUN") {
+  class BareBillingRun(_tableTag: Tag) extends profile.api.Table[BareBillingRunRow](_tableTag, Some(schemaOwner), tablePrefix + "BARE_BILLING_RUN") {
     def * = (billingRunIdc, bare, endDate, onlyFlagged) <> (BareBillingRunRow.tupled, BareBillingRunRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(billingRunIdc), Rep.Some(bare), Rep.Some(endDate), Rep.Some(onlyFlagged)).shaped.<>({r=>import r._; _1.map(_=> BareBillingRunRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -599,7 +596,7 @@ trait BackOfficeTables {
       CommissionRecBareDepRow.tupled((<<[String], <<[String], <<[Char]))
   }
   /** Table description of table GREAT_COMMISSION_REC_BARE_DEP. Objects of this class serve as prototypes for rows in queries. */
-  class CommissionRecBareDep(_tableTag: Tag) extends profile.api.Table[CommissionRecBareDepRow](_tableTag, Some("WERNER2"), tablePrefix + "COMMISSION_REC_BARE_DEP") {
+  class CommissionRecBareDep(_tableTag: Tag) extends profile.api.Table[CommissionRecBareDepRow](_tableTag, Some(schemaOwner), tablePrefix + "COMMISSION_REC_BARE_DEP") {
     def * = (bareCode, commisionReceiverId, kind) <> (CommissionRecBareDepRow.tupled, CommissionRecBareDepRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(bareCode), Rep.Some(commisionReceiverId), Rep.Some(kind)).shaped.<>({r=>import r._; _1.map(_=> CommissionRecBareDepRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -635,7 +632,7 @@ trait BackOfficeTables {
       CommissionReceiverRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_COMMISSION_RECEIVER. Objects of this class serve as prototypes for rows in queries. */
-  class CommissionReceiver(_tableTag: Tag) extends profile.api.Table[CommissionReceiverRow](_tableTag, Some("WERNER2"), tablePrefix + "COMMISSION_RECEIVER") {
+  class CommissionReceiver(_tableTag: Tag) extends profile.api.Table[CommissionReceiverRow](_tableTag, Some(schemaOwner), tablePrefix + "COMMISSION_RECEIVER") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, names) <> (CommissionReceiverRow.tupled, CommissionReceiverRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, names).shaped.<>({r=>import r._; _1.map(_=> CommissionReceiverRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -670,7 +667,7 @@ trait BackOfficeTables {
       CommissionReceiverHistRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_COMMISSION_RECEIVER_HIST. Objects of this class serve as prototypes for rows in queries. */
-  class CommissionReceiverHist(_tableTag: Tag) extends profile.api.Table[CommissionReceiverHistRow](_tableTag, Some("WERNER2"), tablePrefix + "COMMISSION_RECEIVER_HIST") {
+  class CommissionReceiverHist(_tableTag: Tag) extends profile.api.Table[CommissionReceiverHistRow](_tableTag, Some(schemaOwner), tablePrefix + "COMMISSION_RECEIVER_HIST") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, names) <> (CommissionReceiverHistRow.tupled, CommissionReceiverHistRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, names).shaped.<>({r=>import r._; _1.map(_=> CommissionReceiverHistRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -711,7 +708,7 @@ trait BackOfficeTables {
       <<[String] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[java.sql.Timestamp] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[java.sql.Timestamp] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: HNil
   }
   /** Table description of table GREAT_COST_ITEM. Objects of this class serve as prototypes for rows in queries. */
-  class CostItem(_tableTag: Tag) extends profile.api.Table[CostItemRow](_tableTag, Some("WERNER2"), tablePrefix + "COST_ITEM") {
+  class CostItem(_tableTag: Tag) extends profile.api.Table[CostItemRow](_tableTag, Some(schemaOwner), tablePrefix + "COST_ITEM") {
     def * = objectidc :: fileIdValue :: bookEntryIdc :: debtorPosition :: valueDate :: preciseCostType :: materialNumber :: periodOfPerformanceBegin :: periodOfPerformanceEnd :: bare :: commissionReceiver :: purpose :: orgId :: orgName :: orderNumber :: orderItem :: additionalPaymentPosition :: reason :: baseAmount :: sourceAmount :: sourceAmountCur :: percentage :: provInterestDayQuotient :: days :: periodType :: sourceFxRate :: sourceFxRateDate :: sourceCurScale :: targetFxRate :: targetFxRateDate :: targetCurScale :: targetAmountImputed :: targetAmount :: targetAmountCur :: cancelledBookEntry :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -813,7 +810,7 @@ trait BackOfficeTables {
       <<[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_INVOICE. Objects of this class serve as prototypes for rows in queries. */
-  class Invoice(_tableTag: Tag) extends profile.api.Table[InvoiceRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE") {
+  class Invoice(_tableTag: Tag) extends profile.api.Table[InvoiceRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE") {
     def * = objectidc :: invoiceNumber :: amount :: amountCur :: invoiceOrg :: invoiceOrgBy :: invoiceOrgIv :: invoiceAre :: invoiceAreName :: invoiceAreType :: invoiceDivisionCode :: orderNumber :: commissionReceiver :: applicantName :: applicantPhone :: issuersOrg :: fileIdValue :: beneficiaryName :: beneficiaryCountry :: guarantorType :: guarantorNumber :: guarantorName :: guarantorReferences :: billingRunIdc :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -907,7 +904,7 @@ trait BackOfficeTables {
       InvoiceEventRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[Char], <<?[Char], <<?[java.sql.Timestamp], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[scala.math.BigDecimal], <<?[java.sql.Timestamp], <<?[String], <<?[java.sql.Timestamp], <<?[scala.math.BigDecimal], <<?[String]))
   }
   /** Table description of table GREAT_INVOICE_EVENT. Objects of this class serve as prototypes for rows in queries. */
-  class InvoiceEvent(_tableTag: Tag) extends profile.api.Table[InvoiceEventRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE_EVENT") {
+  class InvoiceEvent(_tableTag: Tag) extends profile.api.Table[InvoiceEventRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE_EVENT") {
     def * = (idValue, fileIdValue, guaranteeVersionNumber, debtorPortionPosition, guaranteePurpose, guarantorType, eventTimestamp, eventKind, eventStatus, passId, eventActivityFlag, eventStartDate, registeredChanges, guaranteeStartDate, avalCommPortion, chargeNumber) <> (InvoiceEventRow.tupled, InvoiceEventRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(idValue), fileIdValue, guaranteeVersionNumber, debtorPortionPosition, guaranteePurpose, guarantorType, eventTimestamp, eventKind, eventStatus, passId, eventActivityFlag, eventStartDate, registeredChanges, guaranteeStartDate, avalCommPortion, chargeNumber).shaped.<>({r=>import r._; _1.map(_=> InvoiceEventRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -963,7 +960,7 @@ trait BackOfficeTables {
       <<[String] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_INVOICE_EVIDENCE. Objects of this class serve as prototypes for rows in queries. */
-  class InvoiceEvidence(_tableTag: Tag) extends profile.api.Table[InvoiceEvidenceRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE_EVIDENCE") {
+  class InvoiceEvidence(_tableTag: Tag) extends profile.api.Table[InvoiceEvidenceRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE_EVIDENCE") {
     def * = invoiceEvidenceKey :: invoicePassKey :: fileIdValue :: debtorPortionPosition :: minimalComnInvoiced :: invoiceId :: fileNumber :: invoiceOrgId :: invoiceAreCode :: invoiceGroupAssoc :: orderNumber :: orderItem :: countryOfPartner :: accountingPurpose :: appName :: appPhone :: valueDate :: guarantorType :: commissionReceiver :: invoiceAreName :: bareCode :: minimalFeeInvoiced :: divisionShortName :: HNil
 
     /** Database column INVOICE_EVIDENCE_KEY SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -1036,7 +1033,7 @@ trait BackOfficeTables {
       <<[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[java.sql.Timestamp] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[java.sql.Timestamp] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_INVOICE_EVIDENCE_POS. Objects of this class serve as prototypes for rows in queries. */
-  class InvoiceEvidencePos(_tableTag: Tag) extends profile.api.Table[InvoiceEvidencePosRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE_EVIDENCE_POS") {
+  class InvoiceEvidencePos(_tableTag: Tag) extends profile.api.Table[InvoiceEvidencePosRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE_EVIDENCE_POS") {
     def * = idValue :: parentIdValue :: fxRate :: guaranteedAmountAmount :: guaranteedAmountCurrency :: invoicedAmountAmount :: invoicedAmountCurrency :: beginDate :: endDate :: avalCommissionNumberOfDays :: posComment :: avalCommissionPortion :: guarantorType :: bankName :: bankReference :: beneficiaryCountry :: beneficiaryName :: paymentType :: fxRateDate :: calculatedAmountAmount :: calculatedAmountCurrency :: guaranteeVersion :: internalBankCode :: calculatedAmountInInvCur :: invoiceFxRate :: invoiceFxRateDate :: insuranceNumber :: HNil
 
     /** Database column ID_VALUE SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -1120,7 +1117,7 @@ trait BackOfficeTables {
       InvoiceLineItemRow.tupled((<<[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[scala.math.BigDecimal], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String]))
   }
   /** Table description of table GREAT_INVOICE_LINE_ITEM. Objects of this class serve as prototypes for rows in queries. */
-  class InvoiceLineItem(_tableTag: Tag) extends profile.api.Table[InvoiceLineItemRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE_LINE_ITEM") {
+  class InvoiceLineItem(_tableTag: Tag) extends profile.api.Table[InvoiceLineItemRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE_LINE_ITEM") {
     def * = (objectidc, invoiceIdc, periodOfPerformanceBegin, periodOfPerformanceEnd, positionNumber, text, amount, amountCur, costType, materialNumber, debtorPosition, orderItem) <> (InvoiceLineItemRow.tupled, InvoiceLineItemRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), invoiceIdc, periodOfPerformanceBegin, periodOfPerformanceEnd, positionNumber, text, amount, amountCur, costType, materialNumber, debtorPosition, orderItem).shaped.<>({r=>import r._; _1.map(_=> InvoiceLineItemRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1168,7 +1165,7 @@ trait BackOfficeTables {
       InvoiceNumberRow.tupled((<<[String], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_INVOICE_NUMBER. Objects of this class serve as prototypes for rows in queries. */
-  class InvoiceNumber(_tableTag: Tag) extends profile.api.Table[InvoiceNumberRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE_NUMBER") {
+  class InvoiceNumber(_tableTag: Tag) extends profile.api.Table[InvoiceNumberRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE_NUMBER") {
     def * = (bareGroupId, currentInvoiceNumber) <> (InvoiceNumberRow.tupled, InvoiceNumberRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(bareGroupId), Rep.Some(currentInvoiceNumber)).shaped.<>({r=>import r._; _1.map(_=> InvoiceNumberRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1211,7 +1208,7 @@ trait BackOfficeTables {
       InvoicePassRow.tupled((<<[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[scala.math.BigDecimal], <<?[String], <<?[scala.math.BigDecimal], <<?[java.sql.Timestamp], <<?[java.sql.Clob]))
   }
   /** Table description of table GREAT_INVOICE_PASS. Objects of this class serve as prototypes for rows in queries. */
-  class InvoicePass(_tableTag: Tag) extends profile.api.Table[InvoicePassRow](_tableTag, Some("WERNER2"), tablePrefix + "INVOICE_PASS") {
+  class InvoicePass(_tableTag: Tag) extends profile.api.Table[InvoicePassRow](_tableTag, Some(schemaOwner), tablePrefix + "INVOICE_PASS") {
     def * = (invoicePassKey, userLoginName, generationDate, invoiceDate, fiscalYear, fiscalQuart, filePath, fileName, invoicedAmountAmount, invoicedAmountCurrency, status, minAccAmount, minAccCurrency, kind, lastNum, bareGroup, bareGroupVersion, plannedRunTime, violationsString) <> (InvoicePassRow.tupled, InvoicePassRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(invoicePassKey), userLoginName, generationDate, invoiceDate, fiscalYear, fiscalQuart, filePath, fileName, invoicedAmountAmount, invoicedAmountCurrency, status, minAccAmount, minAccCurrency, kind, lastNum, bareGroup, bareGroupVersion, plannedRunTime, violationsString).shaped.<>({r=>import r._; _1.map(_=> InvoicePassRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1280,7 +1277,7 @@ trait BackOfficeTables {
       InvPassCalendarRow.tupled((<<[String], <<[Char], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_INV_PASS_CALENDAR. Objects of this class serve as prototypes for rows in queries. */
-  class InvPassCalendar(_tableTag: Tag) extends profile.api.Table[InvPassCalendarRow](_tableTag, Some("WERNER2"), tablePrefix + "INV_PASS_CALENDAR") {
+  class InvPassCalendar(_tableTag: Tag) extends profile.api.Table[InvPassCalendarRow](_tableTag, Some(schemaOwner), tablePrefix + "INV_PASS_CALENDAR") {
     def * = (bareCode, invPassKind, day, month) <> (InvPassCalendarRow.tupled, InvPassCalendarRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(bareCode), Rep.Some(invPassKind), Rep.Some(day), Rep.Some(month)).shaped.<>({r=>import r._; _1.map(_=> InvPassCalendarRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1314,7 +1311,7 @@ trait BackOfficeTables {
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: HNil
   }
   /** Table description of table GREAT_PAYMENT. Objects of this class serve as prototypes for rows in queries. */
-  class Payment(_tableTag: Tag) extends profile.api.Table[PaymentRow](_tableTag, Some("WERNER2"), tablePrefix + "PAYMENT") {
+  class Payment(_tableTag: Tag) extends profile.api.Table[PaymentRow](_tableTag, Some(schemaOwner), tablePrefix + "PAYMENT") {
     def * = paymentId :: amount :: currency :: pdate :: reason :: usage :: dpPosition :: num :: fileIdValue :: commissionReceiver :: invoiceOrgId :: orderNumber :: orderItem :: costType :: advanceBilling :: diffFromDp :: state :: lastChangeDate :: lastUser :: confirmDate :: confirmUser :: performanceStartDate :: performanceEndDate :: rejectComment :: cancelledBookEntryId :: additionalPaymentPosition :: HNil
 
     /** Database column PAYMENT_ID SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -1399,7 +1396,7 @@ trait BackOfficeTables {
       PriceScaleEntryRow.tupled((<<[String], <<[String], <<?[scala.math.BigDecimal], <<[Char], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_PRICE_SCALE_ENTRY. Objects of this class serve as prototypes for rows in queries. */
-  class PriceScaleEntry(_tableTag: Tag) extends profile.api.Table[PriceScaleEntryRow](_tableTag, Some("WERNER2"), tablePrefix + "PRICE_SCALE_ENTRY") {
+  class PriceScaleEntry(_tableTag: Tag) extends profile.api.Table[PriceScaleEntryRow](_tableTag, Some(schemaOwner), tablePrefix + "PRICE_SCALE_ENTRY") {
     def * = (objectidc, lineId, upperLimit, costType, amount, amountCurrency, periodType, percentage) <> (PriceScaleEntryRow.tupled, PriceScaleEntryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(lineId), upperLimit, Rep.Some(costType), amount, amountCurrency, periodType, percentage).shaped.<>({r=>import r._; _1.map(_=> PriceScaleEntryRow.tupled((_1.get, _2.get, _3, _4.get, _5, _6, _7, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1446,7 +1443,7 @@ trait BackOfficeTables {
       PriceScaleEntryHistRow.tupled((<<[String], <<[String], <<[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[Char], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_PRICE_SCALE_ENTRY_HIST. Objects of this class serve as prototypes for rows in queries. */
-  class PriceScaleEntryHist(_tableTag: Tag) extends profile.api.Table[PriceScaleEntryHistRow](_tableTag, Some("WERNER2"), tablePrefix + "PRICE_SCALE_ENTRY_HIST") {
+  class PriceScaleEntryHist(_tableTag: Tag) extends profile.api.Table[PriceScaleEntryHistRow](_tableTag, Some(schemaOwner), tablePrefix + "PRICE_SCALE_ENTRY_HIST") {
     def * = (objectidc, lineId, lineVersion, upperLimit, costType, amount, amountCurrency, periodType, percentage) <> (PriceScaleEntryHistRow.tupled, PriceScaleEntryHistRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(lineId), Rep.Some(lineVersion), upperLimit, Rep.Some(costType), amount, amountCurrency, periodType, percentage).shaped.<>({r=>import r._; _1.map(_=> PriceScaleEntryHistRow.tupled((_1.get, _2.get, _3.get, _4, _5.get, _6, _7, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1503,7 +1500,7 @@ trait BackOfficeTables {
       QuarterlyReservesRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[scala.math.BigDecimal], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String]))
   }
   /** Table description of table GREAT_QUARTERLY_RESERVES. Objects of this class serve as prototypes for rows in queries. */
-  class QuarterlyReserves(_tableTag: Tag) extends profile.api.Table[QuarterlyReservesRow](_tableTag, Some("WERNER2"), tablePrefix + "QUARTERLY_RESERVES") {
+  class QuarterlyReserves(_tableTag: Tag) extends profile.api.Table[QuarterlyReservesRow](_tableTag, Some(schemaOwner), tablePrefix + "QUARTERLY_RESERVES") {
     def * = (quarterlyReservesId, baseLiabilityAmount, baseLiabilityCurrency, done, hgbCulculatedReserveAmount, hgbCalculatedCurrency, usgCulculatedReserveAmount, usgCalculatedCurrency, debtorPortionId, hgbReservesPercentage, usgReservesPercentage, calcReservesOrigAmount, calcReservesOrigCurrency) <> (QuarterlyReservesRow.tupled, QuarterlyReservesRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(quarterlyReservesId), baseLiabilityAmount, baseLiabilityCurrency, done, hgbCulculatedReserveAmount, hgbCalculatedCurrency, usgCulculatedReserveAmount, usgCalculatedCurrency, debtorPortionId, hgbReservesPercentage, usgReservesPercentage, calcReservesOrigAmount, calcReservesOrigCurrency).shaped.<>({r=>import r._; _1.map(_=> QuarterlyReservesRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1566,7 +1563,7 @@ trait BackOfficeTables {
       ReconciliationProcessRow.tupled((<<[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_RECONCILIATION_PROCESS. Objects of this class serve as prototypes for rows in queries. */
-  class ReconciliationProcess(_tableTag: Tag) extends profile.api.Table[ReconciliationProcessRow](_tableTag, Some("WERNER2"), tablePrefix + "RECONCILIATION_PROCESS") {
+  class ReconciliationProcess(_tableTag: Tag) extends profile.api.Table[ReconciliationProcessRow](_tableTag, Some(schemaOwner), tablePrefix + "RECONCILIATION_PROCESS") {
     def * = (objectidc, dispatchDate, fromUser, name, listKey, state) <> (ReconciliationProcessRow.tupled, ReconciliationProcessRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), dispatchDate, fromUser, name, listKey, state).shaped.<>({r=>import r._; _1.map(_=> ReconciliationProcessRow.tupled((_1.get, _2, _3, _4, _5, _6)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))

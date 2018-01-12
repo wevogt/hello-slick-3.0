@@ -1,9 +1,6 @@
 package model.great
 
-object AdminTables extends {
-//  val profile = slick.jdbc.OracleProfile
-  val profile = slick.jdbc.H2Profile
-} with AdminTables
+object AdminTables extends DbProfile with AdminTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait AdminTables {
@@ -23,7 +20,8 @@ trait AdminTables {
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
   // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" furr Common setzten um in der DB eine Struktur zu erhalten
-  val tablePrefix = "GREAT_"
+  val tablePrefix = "WVO_"
+  private val schemaOwner = "SCOTT"
 
 
   /** Row type of table Division */
@@ -38,7 +36,7 @@ trait AdminTables {
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_DIVISION. Objects of this class serve as prototypes for rows in queries. */
-  class Division(_tableTag: Tag) extends profile.api.Table[divisionRow](_tableTag, Some("WERNER2"), tablePrefix + "DIVISION") {
+  class Division(_tableTag: Tag) extends profile.api.Table[divisionRow](_tableTag, Some(schemaOwner), tablePrefix + "DIVISION") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: kind :: name :: description :: address :: isLive :: email :: parent :: telephone :: country :: currency :: isArchiving :: barcodeAddress :: language :: disabled :: mainContactUser :: showNationalFields :: inheritShowNationalFields :: archiveCountryIsocode2 :: archiveUrl :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -108,7 +106,7 @@ trait AdminTables {
       DivisioncodeInSectorRow.tupled((<<[String], <<[String]))
   }
   /** Table description of table GREAT_DIVISIONCODE_IN_SECTOR. Objects of this class serve as prototypes for rows in queries. */
-  class DivisioncodeInSector(_tableTag: Tag) extends profile.api.Table[DivisioncodeInSectorRow](_tableTag, Some("WERNER2"), tablePrefix + "DIVISIONCODE_IN_SECTOR") {
+  class DivisioncodeInSector(_tableTag: Tag) extends profile.api.Table[DivisioncodeInSectorRow](_tableTag, Some(schemaOwner), tablePrefix + "DIVISIONCODE_IN_SECTOR") {
     def * = (division, sector) <> (DivisioncodeInSectorRow.tupled, DivisioncodeInSectorRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(division), Rep.Some(sector)).shaped.<>({r=>import r._; _1.map(_=> DivisioncodeInSectorRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -134,7 +132,7 @@ trait AdminTables {
       DivisionLimitsRow.tupled((<<[String], <<?[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_DIVISION_LIMITS. Objects of this class serve as prototypes for rows in queries. */
-  class DivisionLimits(_tableTag: Tag) extends profile.api.Table[DivisionLimitsRow](_tableTag, Some("WERNER2"), tablePrefix + "DIVISION_LIMITS") {
+  class DivisionLimits(_tableTag: Tag) extends profile.api.Table[DivisionLimitsRow](_tableTag, Some(schemaOwner), tablePrefix + "DIVISION_LIMITS") {
     def * = (divisioncode, limit) <> (DivisionLimitsRow.tupled, DivisionLimitsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(divisioncode), limit).shaped.<>({r=>import r._; _1.map(_=> DivisionLimitsRow.tupled((_1.get, _2)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -160,7 +158,7 @@ trait AdminTables {
       DivisionReportRightRow.tupled((<<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char]))
   }
   /** Table description of table GREAT_DIVISION_REPORT_RIGHT. Objects of this class serve as prototypes for rows in queries. */
-  class DivisionReportRight(_tableTag: Tag) extends profile.api.Table[DivisionReportRightRow](_tableTag, Some("WERNER2"), tablePrefix + "DIVISION_REPORT_RIGHT") {
+  class DivisionReportRight(_tableTag: Tag) extends profile.api.Table[DivisionReportRightRow](_tableTag, Some(schemaOwner), tablePrefix + "DIVISION_REPORT_RIGHT") {
     def * = (report, generalAvailability, division, divisioncodeviewerFlag, bareViewerFlag) <> (DivisionReportRightRow.tupled, DivisionReportRightRow.unapply)
 
     /** Database column REPORT SqlType(CHAR), Length(5,false) */
@@ -198,7 +196,7 @@ trait AdminTables {
       DivisionUserRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[Char], <<?[Char], <<?[Char]))
   }
   /** Table description of table GREAT_DIVISION_USER. Objects of this class serve as prototypes for rows in queries. */
-  class DivisionUser(_tableTag: Tag) extends profile.api.Table[DivisionUserRow](_tableTag, Some("WERNER2"), tablePrefix + "DIVISION_USER") {
+  class DivisionUser(_tableTag: Tag) extends profile.api.Table[DivisionUserRow](_tableTag, Some(schemaOwner), tablePrefix + "DIVISION_USER") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, userAccountIdc, divisionIdc, roles, viewerType, upperLimitAmount, upperLimitCurrency, isActive, isAbsent, isDefault) <> (DivisionUserRow.tupled, DivisionUserRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, userAccountIdc, divisionIdc, roles, viewerType, upperLimitAmount, upperLimitCurrency, isActive, isAbsent, isDefault).shaped.<>({r=>import r._; _1.map(_=> DivisionUserRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -248,7 +246,7 @@ trait AdminTables {
       DownloadColumnRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String]))
   }
   /** Table description of table GREAT_DOWNLOAD_COLUMN. Objects of this class serve as prototypes for rows in queries. */
-  class DownloadColumn(_tableTag: Tag) extends profile.api.Table[DownloadColumnRow](_tableTag, Some("WERNER2"), tablePrefix + "DOWNLOAD_COLUMN") {
+  class DownloadColumn(_tableTag: Tag) extends profile.api.Table[DownloadColumnRow](_tableTag, Some(schemaOwner), tablePrefix + "DOWNLOAD_COLUMN") {
     def * = (objectidc, formatIdc, pos, col) <> (DownloadColumnRow.tupled, DownloadColumnRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), formatIdc, pos, col).shaped.<>({r=>import r._; _1.map(_=> DownloadColumnRow.tupled((_1.get, _2, _3, _4)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -280,7 +278,7 @@ trait AdminTables {
       DownloadFormatRow.tupled((<<[String], <<?[String], <<[String], <<?[Char]))
   }
   /** Table description of table GREAT_DOWNLOAD_FORMAT. Objects of this class serve as prototypes for rows in queries. */
-  class DownloadFormat(_tableTag: Tag) extends profile.api.Table[DownloadFormatRow](_tableTag, Some("WERNER2"), tablePrefix + "DOWNLOAD_FORMAT") {
+  class DownloadFormat(_tableTag: Tag) extends profile.api.Table[DownloadFormatRow](_tableTag, Some(schemaOwner), tablePrefix + "DOWNLOAD_FORMAT") {
     def * = (objectidc, owner, name, published) <> (DownloadFormatRow.tupled, DownloadFormatRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), owner, Rep.Some(name), published).shaped.<>({r=>import r._; _1.map(_=> DownloadFormatRow.tupled((_1.get, _2, _3.get, _4)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -312,7 +310,7 @@ trait AdminTables {
   }
   /** Table description of table GREAT_DOWNLOAD_FORMAT_REF. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class DownloadFormatRef(_tableTag: Tag) extends profile.api.Table[DownloadFormatRefRow](_tableTag, Some("WERNER2"), tablePrefix + "DOWNLOAD_FORMAT_REF") {
+  class DownloadFormatRef(_tableTag: Tag) extends profile.api.Table[DownloadFormatRefRow](_tableTag, Some(schemaOwner), tablePrefix + "DOWNLOAD_FORMAT_REF") {
     def * = (formatIdc, userIdc, `type`) <> (DownloadFormatRefRow.tupled, DownloadFormatRefRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(formatIdc), Rep.Some(userIdc), Rep.Some(`type`)).shaped.<>({r=>import r._; _1.map(_=> DownloadFormatRefRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -346,7 +344,7 @@ trait AdminTables {
       BusinessUnitsRow.tupled((<<[String], <<[scala.math.BigDecimal], <<[String], <<[String], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_BUSINESS_UNITS. Objects of this class serve as prototypes for rows in queries. */
-  class BusinessUnits(_tableTag: Tag) extends profile.api.Table[BusinessUnitsRow](_tableTag, Some("WERNER2"), tablePrefix + "BUSINESS_UNITS") {
+  class BusinessUnits(_tableTag: Tag) extends profile.api.Table[BusinessUnitsRow](_tableTag, Some(schemaOwner), tablePrefix + "BUSINESS_UNITS") {
     def * = (code, version, name, parent, description, mandatory) <> (BusinessUnitsRow.tupled, BusinessUnitsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(code), Rep.Some(version), Rep.Some(name), Rep.Some(parent), description, mandatory).shaped.<>({r=>import r._; _1.map(_=> BusinessUnitsRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -386,7 +384,7 @@ trait AdminTables {
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_BARE_DEPENDANTS. Objects of this class serve as prototypes for rows in queries. */
-  class BareDependants(_tableTag: Tag) extends profile.api.Table[BareDependantsRow](_tableTag, Some("WERNER2"), tablePrefix + "BARE_DEPENDANTS") {
+  class BareDependants(_tableTag: Tag) extends profile.api.Table[BareDependantsRow](_tableTag, Some(schemaOwner), tablePrefix + "BARE_DEPENDANTS") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: invoicingPermitted :: parent :: currencyIsoCode :: toBeExcludedFromBsReport :: balanceSheetRecUserId :: disclosureArePattern :: periodicDefGroupComRec :: periodicDefBankComRec :: periodicDefIndBankComRec :: periodicDefInsuranceComRec :: singularDefGroupComRec :: singularDefBankComRec :: singularDefIndBankComRec :: singularDefInsurComRec :: individualParticipation :: invFirstPassDate :: considerStartPeriod :: invStartDate :: invCurrencyIsoCode :: aOrgId :: salesOffice :: billingSystem :: fileNamePrefix :: sapUserName :: serverUpload :: minAccAmountProv :: minAccAmountProvCur :: creationFeeGroup :: creationFeeGroupCur :: creationFeeDirect :: creationFeeDirectCur :: creationFeeIndirect :: creationFeeIndirectCur :: creationFeeInsur :: creationFeeInsurCur :: amendmFeeGroup :: amendmFeeGroupCur :: amendmFeeDirect :: amendmFeeDirectCur :: amendmFeeIndirect :: amendmFeeIndirectCur :: amendmFeeInsur :: amendmFeeInsurCur :: courierChGroup :: courierChGroupCur :: courierChDirect :: courierChDirectCur :: courierChIndirect :: courierChIndirectCur :: courierChInsur :: courierChInsurCur :: expensesGroup :: expensesGroupCur :: expensesDirect :: expensesDirectCur :: expensesIndirect :: expensesIndirectCur :: expensesInsur :: expensesInsurCur :: referableAvalComm :: referableMinComm :: referableFixComm :: referableProcessingFee :: referableMinFee :: referableFixFee :: validFrom :: currencyPeriod :: dayCountFractionPlQl :: groupCommPortion :: thirdPartyCommPortion :: minNominalComm :: minNominalCommCur :: minNominalCommPeriod :: minObligoComm :: minObligoCommCur :: minObligoCommPeriod :: fixComm :: fixCommCur :: fixCommPeriod :: groupFeePortion :: thirdPartyFeePortion :: minFee :: minFeeCur :: minFeePeriod :: minObligoFee :: minObligoFeeCur :: minObligoFeePeriod :: fixFee :: fixFeeCur :: fixFeePeriod :: matNumberPeriodicFee :: matNumberSingular :: matNumberCreationFee :: matNumberSupplementFee :: matNumberCourierCost :: matNumberExpenses :: matNumberCharges :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -682,7 +680,7 @@ trait AdminTables {
       <<[String] :: <<[scala.math.BigDecimal] :: <<?[String] :: <<[String] :: <<[String] :: <<[Char] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: HNil
   }
   /** Table description of table GREAT_BARE_DEPENDANTS_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class BareDependantsHistory(_tableTag: Tag) extends profile.api.Table[BareDependantsHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "BARE_DEPENDANTS_HISTORY") {
+  class BareDependantsHistory(_tableTag: Tag) extends profile.api.Table[BareDependantsHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "BARE_DEPENDANTS_HISTORY") {
     def * = objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: invoicingPermitted :: parent :: currencyIsoCode :: toBeExcludedFromBsReport :: balanceSheetRecUserId :: disclosureArePattern :: periodicDefGroupComRec :: periodicDefBankComRec :: periodicDefIndBankComRec :: periodicDefInsuranceComRec :: singularDefGroupComRec :: singularDefBankComRec :: singularDefIndBankComRec :: singularDefInsurComRec :: individualParticipation :: invFirstPassDate :: considerStartPeriod :: invStartDate :: invCurrencyIsoCode :: aOrgId :: salesOffice :: billingSystem :: fileNamePrefix :: sapUserName :: serverUpload :: minAccAmountProv :: minAccAmountProvCur :: creationFeeGroup :: creationFeeGroupCur :: creationFeeDirect :: creationFeeDirectCur :: creationFeeIndirect :: creationFeeIndirectCur :: creationFeeInsur :: creationFeeInsurCur :: amendmFeeGroup :: amendmFeeGroupCur :: amendmFeeDirect :: amendmFeeDirectCur :: amendmFeeIndirect :: amendmFeeIndirectCur :: amendmFeeInsur :: amendmFeeInsurCur :: courierChGroup :: courierChGroupCur :: courierChDirect :: courierChDirectCur :: courierChIndirect :: courierChIndirectCur :: courierChInsur :: courierChInsurCur :: expensesGroup :: expensesGroupCur :: expensesDirect :: expensesDirectCur :: expensesIndirect :: expensesIndirectCur :: expensesInsur :: expensesInsurCur :: referableAvalComm :: referableMinComm :: referableFixComm :: referableProcessingFee :: referableMinFee :: referableFixFee :: validFrom :: currencyPeriod :: dayCountFractionPlQl :: groupCommPortion :: thirdPartyCommPortion :: minNominalComm :: minNominalCommCur :: minNominalCommPeriod :: minObligoComm :: minObligoCommCur :: minObligoCommPeriod :: fixComm :: fixCommCur :: fixCommPeriod :: groupFeePortion :: thirdPartyFeePortion :: minFee :: minFeeCur :: minFeePeriod :: minObligoFee :: minObligoFeeCur :: minObligoFeePeriod :: fixFee :: fixFeeCur :: fixFeePeriod :: matNumberPeriodicFee :: matNumberSingular :: matNumberCreationFee :: matNumberSupplementFee :: matNumberCourierCost :: matNumberExpenses :: matNumberCharges :: groupCommissionRecSet :: bankCommissionRecSet :: indBankCommissionRecSet :: insuranceCommissionRecSet :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
@@ -923,7 +921,7 @@ trait AdminTables {
       BareRightsRow.tupled((<<[String], <<[String], <<?[Char], <<?[Char], <<?[Char], <<?[Char], <<?[Char]))
   }
   /** Table description of table GREAT_BARE_RIGHTS. Objects of this class serve as prototypes for rows in queries. */
-  class BareRights(_tableTag: Tag) extends profile.api.Table[BareRightsRow](_tableTag, Some("WERNER2"), tablePrefix + "BARE_RIGHTS") {
+  class BareRights(_tableTag: Tag) extends profile.api.Table[BareRightsRow](_tableTag, Some(schemaOwner), tablePrefix + "BARE_RIGHTS") {
     def * = (bareCode, divisionIdc, group, bank, insurance, finFinc, acc) <> (BareRightsRow.tupled, BareRightsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(bareCode), Rep.Some(divisionIdc), group, bank, insurance, finFinc, acc).shaped.<>({r=>import r._; _1.map(_=> BareRightsRow.tupled((_1.get, _2.get, _3, _4, _5, _6, _7)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -969,7 +967,7 @@ trait AdminTables {
       GroupStructureRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[Char]))
   }
   /** Table description of table GREAT_GROUP_STRUCTURE. Objects of this class serve as prototypes for rows in queries. */
-  class GroupStructure(_tableTag: Tag) extends profile.api.Table[GroupStructureRow](_tableTag, Some("WERNER2"), tablePrefix + "GROUP_STRUCTURE") {
+  class GroupStructure(_tableTag: Tag) extends profile.api.Table[GroupStructureRow](_tableTag, Some(schemaOwner), tablePrefix + "GROUP_STRUCTURE") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, isUnitMandatory) <> (GroupStructureRow.tupled, GroupStructureRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, isUnitMandatory).shaped.<>({r=>import r._; _1.map(_=> GroupStructureRow.tupled((_1.get, _2, _3, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1004,7 +1002,7 @@ trait AdminTables {
       GroupStructureHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[Char]))
   }
   /** Table description of table GREAT_GROUP_STRUCTURE_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GroupStructureHistory(_tableTag: Tag) extends profile.api.Table[GroupStructureHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "GROUP_STRUCTURE_HISTORY") {
+  class GroupStructureHistory(_tableTag: Tag) extends profile.api.Table[GroupStructureHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "GROUP_STRUCTURE_HISTORY") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, isUnitMandatory) <> (GroupStructureHistoryRow.tupled, GroupStructureHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, isUnitMandatory).shaped.<>({r=>import r._; _1.map(_=> GroupStructureHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1064,7 +1062,7 @@ trait AdminTables {
       PersonRow.tupled((<<[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_PERSON. Objects of this class serve as prototypes for rows in queries. */
-  class Person(_tableTag: Tag) extends profile.api.Table[PersonRow](_tableTag, Some("WERNER2"), tablePrefix + "PERSON") {
+  class Person(_tableTag: Tag) extends profile.api.Table[PersonRow](_tableTag, Some(schemaOwner), tablePrefix + "PERSON") {
     def * = (personKey, name, appendix1, appendix2, appendix3, iso3166Alpha3Code, zip, city, street, telephone, telefax, email, ifa, commentary, employeeNumber, accountingAreaCode, nationalName, nationalStreet, nationalCity, nationalAppendix1, nationalAppendix2, nationalAppendix3) <> (PersonRow.tupled, PersonRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(personKey), name, appendix1, appendix2, appendix3, iso3166Alpha3Code, zip, city, street, telephone, telefax, email, ifa, commentary, employeeNumber, accountingAreaCode, nationalName, nationalStreet, nationalCity, nationalAppendix1, nationalAppendix2, nationalAppendix3).shaped.<>({r=>import r._; _1.map(_=> PersonRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1135,7 +1133,7 @@ trait AdminTables {
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[java.sql.Timestamp] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: HNil
   }
   /** Table description of table GREAT_USER. Objects of this class serve as prototypes for rows in queries. */
-  class User(_tableTag: Tag) extends profile.api.Table[UserRow](_tableTag, Some("WERNER2"), tablePrefix + "USER") {
+  class User(_tableTag: Tag) extends profile.api.Table[UserRow](_tableTag, Some(schemaOwner), tablePrefix + "USER") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: password :: isAbsent :: language :: upperLimitAmount :: upperLimitCurrency :: divisionIdc :: personKey :: passwordCreationDate :: passwordFifoList :: loginTrials :: loginTrialDate :: department :: reset :: isActive :: viewerType :: roles :: gid :: organisationName :: organisationUnitName :: userAccountIdc :: isDefault :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
@@ -1216,7 +1214,7 @@ trait AdminTables {
       UserAccountRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[java.sql.Timestamp], <<?[Char], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_USER_ACCOUNT. Objects of this class serve as prototypes for rows in queries. */
-  class UserAccount(_tableTag: Tag) extends profile.api.Table[UserAccountRow](_tableTag, Some("WERNER2"), tablePrefix + "USER_ACCOUNT") {
+  class UserAccount(_tableTag: Tag) extends profile.api.Table[UserAccountRow](_tableTag, Some(schemaOwner), tablePrefix + "USER_ACCOUNT") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, personKey, gid, password, passwordCreationDate, passwordFifoList, loginTrials, loginTrialDate, reset, language, department, organisationName, organisationUnitName) <> (UserAccountRow.tupled, UserAccountRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, personKey, gid, password, passwordCreationDate, passwordFifoList, loginTrials, loginTrialDate, reset, language, department, organisationName, organisationUnitName).shaped.<>({r=>import r._; _1.map(_=> UserAccountRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1272,7 +1270,7 @@ trait AdminTables {
       UserDeputiesRow.tupled((<<[String], <<[String]))
   }
   /** Table description of table GREAT_USER_DEPUTIES. Objects of this class serve as prototypes for rows in queries. */
-  class UserDeputies(_tableTag: Tag) extends profile.api.Table[UserDeputiesRow](_tableTag, Some("WERNER2"), tablePrefix + "USER_DEPUTIES") {
+  class UserDeputies(_tableTag: Tag) extends profile.api.Table[UserDeputiesRow](_tableTag, Some(schemaOwner), tablePrefix + "USER_DEPUTIES") {
     def * = (userIdc, deputyIdc) <> (UserDeputiesRow.tupled, UserDeputiesRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(userIdc), Rep.Some(deputyIdc)).shaped.<>({r=>import r._; _1.map(_=> UserDeputiesRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1311,7 +1309,7 @@ trait AdminTables {
       UserGroupRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_USER_GROUP. Objects of this class serve as prototypes for rows in queries. */
-  class UserGroup(_tableTag: Tag) extends profile.api.Table[UserGroupRow](_tableTag, Some("WERNER2"), tablePrefix + "USER_GROUP") {
+  class UserGroup(_tableTag: Tag) extends profile.api.Table[UserGroupRow](_tableTag, Some(schemaOwner), tablePrefix + "USER_GROUP") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, divisionIdc, name, description, address, extension, disabled) <> (UserGroupRow.tupled, UserGroupRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, divisionIdc, name, description, address, extension, disabled).shaped.<>({r=>import r._; _1.map(_=> UserGroupRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1354,7 +1352,7 @@ trait AdminTables {
       UserInDivisionRow.tupled((<<[String], <<[String], <<[String]))
   }
   /** Table description of table GREAT_USER_IN_DIVISION. Objects of this class serve as prototypes for rows in queries. */
-  class UserInDivision(_tableTag: Tag) extends profile.api.Table[UserInDivisionRow](_tableTag, Some("WERNER2"), tablePrefix + "USER_IN_DIVISION") {
+  class UserInDivision(_tableTag: Tag) extends profile.api.Table[UserInDivisionRow](_tableTag, Some(schemaOwner), tablePrefix + "USER_IN_DIVISION") {
     def * = (divisionIdc, userIdc, role) <> (UserInDivisionRow.tupled, UserInDivisionRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(divisionIdc), Rep.Some(userIdc), Rep.Some(role)).shaped.<>({r=>import r._; _1.map(_=> UserInDivisionRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1383,7 +1381,7 @@ trait AdminTables {
       AppInGroupRow.tupled((<<[String], <<[String]))
   }
   /** Table description of table GREAT_APP_IN_GROUP. Objects of this class serve as prototypes for rows in queries. */
-  class AppInGroup(_tableTag: Tag) extends profile.api.Table[AppInGroupRow](_tableTag, Some("WERNER2"), tablePrefix + "APP_IN_GROUP") {
+  class AppInGroup(_tableTag: Tag) extends profile.api.Table[AppInGroupRow](_tableTag, Some(schemaOwner), tablePrefix + "APP_IN_GROUP") {
     def * = (userGroupIdc, userIdc) <> (AppInGroupRow.tupled, AppInGroupRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(userGroupIdc), Rep.Some(userIdc)).shaped.<>({r=>import r._; _1.map(_=> AppInGroupRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1409,7 +1407,7 @@ trait AdminTables {
       SviewConstraintRow.tupled((<<?[String], <<?[String]))
   }
   /** Table description of table GREAT_SVIEW_CONSTRAINT. Objects of this class serve as prototypes for rows in queries. */
-  class SviewConstraint(_tableTag: Tag) extends profile.api.Table[SviewConstraintRow](_tableTag, Some("WERNER2"), tablePrefix + "SVIEW_CONSTRAINT") {
+  class SviewConstraint(_tableTag: Tag) extends profile.api.Table[SviewConstraintRow](_tableTag, Some(schemaOwner), tablePrefix + "SVIEW_CONSTRAINT") {
     def * = (userIdc, constraint) <> (SviewConstraintRow.tupled, SviewConstraintRow.unapply)
 
     /** Database column USER_IDC SqlType(VARCHAR2), Length(10,true) */

@@ -1,29 +1,25 @@
 package model.great
 
-object MasterDataTables extends {
-  val profile = slick.jdbc.OracleProfile
-} with MasterDataTables
+object MasterDataTables extends DbProfile with MasterDataTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait MasterDataTables {
   val profile: slick.jdbc.JdbcProfile
   import profile.api._
-  import slick.model.ForeignKeyAction
   import slick.collection.heterogeneous._
   import slick.collection.heterogeneous.syntax._
+  import slick.model.ForeignKeyAction
   // NOTE: GetResult mappers for plain SQL are only generated for tables where Slick knows how to map the types of all columns.
-  import slick.jdbc.{GetResult => GR}
-
   import model.great.AdminTables._
-  import model.great.CommonTables._
-  import model.great.BackOfficeTables._
   import model.great.GuaranteeTables._
+  import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
   lazy val schema: profile.SchemaDescription = Array(AccountingArea.schema, AccountingAreaHistory.schema, BusinessPartner.schema, BusinessPartnerHistory.schema, Country.schema, CountryHistory.schema, Currency.schema, CurrencyHistory.schema, FxRates.schema, GlineAccount.schema, GlineAccountHistory.schema, GlineContract.schema, GlineContractHistory.schema, GlineReservation.schema, GlineReservationHist.schema, GlineReservations.schema, GlineReservationsHist.schema, Language.schema, LatestFxRates.schema, Org.schema, OrgHistory.schema, Ratings.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
-  val tablePrefix = "GREAT_"
+  val tablePrefix = "WVO_"
+  private val schemaOwner = "SCOTT"
 
   /** Entity class storing rows of table AccountingArea
     *  @param objectidc Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true)
@@ -48,7 +44,7 @@ trait MasterDataTables {
   }
   /** Table description of table GREAT_ACCOUNTING_AREA. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class AccountingArea(_tableTag: Tag) extends profile.api.Table[AccountingAreaRow](_tableTag, Some("WERNER2"), tablePrefix + "ACCOUNTING_AREA") {
+  class AccountingArea(_tableTag: Tag) extends profile.api.Table[AccountingAreaRow](_tableTag, Some(schemaOwner), tablePrefix + "ACCOUNTING_AREA") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating) <> (AccountingAreaRow.tupled, AccountingAreaRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating).shaped.<>({r=>import r._; _1.map(_=> AccountingAreaRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -115,7 +111,7 @@ trait MasterDataTables {
   }
   /** Table description of table GREAT_ACCOUNTING_AREA_HISTORY. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class AccountingAreaHistory(_tableTag: Tag) extends profile.api.Table[AccountingAreaHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "ACCOUNTING_AREA_HISTORY") {
+  class AccountingAreaHistory(_tableTag: Tag) extends profile.api.Table[AccountingAreaHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "ACCOUNTING_AREA_HISTORY") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating) <> (AccountingAreaHistoryRow.tupled, AccountingAreaHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, name, `type`, iso3166Alpha3Code, reserveRate, defaultRateOverwritten, usgReserveRate, extern, active, hgbRating, usgRating).shaped.<>({r=>import r._; _1.map(_=> AccountingAreaHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -183,7 +179,7 @@ trait MasterDataTables {
       CountryRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_COUNTRY. Objects of this class serve as prototypes for rows in queries. */
-  class Country(_tableTag: Tag) extends profile.api.Table[CountryRow](_tableTag, Some("WERNER2"), tablePrefix + "COUNTRY") {
+  class Country(_tableTag: Tag) extends profile.api.Table[CountryRow](_tableTag, Some(schemaOwner), tablePrefix + "COUNTRY") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating) <> (CountryRow.tupled, CountryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating).shaped.<>({r=>import r._; _1.map(_=> CountryRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -242,7 +238,7 @@ trait MasterDataTables {
       CountryHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_COUNTRY_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class CountryHistory(_tableTag: Tag) extends profile.api.Table[CountryHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "COUNTRY_HISTORY") {
+  class CountryHistory(_tableTag: Tag) extends profile.api.Table[CountryHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "COUNTRY_HISTORY") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating) <> (CountryHistoryRow.tupled, CountryHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, iso3166Alpha2Code, hgbForeignUnited, hgbForeignOther, usgForeignUnited, usgForeignOther, hgbForeignUnitedRating, hgbForeignOtherRating, usgForeignUnitedRating, usgForeignOtherRating).shaped.<>({r=>import r._; _1.map(_=> CountryHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -305,7 +301,7 @@ trait MasterDataTables {
       CurrencyRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char]))
   }
   /** Table description of table GREAT_CURRENCY. Objects of this class serve as prototypes for rows in queries. */
-  class Currency(_tableTag: Tag) extends profile.api.Table[CurrencyRow](_tableTag, Some("WERNER2"), tablePrefix + "CURRENCY") {
+  class Currency(_tableTag: Tag) extends profile.api.Table[CurrencyRow](_tableTag, Some(schemaOwner), tablePrefix + "CURRENCY") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, numDecimalDigits, textDe, textEn, textEs, startDate, endDate, fxtype) <> (CurrencyRow.tupled, CurrencyRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(numDecimalDigits), textDe, textEn, textEs, startDate, endDate, fxtype).shaped.<>({r=>import r._; _1.map(_=> CurrencyRow.tupled((_1.get, _2, _3, _4, _5.get, _6, _7, _8, _9, _10, _11)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -358,7 +354,7 @@ trait MasterDataTables {
       CurrencyHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char]))
   }
   /** Table description of table GREAT_CURRENCY_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class CurrencyHistory(_tableTag: Tag) extends profile.api.Table[CurrencyHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "CURRENCY_HISTORY") {
+  class CurrencyHistory(_tableTag: Tag) extends profile.api.Table[CurrencyHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "CURRENCY_HISTORY") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, numDecimalDigits, textDe, textEn, textEs, startDate, endDate, fxtype) <> (CurrencyHistoryRow.tupled, CurrencyHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, Rep.Some(numDecimalDigits), textDe, textEn, textEs, startDate, endDate, fxtype).shaped.<>({r=>import r._; _1.map(_=> CurrencyHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8.get, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -413,7 +409,7 @@ trait MasterDataTables {
   }
   /** Table description of table GREAT_BUSINESS_PARTNER. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class BusinessPartner(_tableTag: Tag) extends profile.api.Table[BusinessPartnerRow](_tableTag, Some("WERNER2"), tablePrefix + "BUSINESS_PARTNER") {
+  class BusinessPartner(_tableTag: Tag) extends profile.api.Table[BusinessPartnerRow](_tableTag, Some(schemaOwner), tablePrefix + "BUSINESS_PARTNER") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: bic :: name :: appendix1 :: appendix2 :: appendix3 :: street :: zip :: city :: iso3166Alpha3Code :: telephone :: telefax :: email :: conditions :: commentary :: active :: contactUserKey1 :: contactUserKey2 :: contactUserKey3 :: contactUserKey4 :: duns :: dunsDo :: dunsGu :: ifa :: region :: telephoneCmd :: cmdStatus :: `type` :: migration :: temporary :: gmsId :: globalGmsId :: gmsCheck :: spRating :: spRatingDate :: fitchRating :: fitchRatingDate :: moodyRating :: moodyRatingDate :: lcCommentary :: lcBics :: lcConsultant1 :: lcConsultant2 :: lcTransactionmanager1 :: lcTransactionmanager2 :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -549,7 +545,7 @@ trait MasterDataTables {
   }
   /** Table description of table GREAT_BUSINESS_PARTNER_HISTORY. Objects of this class serve as prototypes for rows in queries.
     *  NOTE: The following names collided with Scala keywords and were escaped: type */
-  class BusinessPartnerHistory(_tableTag: Tag) extends profile.api.Table[BusinessPartnerHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "BUSINESS_PARTNER_HISTORY") {
+  class BusinessPartnerHistory(_tableTag: Tag) extends profile.api.Table[BusinessPartnerHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "BUSINESS_PARTNER_HISTORY") {
     def * = objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: bic :: name :: appendix1 :: appendix2 :: appendix3 :: street :: zip :: city :: iso3166Alpha3Code :: telephone :: telefax :: email :: conditions :: commentary :: active :: contactUserKey1 :: contactUserKey2 :: contactUserKey3 :: contactUserKey4 :: duns :: dunsDo :: dunsGu :: ifa :: region :: telephoneCmd :: cmdStatus :: `type` :: migration :: temporary :: gmsId :: globalGmsId :: gmsCheck :: spRating :: spRatingDate :: fitchRating :: fitchRatingDate :: moodyRating :: moodyRatingDate :: lcCommentary :: lcBics :: lcConsultant1 :: lcConsultant2 :: lcTransactionmanager1 :: lcTransactionmanager2 :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
@@ -692,7 +688,7 @@ trait MasterDataTables {
       FxRatesRow.tupled((<<[Char], <<[java.sql.Timestamp], <<[String], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_FX_RATES. Objects of this class serve as prototypes for rows in queries. */
-  class FxRates(_tableTag: Tag) extends profile.api.Table[FxRatesRow](_tableTag, Some("WERNER2"), tablePrefix + "FX_RATES") {
+  class FxRates(_tableTag: Tag) extends profile.api.Table[FxRatesRow](_tableTag, Some(schemaOwner), tablePrefix + "FX_RATES") {
     def * = (fxtype, fxdate, isoCode, rate) <> (FxRatesRow.tupled, FxRatesRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(fxtype), Rep.Some(fxdate), Rep.Some(isoCode), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> FxRatesRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -724,7 +720,7 @@ trait MasterDataTables {
       LanguageRow.tupled((<<[String], <<?[String], <<?[Char]))
   }
   /** Table description of table GREAT_LANGUAGE. Objects of this class serve as prototypes for rows in queries. */
-  class Language(_tableTag: Tag) extends profile.api.Table[LanguageRow](_tableTag, Some("WERNER2"), tablePrefix + "LANGUAGE") {
+  class Language(_tableTag: Tag) extends profile.api.Table[LanguageRow](_tableTag, Some(schemaOwner), tablePrefix + "LANGUAGE") {
     def * = (iso639Code, name, systemLanguage) <> (LanguageRow.tupled, LanguageRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(iso639Code), name, systemLanguage).shaped.<>({r=>import r._; _1.map(_=> LanguageRow.tupled((_1.get, _2, _3)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -749,7 +745,7 @@ trait MasterDataTables {
       LatestFxRatesRow.tupled((<<[String], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_LATEST_FX_RATES. Objects of this class serve as prototypes for rows in queries. */
-  class LatestFxRates(_tableTag: Tag) extends profile.api.Table[LatestFxRatesRow](_tableTag, Some("WERNER2"), tablePrefix + "LATEST_FX_RATES") {
+  class LatestFxRates(_tableTag: Tag) extends profile.api.Table[LatestFxRatesRow](_tableTag, Some(schemaOwner), tablePrefix + "LATEST_FX_RATES") {
     def * = (isoCode, rate) <> (LatestFxRatesRow.tupled, LatestFxRatesRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(isoCode), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> LatestFxRatesRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -786,7 +782,7 @@ trait MasterDataTables {
       OrgRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_ORG. Objects of this class serve as prototypes for rows in queries. */
-  class Org(_tableTag: Tag) extends profile.api.Table[OrgRow](_tableTag, Some("WERNER2"), tablePrefix + "ORG") {
+  class Org(_tableTag: Tag) extends profile.api.Table[OrgRow](_tableTag, Some(schemaOwner), tablePrefix + "ORG") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld) <> (OrgRow.tupled, OrgRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld).shaped.<>({r=>import r._; _1.map(_=> OrgRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -851,7 +847,7 @@ trait MasterDataTables {
       OrgHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_ORG_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class OrgHistory(_tableTag: Tag) extends profile.api.Table[OrgHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "ORG_HISTORY") {
+  class OrgHistory(_tableTag: Tag) extends profile.api.Table[OrgHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "ORG_HISTORY") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld) <> (OrgHistoryRow.tupled, OrgHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, shortName, areCode, functions, divisionShortName, external, active, ifa, address, temporary, divisionShortNameOld).shaped.<>({r=>import r._; _1.map(_=> OrgHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -910,7 +906,7 @@ trait MasterDataTables {
       RatingsRow.tupled((<<[String], <<[scala.math.BigDecimal], <<[scala.math.BigDecimal]))
   }
   /** Table description of table GREAT_RATINGS. Objects of this class serve as prototypes for rows in queries. */
-  class Ratings(_tableTag: Tag) extends profile.api.Table[RatingsRow](_tableTag, Some("WERNER2"), tablePrefix + "RATINGS") {
+  class Ratings(_tableTag: Tag) extends profile.api.Table[RatingsRow](_tableTag, Some(schemaOwner), tablePrefix + "RATINGS") {
     def * = (code, lifetime, rate) <> (RatingsRow.tupled, RatingsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(code), Rep.Some(lifetime), Rep.Some(rate)).shaped.<>({r=>import r._; _1.map(_=> RatingsRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -952,7 +948,7 @@ trait MasterDataTables {
       GlineAccountRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[Char], <<[String], <<[String], <<[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[scala.math.BigDecimal], <<[String], <<?[Char], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_ACCOUNT. Objects of this class serve as prototypes for rows in queries. */
-  class GlineAccount(_tableTag: Tag) extends profile.api.Table[GlineAccountRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_ACCOUNT") {
+  class GlineAccount(_tableTag: Tag) extends profile.api.Table[GlineAccountRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_ACCOUNT") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, activeFlag, contractId, businessPartnerId, bareId, limit, upperConsumptionPercentage, accountNumber, name, expiringFlag, fixedLimitFlag, losId) <> (GlineAccountRow.tupled, GlineAccountRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(activeFlag), Rep.Some(contractId), Rep.Some(businessPartnerId), Rep.Some(bareId), limit, upperConsumptionPercentage, Rep.Some(accountNumber), Rep.Some(name), expiringFlag, fixedLimitFlag, losId).shaped.<>({r=>import r._; _1.map(_=> GlineAccountRow.tupled((_1.get, _2, _3, _4, _5.get, _6.get, _7.get, _8.get, _9, _10, _11.get, _12.get, _13, _14, _15)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1026,7 +1022,7 @@ trait MasterDataTables {
       GlineAccountHistoryRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<[String], <<[String], <<[Char], <<?[java.sql.Timestamp], <<[Char], <<[String], <<[String], <<[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<[String], <<[String], <<?[Char], <<?[Char], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_ACCOUNT_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GlineAccountHistory(_tableTag: Tag) extends profile.api.Table[GlineAccountHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_ACCOUNT_HISTORY") {
+  class GlineAccountHistory(_tableTag: Tag) extends profile.api.Table[GlineAccountHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_ACCOUNT_HISTORY") {
     def * = (objectidc, objectversionc, lastuserc, updatereasonc, updatecategoryc, activec, updatetimec, activeFlag, contractId, businessPartnerId, bareId, limit, upperConsumptionPercentage, lineNumber, name, expiringFlag, fixedLimitFlag, losId) <> (GlineAccountHistoryRow.tupled, GlineAccountHistoryRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(activec), updatetimec, Rep.Some(activeFlag), Rep.Some(contractId), Rep.Some(businessPartnerId), Rep.Some(bareId), limit, upperConsumptionPercentage, Rep.Some(lineNumber), Rep.Some(name), expiringFlag, fixedLimitFlag, losId).shaped.<>({r=>import r._; _1.map(_=> GlineAccountHistoryRow.tupled((_1.get, _2.get, _3, _4.get, _5.get, _6.get, _7, _8.get, _9.get, _10.get, _11.get, _12, _13, _14.get, _15.get, _16, _17, _18)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1086,7 +1082,7 @@ trait MasterDataTables {
       <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<[String] :: <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<[java.sql.Timestamp] :: <<[java.sql.Timestamp] :: <<[Char] :: <<[Char] :: <<[Char] :: <<[Char] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: HNil
   }
   /** Table description of table GREAT_GLINE_CONTRACT. Objects of this class serve as prototypes for rows in queries. */
-  class GlineContract(_tableTag: Tag) extends profile.api.Table[GlineContractRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_CONTRACT") {
+  class GlineContract(_tableTag: Tag) extends profile.api.Table[GlineContractRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_CONTRACT") {
     def * = objectidc :: objectversionc :: lastuserc :: updatetimec :: businessPartnerId :: bareId :: limit :: currency :: startDate :: endDate :: externalLimitFlag :: externalStartDateFlag :: externalEndDateFlag :: usageRestrictedFlag :: usageRestrictedReason :: reminderStartDate :: reminderPeriod :: currencyPeriodType :: interestDayQuotient :: commentary :: responsibleUsers :: upperConsumptionPercentage :: activeFlag :: contractNumber :: name :: expiringFlag :: fixedLimitFlag :: conditionsCommentary :: contractType :: tappApprovalId :: contractLang :: contractUnderlyingLaw :: contrBasedonSiemensStandard :: coverageOfFacility :: additionalCoverageInfo :: commitmentFeePercentage :: onetimeSetupfeeAmount :: onetimeSetupfeeWkz :: onetimeSetupfeePercentage :: utilizationFeeAmount :: utilizationFeeWkz :: utilizationFeePercentage :: interestratePercentage :: referenceratePercentage :: creditspreadPercentage :: otherFees :: ratingtrgCl :: quotRatingtrgCl :: changeOfControltrg :: quotChangeOfControltrg :: crossdefaultTrgCl :: quotCrossdefaulttrgCl :: materialAdverseChtrgCl :: quotMaterialAdverseChtrgCl :: anyOtherRelTrgProv :: quotOtherRelTrgCl :: resultOfTrgCls :: financialCovenant :: quotFinancialCovenant :: resultOfFinancialCovenant :: informationCovenant :: quotInformationCovenant :: resultOfInformationCovenant :: otherCovenant :: quotOtherCovenant :: resultOfOtherCovenant :: contractContainsNoCovenants :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), PrimaryKey, Length(10,true) */
@@ -1246,7 +1242,7 @@ trait MasterDataTables {
       <<[String] :: <<[scala.math.BigDecimal] :: <<?[String] :: <<[String] :: <<[String] :: <<[Char] :: <<?[java.sql.Timestamp] :: <<[String] :: <<[String] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<[java.sql.Timestamp] :: <<[java.sql.Timestamp] :: <<[Char] :: <<[Char] :: <<[Char] :: <<[Char] :: <<?[String] :: <<?[java.sql.Timestamp] :: <<?[Char] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[scala.math.BigDecimal] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: <<?[String] :: <<?[String] :: <<?[Char] :: HNil
   }
   /** Table description of table GREAT_GLINE_CONTRACT_HISTORY. Objects of this class serve as prototypes for rows in queries. */
-  class GlineContractHistory(_tableTag: Tag) extends profile.api.Table[GlineContractHistoryRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_CONTRACT_HISTORY") {
+  class GlineContractHistory(_tableTag: Tag) extends profile.api.Table[GlineContractHistoryRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_CONTRACT_HISTORY") {
     def * = objectidc :: objectversionc :: lastuserc :: updatereasonc :: updatecategoryc :: activec :: updatetimec :: businessPartnerId :: bareId :: limit :: currency :: startDate :: endDate :: externalLimitFlag :: externalStartDateFlag :: externalEndDateFlag :: usageRestrictedFlag :: usageRestrictedReason :: reminderStartDate :: reminderPeriod :: currencyPeriodType :: interestDayQuotient :: commentary :: responsibleUsers :: upperConsumptionPercentage :: activeFlag :: contractNumber :: name :: expiringFlag :: fixedLimitFlag :: conditionsCommentary :: contractType :: tappApprovalId :: contractLang :: contractUnderlyingLaw :: contrBasedonSiemensStandard :: coverageOfFacility :: additionalCoverageInfo :: commitmentFeePercentage :: onetimeSetupfeeAmount :: onetimeSetupfeeWkz :: onetimeSetupfeePercentage :: utilizationFeeAmount :: utilizationFeeWkz :: utilizationFeePercentage :: interestratePercentage :: referenceratePercentage :: creditspreadPercentage :: otherFees :: ratingtrgCl :: quotRatingtrgCl :: changeOfControltrg :: quotChangeOfControltrg :: crossdefaultTrgCl :: quotCrossdefaulttrgCl :: materialAdverseChtrgCl :: quotMaterialAdverseChtrgCl :: anyOtherRelTrgProv :: quotOtherRelTrgCl :: resultOfTrgCls :: financialCovenant :: quotFinancialCovenant :: resultOfFinancialCovenant :: informationCovenant :: quotInformationCovenant :: resultOfInformationCovenant :: otherCovenant :: quotOtherCovenant :: resultOfOtherCovenant :: contractContainsNoCovenants :: HNil
 
     /** Database column OBJECTIDC SqlType(VARCHAR2), Length(10,true) */
@@ -1424,7 +1420,7 @@ trait MasterDataTables {
       GlineReservationRow.tupled((<<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATION. Objects of this class serve as prototypes for rows in queries. */
-  class GlineReservation(_tableTag: Tag) extends profile.api.Table[GlineReservationRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATION") {
+  class GlineReservation(_tableTag: Tag) extends profile.api.Table[GlineReservationRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_RESERVATION") {
     def * = (objectidc, parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary) <> (GlineReservationRow.tupled, GlineReservationRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary).shaped.<>({r=>import r._; _1.map(_=> GlineReservationRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1512,7 +1508,7 @@ trait MasterDataTables {
       GlineReservationHistRow.tupled((<<[String], <<?[String], <<[scala.math.BigDecimal], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[java.sql.Timestamp], <<?[Char], <<?[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String], <<?[Char], <<?[Char], <<?[String], <<?[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATION_HIST. Objects of this class serve as prototypes for rows in queries. */
-  class GlineReservationHist(_tableTag: Tag) extends profile.api.Table[GlineReservationHistRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATION_HIST") {
+  class GlineReservationHist(_tableTag: Tag) extends profile.api.Table[GlineReservationHistRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_RESERVATION_HIST") {
     def * = (objectidc, parentId, parentVersion, reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary) <> (GlineReservationHistRow.tupled, GlineReservationHistRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), parentId, Rep.Some(parentVersion), reservedAmount, reservedAmountCurrency, project, ownerId, reservationTimestamp, expiryDate, reminderStartDate, reminderPeriodType, guaranteeEndDate, guaranteePartnerOrgId, guaranteeRespAppId, guaranteeRespAppName, guaranteeId, reservationType, firstEntryFlag, conditions, commentary).shaped.<>({r=>import r._; _1.map(_=> GlineReservationHistRow.tupled((_1.get, _2, _3.get, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1588,7 +1584,7 @@ trait MasterDataTables {
       GlineReservationsRow.tupled((<<[String], <<?[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATIONS. Objects of this class serve as prototypes for rows in queries. */
-  class GlineReservations(_tableTag: Tag) extends profile.api.Table[GlineReservationsRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATIONS") {
+  class GlineReservations(_tableTag: Tag) extends profile.api.Table[GlineReservationsRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_RESERVATIONS") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, lineAccountId) <> (GlineReservationsRow.tupled, GlineReservationsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), objectversionc, lastuserc, updatetimec, Rep.Some(lineAccountId)).shaped.<>({r=>import r._; _1.map(_=> GlineReservationsRow.tupled((_1.get, _2, _3, _4, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
@@ -1625,7 +1621,7 @@ trait MasterDataTables {
       GlineReservationsHistRow.tupled((<<[String], <<[scala.math.BigDecimal], <<?[String], <<?[java.sql.Timestamp], <<[String], <<[String], <<[String]))
   }
   /** Table description of table GREAT_GLINE_RESERVATIONS_HIST. Objects of this class serve as prototypes for rows in queries. */
-  class GlineReservationsHist(_tableTag: Tag) extends profile.api.Table[GlineReservationsHistRow](_tableTag, Some("WERNER2"), tablePrefix + "GLINE_RESERVATIONS_HIST") {
+  class GlineReservationsHist(_tableTag: Tag) extends profile.api.Table[GlineReservationsHistRow](_tableTag, Some(schemaOwner), tablePrefix + "GLINE_RESERVATIONS_HIST") {
     def * = (objectidc, objectversionc, lastuserc, updatetimec, updatereasonc, updatecategoryc, lineAccountId) <> (GlineReservationsHistRow.tupled, GlineReservationsHistRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(objectidc), Rep.Some(objectversionc), lastuserc, updatetimec, Rep.Some(updatereasonc), Rep.Some(updatecategoryc), Rep.Some(lineAccountId)).shaped.<>({r=>import r._; _1.map(_=> GlineReservationsHistRow.tupled((_1.get, _2.get, _3, _4, _5.get, _6.get, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))

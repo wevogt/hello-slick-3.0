@@ -1,9 +1,6 @@
 package model.great
 
-object CommonTables extends {
-  val profile = slick.jdbc.H2Profile
-  //val profile = slick.jdbc.OracleProfile
-} with CommonTables
+object CommonTables extends DbProfile with CommonTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait CommonTables {
@@ -20,8 +17,8 @@ trait CommonTables {
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
   // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" fuer Common setzten um in der DB eine Struktur zu erhalten
-  private val tablePrefix = "GREATx_"
-  private val schemaOwner = "WERNER2"
+  private val tablePrefix = "WVO_"
+  private val schemaOwner = "SCOTT"
 
 
   /** Entity class storing rows of table AuditLog
