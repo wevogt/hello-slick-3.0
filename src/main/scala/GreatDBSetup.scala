@@ -1,13 +1,13 @@
 
 //import org.h2.engine.Database
+import java.sql.{Clob, Timestamp}
+
+import model.great.CommonTables.AuditLogRow
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
-//import slick.driver.H2Driver.api._
-//import slick.driver.PostgresDriver.api._
-//import slick.driver.HsqldbDriver.api._
 
 // The main application
 object GreatDBSetup extends App {
@@ -23,21 +23,14 @@ object GreatDBSetup extends App {
   implicit val ec = scala.concurrent.ExecutionContext.global
   try {
 
-    // The query interface for the Suppliers table
-
-    val suppliers: TableQuery[Suppliers] = lifted.TableQuery[Suppliers]
-
-    // the query interface for the Coffees table
-    val coffees: TableQuery[Coffees] = lifted.TableQuery[Coffees]
-
-    val auditLog: TableQuery[model.great.CommonTables.AuditLog] = lifted.TableQuery[model.great.CommonTables.AuditLog]
+    val auditLogs: TableQuery[model.great.CommonTables.AuditLog] = lifted.TableQuery[model.great.CommonTables.AuditLog]
     val persons: TableQuery[model.great.AdminTables.Person] = lifted.TableQuery[model.great.AdminTables.Person]
 //    val commonTables: TableQuery[model.great.CommonTables.schema] = lifted.TableQuery[model.great.CommonTables]
 
     val setupAction: DBIO[Unit] = DBIO.seq(
       // Create the schema by combining the DDLs for the Suppliers and Coffees
       // tables using the query interfaces
-      (suppliers.schema ++ coffees.schema ++
+      (
         model.great.AdminTables.Person.schema ++
         model.great.MasterDataTables.Country.schema ++
         model.great.MasterDataTables.Language.schema ++
@@ -49,49 +42,29 @@ object GreatDBSetup extends App {
         model.great.CommonTables.MessageEvent.schema ++
         model.great.CommonTables.MessageInfo.schema ++
         model.great.CommonTables.MessageAttachment.schema ++
-        auditLog.schema).create,
+        auditLogs.schema).create,
 //      (model.great.CommonTables.schema.createStatements),
 
-      // Insert some suppliers
-      suppliers += (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199"),
-      suppliers += ( 49, "Superior Coffee", "1 Party Place", "Mendocino", "CA", "95460"),
-      suppliers += (150, "The High Ground", "100 Coffee Lane", "Meadows", "CA", "93966")
-
-//      ,persons += (001, )
-//      ,auditLog += model.great.CommonTables.AuditLogRow("Bond", Nil , "test what", "division").
+    //  ,persons += (001, Some("Peter Pan"), )
+       auditLogs += model.great.CommonTables.AuditLogRow("00001", Some("Bond"), Some(new Timestamp(System.currentTimeMillis()))  , None, Some("division"))
+      ,auditLogs += model.great.CommonTables.AuditLogRow("00002", Some("Peter Pan"), Some(new Timestamp(System.currentTimeMillis()))  , None, Some("division neu"))
     )
 
     val setupFuture: Future[Unit] = dbConfig.db.run(setupAction)
     val f = setupFuture.flatMap { _ =>
 
-      // Insert some coffees (using JDBC's batch insert feature)
-      val insertAction: DBIO[Option[Int]] = coffees ++= Seq(
-        ("Colombian", 101, 7.99, 0, 0),
-        ("French_Roast", 49, 8.99, 0, 0),
-        ("Espresso", 150, 9.99, 0, 0),
-        ("Colombian_Decaf", 101, 8.99, 0, 0),
-        ("French_Roast_Decaf", 49, 9.99, 0, 0)
-      )
+      val allAuditLogsAction: DBIO[Seq[model.great.CommonTables.AuditLogRow]] =
+        auditLogs.result
 
-      val insertAndPrintAction: DBIO[Unit] = insertAction.map { coffeesInsertResult =>
-        // Print the number of rows inserted
-        coffeesInsertResult foreach { numRows =>
-          println(s"Inserted $numRows rows into the Coffees table")
-        }
+      val allAuditLogs: Future[Seq[AuditLogRow]] =
+        dbConfig.db.run(allAuditLogsAction)
+
+
+      allAuditLogs.map { allAuditLogs =>
+        allAuditLogs.foreach(println)
+//        allAuditLogs.foreach(_.what.getOrElse("default") -> println)
       }
 
-      val allSuppliersAction: DBIO[Seq[(Int, String, String, String, String, String)]] =
-        suppliers.result
-
-      val combinedAction: DBIO[Seq[(Int, String, String, String, String, String)]] =
-        insertAndPrintAction >> allSuppliersAction
-
-      val combinedFuture: Future[Seq[(Int, String, String, String, String, String)]] =
-        dbConfig.db.run(combinedAction)
-
-      combinedFuture.map { allSuppliers =>
-        allSuppliers.foreach(println)
-      }
     } (ec)
 
       /*
