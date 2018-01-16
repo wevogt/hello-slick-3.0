@@ -42,12 +42,14 @@ object GreatDBSetup extends App {
         model.great.CommonTables.MessageEvent.schema ++
         model.great.CommonTables.MessageInfo.schema ++
         model.great.CommonTables.MessageAttachment.schema ++
-        auditLogs.schema).create,
+        auditLogs.schema).create
 //      (model.great.CommonTables.schema.createStatements),
 
-    //  ,persons += (001, Some("Peter Pan"), )
-       auditLogs += model.great.CommonTables.AuditLogRow("00001", Some("Bond"), Some(new Timestamp(System.currentTimeMillis()))  , None, Some("division"))
-      ,auditLogs += model.great.CommonTables.AuditLogRow("00002", Some("Peter Pan"), Some(new Timestamp(System.currentTimeMillis()))  , None, Some("division neu"))
+      ,persons    += new model.great.AdminTables.PersonRow( personKey =" 001", name = Some("Peter Pan"), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+      ,persons    += new model.great.AdminTables.PersonRow( personKey =" 002", name = Some("Norma Jean"), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+      ,persons    += new model.great.AdminTables.PersonRow( personKey =" 003", name = Some("Peter Fonda"), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+      ,auditLogs  += model.great.CommonTables.AuditLogRow("00001", Some("Bond"), Some(new Timestamp(System.currentTimeMillis()))  , None, Some("division"))
+      ,auditLogs  += model.great.CommonTables.AuditLogRow("00002", Some("Peter Pan"), Some(new Timestamp(System.currentTimeMillis()))  , None, Some("division neu"))
     )
 
     val setupFuture: Future[Unit] = dbConfig.db.run(setupAction)
