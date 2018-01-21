@@ -2,6 +2,7 @@
 //import org.h2.engine.Database
 import java.sql.{Clob, Timestamp}
 
+import model.great.AdminTables.PersonRow
 import model.great.CommonTables.AuditLogRow
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
@@ -53,6 +54,7 @@ object GreatDBSetup extends App {
     )
 
     val setupFuture: Future[Unit] = dbConfig.db.run(setupAction)
+
     val f = setupFuture.flatMap { _ =>
 
       val allAuditLogsAction: DBIO[Seq[model.great.CommonTables.AuditLogRow]] =
@@ -65,6 +67,16 @@ object GreatDBSetup extends App {
       allAuditLogs.map { allAuditLogs =>
         allAuditLogs.foreach(println)
 //        allAuditLogs.foreach(_.what.getOrElse("default") -> println)
+      }
+
+      val allPersonsAction: DBIO[Seq[model.great.AdminTables.PersonRow]] =
+        persons.result
+
+      val allPersons: Future[Seq[PersonRow]] =
+        dbConfig.db.run(allPersonsAction)
+
+      allPersons.map { allPersons =>
+        allPersons.foreach(println)
       }
 
     } (ec)
