@@ -5,8 +5,8 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Milliseconds, Seconds, Span}
 
 import scala.language.postfixOps
-//import slick.jdbc.H2Profile.api._
-import slick.jdbc.OracleProfile.api._
+import slick.jdbc.H2Profile.api._
+//import slick.jdbc.OracleProfile.api._
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
@@ -35,7 +35,7 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAl
   )
 
   before {
-    db = Database.forConfig("slick-oracle")
+    db = Database.forConfig("great-h2mem-test")
     setupTestData()
   }
 

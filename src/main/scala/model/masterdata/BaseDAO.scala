@@ -9,9 +9,14 @@ import scala.concurrent.{Await, Future}
 /**
   * Created by werner on 12.04.17.
   */
-trait BaseDAO [T] {
+trait BaseDAO [T]  extends  MultiDatabase {
 
-  lazy val db = Database.forConfig("slick-oracle")
+  import profile.api._
+
+  lazy val dbConfig = profile.api.Database
+  lazy val db = dbConfig.db
+
+  //  lazy val db = Database.forConfig("slick-oracle")
   val stmtTimeout: Duration = 1.seconds
 
 

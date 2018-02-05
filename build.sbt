@@ -12,6 +12,7 @@ libraryDependencies ++= List(
   "com.typesafe.slick" %% "slick" % "3.2.1",
   "com.typesafe.slick" %% "slick-codegen" % "3.2.1",
   "com.typesafe.slick" %% "slick-hikaricp" % "3.2.1",
+  "com.typesafe.play" %% "play" % "2.6.11",
 
 //  "org.scalatest" %% "scalatest" % "3.2.0-SNAP4" % "test",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
