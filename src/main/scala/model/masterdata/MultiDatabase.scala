@@ -1,21 +1,17 @@
 package model.masterdata
 
-import play.api.Play
-import play.api.PlayException
-
+import com.typesafe.config.ConfigFactory
 import slick.SlickException
 
-import slick.jdbc.SQLServerProfile
-import slick.jdbc.H2Profile
-import slick.jdbc.OracleProfile
-
 trait MultiDatabase {
-  lazy val profile = {
-    Play.current.configuration.getString("development.stage") match {
-      case Some("dev") | Some("test") => H2Profile
-      case Some("qa") | Some("prod") =>  OracleProfile
-      case Some("qa2") | Some("prod") =>  SQLServerProfile
+  lazy val env :Option[String] = Option(ConfigFactory.load().getString("stage.projectPhase"))
+
+  lazy val profile =
+    env match {
+      case Some("development") | Some("test") => slick.jdbc.H2Profile
+      case Some("qa") | Some("prod") =>  slick.jdbc.OracleProfile
+      case Some("qa2") | Some("prod") =>  slick.jdbc.SQLServerProfile
       case _ => throw new SlickException("message")
     }
-  }
+
 }

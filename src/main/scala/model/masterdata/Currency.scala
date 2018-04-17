@@ -2,8 +2,6 @@ package model.masterdata
 
 import java.sql.Date
 
-import scala.concurrent.Future
-
 //import slick.profile.SqlProfile.ColumnOption.Nullable
 //import slick.jdbc.H2Profile.api._
 //import slick.jdbc.PostgresProfile.api._
@@ -49,7 +47,7 @@ object CurrencyDAO extends TableQuery(new Currencies(_)) with BaseDAO[Currency] 
 
   lazy val currencies = TableQuery[Currencies]
 
-  def insert(currency: Currency): Unit = Await.result(db.run(currencies += currency).map( _ => ()), Duration.Inf)
+  def insert(currency: Currency): Unit = Await.result(db.run(currencies += currency).map(_ => ()), Duration.Inf)
 
   def countAll: Int = exec(currencies.length.result)
   def count(count: Int): Int = exec(currencies.take(count).length.result)

@@ -16,7 +16,7 @@ trait BaseDAO [T] extends MultiDatabase {
   import profile.api._
 
   lazy val dbConfig = profile.api.Database
-  lazy val db = dbConfig.forName(ConfigFactory.load().getString("usage.dbEnv"), Some(5))
+  lazy val db = dbConfig.forName(ConfigFactory.load().getString("stage.dbEnv"), Some(5))
 
   //  lazy val db = Database.forConfig("slick-oracle")
   val stmtTimeout: Duration = 1.seconds
@@ -37,6 +37,7 @@ trait BaseDAO [T] extends MultiDatabase {
 
   //def insert[T]: Future[Unit]
 
+  def logDbEnvvironment :Unit = println("Global DB-Setting: " + db)
 
 /*
   //DB-Abfrage mit Ergebins als Stream

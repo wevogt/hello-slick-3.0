@@ -2,6 +2,7 @@
 //import org.h2.engine.Database
 import java.sql.{Clob, Timestamp}
 
+import com.typesafe.config.ConfigFactory
 import model.great.AdminTables.PersonRow
 import model.great.CommonTables.AuditLogRow
 import slick.basic.DatabaseConfig
@@ -13,8 +14,8 @@ import scala.concurrent.duration.Duration
 // The main application
 object GreatDBSetup extends App {
 
-//  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
-  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("scott-oracle-test")
+  val dbConfig = DatabaseConfig.forConfig[JdbcProfile](ConfigFactory.load().getString("stage.dbEnv"))
+//  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("scott-oracle-test")
   import dbConfig.profile.api._
   import slick.dbio.DBIO
   import slick.lifted
