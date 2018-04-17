@@ -8,6 +8,8 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
+import com.typesafe.config.ConfigFactory
+
 //import slick.jdbc.H2Profile.api._
 //import slick.jdbc.PostgresProfile.api._
 import slick.jdbc.OracleProfile.api._
@@ -17,7 +19,7 @@ object CurrencyMapping extends App {
   val fxrates = TableQuery[FxRates]
   val currencies = TableQuery[Currencies]
 
-  val db = Database.forConfig("slick-oracle")
+  val db = Database.forConfig(ConfigFactory.load().getString("usage.dbEnv"))
   //val db = Database.forConfig("pgtest")
 
   /*
@@ -49,7 +51,7 @@ object CurrencyMapping extends App {
         currencies
           .filter( t => t.fxType ===  dailyRate || t.fxType === monthlyRate )     // OR
           .filter(_.startDate <= today)
-          .filter(_.endDate isEmpty)
+          .filter(_.endDate >= today)
           //.filter(_.decimalDigits >= 1)
           .sortBy(_.isoCode3.desc)
           .map(_.isoCode3)
@@ -71,7 +73,7 @@ object CurrencyMapping extends App {
           //.filter(t => t.fxType === 'D' || t.fxType === 'M') // OR
           //          .filter( t: slick.lifted.Rep[_] => fxTypes.contains(t.fxType) )     // OR
           .filter(_.startDate <= today)
-          .filter(_.endDate isEmpty)
+          .filter(_.endDate >= today)
           //          .filter( t => Some(t.endDate) > today || t.endDate === null)
           .sortBy(_.isoCode3)
           .map(c => c.isoCode3)
@@ -84,7 +86,7 @@ object CurrencyMapping extends App {
       db.run(currenciesCountQuery.to[IndexedSeq].result).map(println)
 
     }.flatMap { _ =>
-      println("\nCurrency and Currencyname:")
+      print("\nCurrency and Currencyname:")
 
       val currencyDetailQuery = currencies.filter(t => t.fxType === dailyRate || t.fxType === monthlyRate).sortBy(_.isoCode3).map(c => (c.isoCode3, c.nameDE))
 
@@ -93,10 +95,12 @@ object CurrencyMapping extends App {
       db.run(currencyDetailQuery.result.map(println))
 
     }.flatMap { _ =>
+      print("\nWir haben Waehrungskurse gespeichert: ")
       val rates = fxrates
-       db.run(rates.length.result).map(println)
+      db.run(rates.length.result).map(println)
+//      ratesCnt = Some(db.run(rates.length.result).value)
 
-      //println("all FXRates: " + cnt)
+//      println(s"\nWir haben Waehrungskurse $ratesCnt gespeichert! ")
 
     }.flatMap { _ =>
       println(s"\n$showMaxRecords FxRates-ISO-Codes:")

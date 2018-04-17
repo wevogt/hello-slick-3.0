@@ -16,7 +16,7 @@ trait CommonTables {
   lazy val schema: profile.SchemaDescription = Array(ArchivingBarcode.schema, ArchivingIxosResult.schema, ArchivingMetadata.schema, ArchivingTransported.schema, AuditLog.schema, BatchDriver.schema, BatchJobDescription.schema, BatchJobRun.schema, Enterprise.schema, GmsState.schema, GmsTransfer.schema, GmsTransferEntity.schema, Import.schema, InternatTexts.schema, MessageAttachment.schema, MessageEvent.schema, MessageInfo.schema, OpenftParameter.schema, ReminderRun.schema, ServerstatsSnapshot.schema, UniqueIds.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
-  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" fuer Common setzten um in der DB eine Struktur zu erhalten
+  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" fuer Common setzen um in der DB eine Struktur zu erhalten
   private val tablePrefix = "WVO_"
   private val schemaOwner = "SCOTT"
 

@@ -13,7 +13,8 @@ import scala.concurrent.duration.Duration
 // The main application
 object GreatDBSetup extends App {
 
-  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+//  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+  val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("scott-oracle-test")
   import dbConfig.profile.api._
   import slick.dbio.DBIO
   import slick.lifted

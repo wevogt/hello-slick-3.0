@@ -1,20 +1,22 @@
 package model.masterdata
 
 //import slick.jdbc.H2Profile.api._
-import slick.jdbc.OracleProfile.api._
+//import slick.jdbc.OracleProfile.api._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
+import com.typesafe.config.ConfigFactory
+
 /**
   * Created by werner on 12.04.17.
   */
-trait BaseDAO [T]  extends  MultiDatabase {
+trait BaseDAO [T] extends MultiDatabase {
 
   import profile.api._
 
   lazy val dbConfig = profile.api.Database
-  lazy val db = dbConfig.db
+  lazy val db = dbConfig.forName(ConfigFactory.load().getString("usage.dbEnv"), Some(5))
 
   //  lazy val db = Database.forConfig("slick-oracle")
   val stmtTimeout: Duration = 1.seconds

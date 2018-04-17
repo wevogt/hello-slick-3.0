@@ -19,7 +19,7 @@ trait AdminTables {
   lazy val schema: profile.SchemaDescription = Array (BareDependants.schema, BareDependantsHistory.schema, BareRights.schema, BusinessUnits.schema, Division.schema, DivisioncodeInSector.schema, DivisionLimits.schema, DivisionReportRight.schema, DivisionUser.schema, DownloadColumn.schema, DownloadFormat.schema, DownloadFormatRef.schema, GroupStructure.schema, GroupStructureHistory.schema, Person.schema, SviewConstraint.schema, User.schema, UserAccount.schema, UserDeputies.schema, UserGroup.schema, UserInDivision.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
-  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" furr Common setzten um in der DB eine Struktur zu erhalten
+  // ToDo: im "alten" DB-Schema, beginnt jeder Tabellenname mit GREAT; spaeter moechte ich hier z.B. "COM" fuer Common setzen um in der DB eine Struktur zu erhalten
   val tablePrefix = "WVO_"
   private val schemaOwner = "SCOTT"
 
