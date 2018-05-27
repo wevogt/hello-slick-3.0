@@ -1,31 +1,52 @@
 package model
 
-import model.masterdata.User
-import org.scalatest.{FlatSpec, Matchers}
+import model.masterdata.{MultiDatabase, User, UserDAO}
+import org.scalatest.{BeforeAndAfterEach, FlatSpec, Matchers}
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class DatabaseConfigTest extends FlatSpec with Matchers {
+class DatabaseConfigTest extends FlatSpec with Matchers with BeforeAndAfterEach {
+
+  import scala.concurrent.duration._
+  val timeout = 500 milliseconds
+
   def withDb(test: DatabaseConfig[JdbcProfile] => Any) = {
     val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
 
     implicit val profile: JdbcProfile = dbConfig.profile
     implicit val db: JdbcProfile#Backend#Database = dbConfig.db
-    /* The api for the driver specified in the config is imported here. */
-    import dbConfig.profile.api._
 
     try test(dbConfig)
-    finally dbConfig.db.close()
+    println("Test withBD, DbEnv = " + dbConfig.db.source)
+    db.createSession()
+
+    db.close()
+
+//    finally dbConfig.db.close()
   }
 
-  "DatabaseConfig" should "work" in withDb { dbConfig =>
-    import model.masterdata.User._
-
-    //import Suppliers._
-//    val names = User.map(_.name)
-//
-//    dbConfig.db.run(cities.result).map(_.foreach(println))
+  override def beforeEach(): Unit = {
+    Await.result(UserDAO.init(), timeout)
   }
+
+
+  override def afterEach(): Unit = {
+    UserDAO.drop()
+  }
+
+
+  "DatabaseConfig" should "work" in withDb { db =>
+    import model.masterdata._
+
+    val test = 42
+    val names = UserDAO.users.baseTableRow.tableName
+    println("UserTable-Name = " + names)
+
+    assert(UserDAO.countUsers() == 5)
+    assert(db.profileIsObject)
+  }
+
 }

@@ -1,6 +1,7 @@
 package model.masterdata
 
-import slick.dbio.{FailureAction, SuccessAction}
+import slick.dbio.{DBIOAction, FailureAction, SuccessAction}
+import slick.jdbc.meta.MTable
 //import slick.jdbc.H2Profile.api._
 import slick.sql.SqlProfile.ColumnOption.NotNull
 
@@ -66,7 +67,7 @@ object UserDAO extends TableQuery(new UserTable(_)) with BaseDAO[User] {
   //val db = Database.forConfig("pgtest")
   //val db = Database.forConfig("h2mem1")
 
-/*
+/**/
   val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>
     val names = Vector(users.baseTableRow.tableName)
     names.intersect(tables.map(_.name.name)) == names
@@ -75,15 +76,22 @@ object UserDAO extends TableQuery(new UserTable(_)) with BaseDAO[User] {
   def create: DBIO[Unit] = (users.schema).create
   //def create: Future[Unit] = db.run((users.schema).create)
 
+  def drop(): DBIO[Unit] = (users.schema).drop
+
   def createIfNotExist: DBIO[Unit] = tablesExist.flatMap(exist => if (!exist) create else SuccessAction {})
 
-  def insertUsers: DBIO[Option[Int]] = users.map(u => (u.name)) ++= Seq(("John Doe"), ("Fred Smith"), ("Norma Jean"), ("James Dean"), ("Lucky Luke"))
+
+  def insertUsers: DBIO[Option[Int]] = users.map(u => (u.name, u.id)) ++= Seq(("John Doe", 1), ("Fred Smith", 2), ("Norma Jean", 3), ("James Dean", 4), ("Lucky Luke", 5))
   //val setup =  Await.result(db.run(createIfNotExist >> insertUsers), Duration(5, SECONDS))
   //val setup =  Await.result(db.run(createIfNotExist), Duration.Inf)
   val setup =  db.run(createIfNotExist >> insertUsers)
   //val setup =  db.run(createIfNotExist)
   Thread.sleep(2000)
-*/
+
+  //def init() = db.run(DBIOAction.seq(users.schema.create))
+  def init(): Future[Unit]  =
+   db.run(DBIOAction.seq(drop, createIfNotExist, insertUsers))
+
 
   def findById = users.findBy(_.id)
 

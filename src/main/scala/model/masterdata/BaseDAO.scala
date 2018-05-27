@@ -5,8 +5,9 @@ package model.masterdata
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
-
 import com.typesafe.config.ConfigFactory
+import slick.basic.DatabaseConfig
+import slick.jdbc.JdbcProfile
 
 /**
   * Created by werner on 12.04.17.
@@ -14,9 +15,11 @@ import com.typesafe.config.ConfigFactory
 trait BaseDAO [T] extends MultiDatabase {
 
   import profile.api._
+  //import config.profile.api._
 
-  lazy val dbConfig = profile.api.Database
-  lazy val db = dbConfig.forName(ConfigFactory.load().getString("stage.dbEnv"), Some(5))
+  //lazy val dbConfig = profile.api.Database
+  lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile](ConfigFactory.load().getString("stage.dbEnv"))
+  val db: JdbcProfile#Backend#Database = dbConfig.db
 
   //  lazy val db = Database.forConfig("slick-oracle")
   val stmtTimeout: Duration = 1.seconds

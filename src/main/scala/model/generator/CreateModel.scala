@@ -10,6 +10,8 @@ import scala.concurrent.duration._
 
 //import org.h2.engine.Database
 import slick.jdbc.OracleProfile.api._
+import scala.language.postfixOps
+
 
 /**
   * Reverse Engineering der GREAT-Datenbank -> CaseClasses und Tabledefinition
