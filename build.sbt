@@ -6,7 +6,7 @@ name := """hello-slick-3.0"""
 
 /*mainClass in Compile := Some("HelloSlick") */
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.6"
 
 libraryDependencies ++= List(
   "com.typesafe.slick" %% "slick" % "3.2.1",

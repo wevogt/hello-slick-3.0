@@ -3,15 +3,22 @@ package services
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
+import slick.basic.DatabaseConfig
+import slick.lifted.TableQuery
 import slick.jdbc.H2Profile.api._
 //import slick.driver.HsqldbDriver.api._
 import model.projectdomain._
 import slick.jdbc.meta._
+import slick.dbio.DBIO
+import slick.jdbc.JdbcProfile
 
 class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
-  var db: Database = _
+  lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+  implicit lazy val profile: JdbcProfile = dbConfig.profile
+  implicit lazy val db: JdbcProfile#Backend#Database = dbConfig.db
+
   val projects = TableQuery[ProjectTable]
   val initialTestObjects = Seq(
     Project(Some(100), "P100", "active"),
@@ -22,13 +29,14 @@ class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures 
 
   def setupTestData() =
     //db.run((projects.schema).create).futureValue
-    db.run(
-      projects.schema.create >> (projects ++= initialTestObjects)
-    )
+    //db.run(
+      DBIO.seq (
+        (projects.schema).create ,
+        projects ++= initialTestObjects
+      )
 
   before {
-    db = Database.forConfig("h2mem1")
-    setupTestData()
+    db.run(setupTestData())
   }
 
   test("Creating the Schema should works") {
@@ -62,5 +70,5 @@ class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures 
     }
   }
   
-  after { db.close }
+  //after { db.close }
 }

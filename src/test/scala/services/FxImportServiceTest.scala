@@ -1,8 +1,10 @@
 package services
 
-import model.masterdata.{FxRates, FxRate, FxRateDAO}
+import model.masterdata.{FxRate, FxRateDAO, FxRates}
 import org.scalatest.time.Milliseconds
+import slick.basic.DatabaseConfig
 import slick.jdbc.H2Profile.api._
+import slick.jdbc.JdbcProfile
 //import slick.jdbc.OracleProfile.api._
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.scalatest.concurrent.ScalaFutures
@@ -18,7 +20,10 @@ import utils.etl.services.FxImportService
 class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds), Span(60, Milliseconds))
 
-  var db: Database = _
+  lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+  implicit lazy val profile: JdbcProfile = dbConfig.profile
+  implicit lazy val db: JdbcProfile#Backend#Database = dbConfig.db
+
   val fxrateDAO =  FxRateDAO
   val fxrates = TableQuery[FxRates]
   val initialTestObjects = Seq(
@@ -27,13 +32,14 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures
 
 
   def setupTestData() =
-    db.run(
-      fxrates.schema.create >> (fxrates ++= initialTestObjects)
+    DBIO.seq(
+      (fxrates.schema).create,
+      fxrates ++= initialTestObjects
     )
 
   before {
-    db = Database.forConfig("great-h2mem-test")
-    setupTestData()
+    //db = Database.forConfig("great-h2mem-test")
+    db.run(setupTestData())
   }
 
   test("Creating the Schema should works") {

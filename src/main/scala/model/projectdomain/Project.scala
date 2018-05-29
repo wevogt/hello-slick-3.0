@@ -1,5 +1,6 @@
 package model.projectdomain
 
+import model.masterdata.BaseDAO
 import slick.dbio.SuccessAction
 import slick.jdbc.H2Profile.api._
 import slick.jdbc.meta.MTable
@@ -33,6 +34,7 @@ case class Project(
 }
 
 class ProjectTable(tag: Tag) extends Table[Project](tag, "PROJECTS") {
+
   // Auto Increment the id primary key column
   def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
   def name = column[String]("NAME", NotNull)
@@ -42,11 +44,11 @@ class ProjectTable(tag: Tag) extends Table[Project](tag, "PROJECTS") {
   def * = (id.?, name, projectState, budget) <> ((Project.apply _).tupled, Project.unapply _)
 }
 
-object ProjectDAO extends TableQuery(new ProjectTable(_)) {
+object ProjectDAO extends TableQuery(new ProjectTable(_)) with BaseDAO[Project]{
   // the base query for the Projects table
   lazy val projects = TableQuery[ProjectTable]
   //val db = Database.forConfig("pgtest")
-  val db = Database.forConfig("h2mem1")
+  //val db = Database.forConfig("great-h2mem-test")
 
 /*
   val tablesExist: DBIO[Boolean] = MTable.getTables.map { tables =>

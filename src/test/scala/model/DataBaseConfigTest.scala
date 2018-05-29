@@ -1,7 +1,7 @@
 package model
 
 import model.masterdata.UserDAO
-import org.scalatest.{FlatSpec, Matchers, BeforeAndAfterEach}
+import org.scalatest.{BeforeAndAfterEach, FlatSpec, Matchers}
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
