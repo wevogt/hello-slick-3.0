@@ -1,6 +1,8 @@
 package model.great
 
-object MasterDataTables extends DbProfile with MasterDataTables
+import model.masterdata.MultiDbProfile
+
+object MasterDataTables extends MultiDbProfile with MasterDataTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait MasterDataTables {

@@ -1,6 +1,8 @@
 package model.great
 
-object CommonTables extends DbProfile with CommonTables
+import model.masterdata.MultiDbProfile
+
+object CommonTables extends MultiDbProfile with CommonTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait CommonTables {

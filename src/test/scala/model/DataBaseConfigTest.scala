@@ -1,12 +1,11 @@
 package model
 
-import model.masterdata.{MultiDatabase, User, UserDAO}
-import org.scalatest.{BeforeAndAfterEach, FlatSpec, Matchers}
+import model.masterdata.UserDAO
+import org.scalatest.{FlatSpec, Matchers, BeforeAndAfterEach}
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class DatabaseConfigTest extends FlatSpec with Matchers with BeforeAndAfterEach {
 

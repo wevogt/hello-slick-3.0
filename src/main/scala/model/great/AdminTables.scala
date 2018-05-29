@@ -1,6 +1,8 @@
 package model.great
 
-object AdminTables extends DbProfile with AdminTables
+import model.masterdata.MultiDbProfile
+
+object AdminTables extends MultiDbProfile with AdminTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait AdminTables {

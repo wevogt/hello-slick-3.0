@@ -1,13 +1,13 @@
 package services
 
-import model.masterdata.{FxRate, FxRateDAO, FxRates}
-import org.scalatest.time.{Milliseconds, Seconds, Span}
-//import slick.jdbc.H2Profile.api._
-import slick.jdbc.OracleProfile.api._
+import model.masterdata.{FxRates, FxRate, FxRateDAO}
+import org.scalatest.time.Milliseconds
+import slick.jdbc.H2Profile.api._
+//import slick.jdbc.OracleProfile.api._
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Seconds, Span}
-import slick.ast.{LiteralNode, Take}
+import org.scalatest.time.{Span, Seconds}
+import slick.ast.{Take, LiteralNode}
 import slick.jdbc.meta.MTable
 import slick.lifted.TableQuery
 import utils.etl.services.FxImportService
@@ -32,7 +32,7 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures
     )
 
   before {
-    db = Database.forConfig("slick-oracle")
+    db = Database.forConfig("great-h2mem-test")
     setupTestData()
   }
 

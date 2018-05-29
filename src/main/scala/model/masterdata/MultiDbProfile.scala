@@ -3,7 +3,7 @@ package model.masterdata
 import com.typesafe.config.ConfigFactory
 import slick.SlickException
 
-trait MultiDatabase {
+trait MultiDbProfile {
   lazy val env :Option[String] = Option(ConfigFactory.load().getString("stage.projectPhase"))
 
   lazy val profile =

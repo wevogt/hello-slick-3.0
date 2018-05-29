@@ -1,6 +1,8 @@
 package model.great
 
-object BackOfficeTables extends DbProfile with BackOfficeTables
+import model.masterdata.MultiDbProfile
+
+object BackOfficeTables extends MultiDbProfile with BackOfficeTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait BackOfficeTables {

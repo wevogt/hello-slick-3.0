@@ -12,7 +12,7 @@ import slick.jdbc.JdbcProfile
 /**
   * Created by werner on 12.04.17.
   */
-trait BaseDAO [T] extends MultiDatabase {
+trait BaseDAO [T] extends MultiDbProfile {
 
   import profile.api._
   //import config.profile.api._

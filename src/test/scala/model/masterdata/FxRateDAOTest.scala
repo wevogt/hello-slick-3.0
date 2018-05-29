@@ -3,9 +3,11 @@ package model.masterdata
 import java.sql.SQLException
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{Span, Seconds}
 import org.scalatest.{BeforeAndAfter, FunSuite}
+import slick.basic.DatabaseConfig
 import slick.jdbc.H2Profile.api._
+import slick.jdbc.JdbcProfile
 import slick.jdbc.meta.MTable
 import slick.lifted.TableQuery
 
@@ -15,7 +17,12 @@ import slick.lifted.TableQuery
 class FxRateDAOTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
-  var db: Database = _
+  lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+  implicit lazy val profile: JdbcProfile = dbConfig.profile
+  implicit lazy val db: JdbcProfile#Backend#Database = dbConfig.db
+
+  import scala.concurrent.duration._
+  val timeout = 500 milliseconds
 
   val milliSecondsPerDay: Long = 24*3600*1000L
   val fxrateDAO =  FxRateDAO
@@ -48,7 +55,6 @@ class FxRateDAOTest extends FunSuite with BeforeAndAfter with ScalaFutures {
     )
 
   before {
-    db = Database.forConfig("h2mem1")
     db.run(setupTestData())
   }
 

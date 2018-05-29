@@ -1,8 +1,10 @@
 package model.great
 
+import model.masterdata.MultiDbProfile
+
 // AUTO-GENERATED Slick data model
 /** Stand-alone Slick data model for immediate use */
-object GuaranteeTables extends DbProfile with GuaranteeTables
+object GuaranteeTables extends MultiDbProfile with GuaranteeTables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
 trait GuaranteeTables {
