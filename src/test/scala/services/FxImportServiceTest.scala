@@ -1,6 +1,7 @@
 package services
 
-import model.masterdata.{FxRate, FxRateDAO, FxRates}
+import model.masterdata.{FxRates, FxRate, FxRateDAO}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.time.Milliseconds
 import slick.basic.DatabaseConfig
 import slick.jdbc.H2Profile.api._
@@ -17,7 +18,7 @@ import utils.etl.services.FxImportService
 /**
   * Created by werner on 20.04.17.
   */
-class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
+class FxImportServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds), Span(60, Milliseconds))
 
   lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
@@ -66,6 +67,12 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures
 
 //    val hundredRates = for (rate <- fxrates.take(99)) yield rate
     assert(fxrateDAO.count(99) == 99)
+  }
+
+  override def afterAll() {
+    printf("... test's finished, cleanup DB")
+    db.io(fxrates.schema.drop)
+    db.close
   }
 
 }

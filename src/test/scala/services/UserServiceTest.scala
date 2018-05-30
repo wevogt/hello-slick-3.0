@@ -1,25 +1,28 @@
 package services
 
-import org.scalatest.{time, _}
+import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Milliseconds, Seconds, Span}
+import org.scalatest.time.{Span, Seconds}
+import slick.basic.DatabaseConfig
 
 import scala.language.postfixOps
 import slick.jdbc.H2Profile.api._
+import slick.jdbc.JdbcProfile
 //import slick.jdbc.OracleProfile.api._
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.util.Success
 //import slick.driver.HsqldbDriver.api._
-import slick.jdbc.meta._
-
 import model.masterdata._
 import slick.jdbc.meta._
 
 class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
-  var db: Database = _
+  lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+  implicit lazy val profile: JdbcProfile = dbConfig.profile
+  implicit lazy val db: JdbcProfile#Backend#Database = dbConfig.db
+
   val users = TableQuery[UserTable]
   val initialTestObjects = Seq(
     User.create("John Doe", Option(1)),
@@ -30,25 +33,24 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAl
   )
 
   def setupTestData() =
-  db.run(
+    DBIO.seq(
     users.schema.create >> (users ++= initialTestObjects)
   )
 
   before {
-    db = Database.forConfig("great-h2mem-test")
-    setupTestData()
+    //db = Database.forConfig("great-h2mem-test")
+    db.run(setupTestData())
   }
 
   test("Creating the Schema should works") {
     val tables = db.run(MTable.getTables).futureValue
 
     Thread.sleep(1000)
-    assert(tables.size == 0)
-//    assert(tables.count(_.name.name.equalsIgnoreCase("users")) == 1) // wieso funktioniert das unter Oracle nicht?
+//    assert(tables.size == 0)
+    assert(tables.count(_.name.name.equalsIgnoreCase("users")) == 1) // wieso funktioniert das unter Oracle nicht?
   }
 
   test("Querying a User (not existing) should works") {
-    import scala.concurrent.ExecutionContext.Implicits.global
 
     val insertCount = Await.result(UserService.getAllUsers, 1.seconds).size
     assert(insertCount == 5)

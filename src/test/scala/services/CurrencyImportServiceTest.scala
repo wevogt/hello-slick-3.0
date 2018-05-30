@@ -2,14 +2,12 @@ package services
 
 import model.masterdata._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Milliseconds, Seconds, Span}
+import org.scalatest.time.{Milliseconds, Span, Seconds}
 import org.scalatest.{BeforeAndAfter, FunSuite}
-import slick.ast.{LiteralNode, Take}
+import slick.ast.{Take, LiteralNode}
+import slick.basic.DatabaseConfig
+import slick.jdbc.JdbcProfile
 import slick.jdbc.OracleProfile.api._
-
-import scala.concurrent.Await
-import scala.concurrent.Await._
-import scala.concurrent.duration.Duration
 //import slick.jdbc.H2Profile.api._
 import slick.jdbc.meta.MTable
 import slick.lifted.TableQuery
@@ -21,7 +19,10 @@ import utils.etl.services.CurrencyImportService
 class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds), Span(60, Milliseconds))
 
-  var db: Database = _
+  lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
+  implicit lazy val profile: JdbcProfile = dbConfig.profile
+  implicit lazy val db: JdbcProfile#Backend#Database = dbConfig.db
+
   val currencyDAO =  CurrencyDAO
   val currencies = TableQuery[Currencies]
   val initialTestObjects = Seq(
@@ -30,13 +31,13 @@ class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaF
 
 
   def setupTestData() =
-    db.run(
+    DBIO.seq(
       currencies.schema.create >> (currencies ++= initialTestObjects)
     )
 
   before {
-    db = Database.forConfig("slick-oracle")
-    setupTestData()
+    //db = Database.forConfig("slick-oracle")
+    db.run(setupTestData())
   }
 
   test("Creating the Schema should works") {
