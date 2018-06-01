@@ -2,7 +2,7 @@ package utils.etl.services
 
 import java.text.SimpleDateFormat
 
-import model.masterdata.{Currency, CurrencyDAO, FxRate, FxRateDAO}
+import model.masterdata.{Currency, CurrencyDAO}
 import utils.reflection._
 
 import scala.io.Source
@@ -29,7 +29,7 @@ case class CurrencyETL (
 object CurrencyImportService {
 
   val importFile = "Great_Currency.csv"
-  val importPath = "/Users/werner/Workspace_Scala/hello-slick-3.0/src/main/scala/utils/etl/importdata/"
+  //val importPath = "/Users/werner/Workspace_Scala/hello-slick-3.0/src/main/scala/utils/etl/importdata/"
 
   //val simpleStringParser = SimpleStringParser.fxrateParser
   val skipHeaderLines: Int = 1
@@ -47,6 +47,8 @@ object CurrencyImportService {
         }
         cnt = cnt + 1
       }
+      cnt = cnt - skipHeaderLines
+      println(s"\n... FxImportService, $cnt lines reading importfile")
     } catch {
       case ex: Exception => println(s"Bummer, an exception happened:\n $ex")
     }

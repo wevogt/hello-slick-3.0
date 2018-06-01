@@ -44,7 +44,7 @@ object CurrencyMapping extends App {
 
   try {
 
-    val setupFuture: Future[Unit] = db.io(Future[Unit])
+    val setupFuture: Future[Unit] = db.io()
     val f = setupFuture.flatMap { _ =>
       println("\nall valid Currency.Iso-Codes (= objectidc):")
       val currenciesQuery: Query[Rep[String], String, Seq] =

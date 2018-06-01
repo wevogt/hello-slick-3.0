@@ -3,7 +3,7 @@ package services
 import model.masterdata._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Milliseconds, Span, Seconds}
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.{BeforeAndAfter, FunSuite, BeforeAndAfterAll}
 import slick.ast.{Take, LiteralNode}
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
@@ -16,7 +16,7 @@ import utils.etl.services.CurrencyImportService
 /**
   * Created by werner on 20.04.17.
   */
-class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
+class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds), Span(60, Milliseconds))
 
   lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
@@ -35,7 +35,8 @@ class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with ScalaF
       currencies.schema.create >> (currencies ++= initialTestObjects)
     )
 
-  before {
+  override def beforeAll() {
+    println("... running before")
     //db = Database.forConfig("slick-oracle")
     db.run(setupTestData())
   }

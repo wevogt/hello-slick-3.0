@@ -37,7 +37,8 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAl
     users.schema.create >> (users ++= initialTestObjects)
   )
 
-  before {
+  override def beforeAll() {
+    println("... running before")
     //db = Database.forConfig("great-h2mem-test")
     db.run(setupTestData())
   }
@@ -119,7 +120,7 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAl
   override def afterAll() {
     printf("... test's finished, cleanup DB")
     db.io(users.schema.drop)
-    db.close
+    //db.close
   }
 
 }

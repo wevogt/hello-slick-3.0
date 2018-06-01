@@ -33,3 +33,11 @@ libraryDependencies ++= List(
 )
 
 scalacOptions ++= Seq("-deprecation", "-feature")
+
+// Einstellungen um gleiches Verhalten von Tests in IDE und sbt zu erhalten
+// https://www.scala-sbt.org/1.x/docs/Forking.html
+javaOptions += "-D=file.encoding=CP1252"
+val root = Project("root", file("."))
+//Compile / run / fork := true
+// fork in run := true
+fork := true

@@ -20,9 +20,7 @@ class FxRateDAOTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
   implicit lazy val profile: JdbcProfile = dbConfig.profile
   implicit lazy val db: JdbcProfile#Backend#Database = dbConfig.db
-
-  import scala.concurrent.duration._
-  val timeout = 500 milliseconds
+  //val timeout = 500 milliseconds
 
   val milliSecondsPerDay: Long = 24*3600*1000L
   val fxrateDAO =  FxRateDAO

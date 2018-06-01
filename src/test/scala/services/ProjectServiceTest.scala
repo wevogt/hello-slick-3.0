@@ -12,7 +12,7 @@ import slick.jdbc.meta._
 import slick.dbio.DBIO
 import slick.jdbc.JdbcProfile
 
-class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures {
+class ProjectServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAll with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(1, Seconds))
 
   lazy val dbConfig = DatabaseConfig.forConfig[JdbcProfile]("great-h2mem-test")
@@ -35,7 +35,8 @@ class ProjectServiceTest extends FunSuite with BeforeAndAfter with ScalaFutures 
         projects ++= initialTestObjects
       )
 
-  before {
+  override def beforeAll() {
+    println("... running before")
     db.run(setupTestData())
   }
 

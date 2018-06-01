@@ -49,5 +49,5 @@ class TablesSuite extends FunSuite with BeforeAndAfter with ScalaFutures {
     assert(results.head._1 == 101)
   }
   
-  after { db.close }
+  //after { db.close }
 }
