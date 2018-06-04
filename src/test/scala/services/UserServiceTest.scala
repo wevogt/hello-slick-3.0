@@ -38,7 +38,7 @@ class UserServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAfterAl
   )
 
   override def beforeAll() {
-    println("... running before")
+    println("... running before UserServiceTest")
     //db = Database.forConfig("great-h2mem-test")
     db.run(setupTestData())
   }

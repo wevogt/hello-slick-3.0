@@ -39,7 +39,7 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAft
     )
 
   override def beforeAll() {
-    println("... running before")
+    println("... running before FxImportServiceTest")
     //db = Database.forConfig("great-h2mem-test")
     db.run(setupTestData())
   }
@@ -71,7 +71,7 @@ class FxImportServiceTest extends FunSuite with BeforeAndAfter with BeforeAndAft
   }
 
   override def afterAll() {
-    printf("... test's finished, cleanup DB")
+    println("... test's finished, cleanup DB")
     db.io(fxrates.schema.drop)
     //db.close
   }

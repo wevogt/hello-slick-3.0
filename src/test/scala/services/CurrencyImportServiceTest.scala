@@ -36,7 +36,7 @@ class CurrencyImportServiceTest extends FunSuite with BeforeAndAfter with Before
     )
 
   override def beforeAll() {
-    println("... running before")
+    println("... running before CurrencyImportServiceTest")
     //db = Database.forConfig("slick-oracle")
     db.run(setupTestData())
   }
