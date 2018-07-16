@@ -1,6 +1,7 @@
 //import java.sql.Date
 import java.util.Calendar
 
+import UnifiedTypes.set
 import model.masterdata.{Currency, Money}
 
 import scala.collection.mutable
@@ -73,8 +74,9 @@ object UnifiedTypes extends App {
   set += true
   set += main _     // add a new function
   val iter: Iterator[Any] = set.iterator
-  iter.foreach(e => println("Unified Type: " + e))
+  iter.foreach(e => println("Unified Type: " + e.toString))
   //while (iter.hasNext) {println(iter.next().toString)}
+  println("Element 4 = " + set(3))
 }
 UnifiedTypes
 

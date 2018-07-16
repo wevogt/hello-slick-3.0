@@ -11,7 +11,7 @@ import scala.concurrent.Await
 class UsersRepositoryTest extends FunSuite with DbConfiguration
   with Matchers with  BeforeAndAfter with ScalaFutures  with BeforeAndAfterEach {
 
-  implicit override val patienceConfig = PatienceConfig(timeout = Span(500, Milliseconds))
+  implicit override val patienceConfig = PatienceConfig(timeout = Span(2000, Milliseconds))
 
   val users = new UsersRepository(config)
 
@@ -26,7 +26,7 @@ class UsersRepositoryTest extends FunSuite with DbConfiguration
   test ("User should be inserted successfully")  {
     //implicit ee: ExecutionContext =>
     val user = User(None, "a@b.com", Some("Tom"), Some("Tommyknocker"))
-    assert( users.insert(user) == user.copy(id = Some(1)) )
+    assert( Await.result(users.insert(user), patienceConfig.timeout) == user.copy(id = Some(1)) )
   }
 
 //  override def execute(runnable: Runnable): Unit = ???

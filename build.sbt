@@ -43,6 +43,7 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 // https://www.scala-sbt.org/1.x/docs/Forking.html
 javaOptions += "-D=file.encoding=CP1252"
 //val root = Project("root", file("."))
+lazy val root = (project in file("."))
 //Compile / run / fork := true
 // fork in run := true
 fork := true

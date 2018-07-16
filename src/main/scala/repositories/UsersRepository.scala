@@ -1,7 +1,7 @@
 package repositories
 
 import akka.stream.Materializer
-import akka.stream.javadsl.JavaFlowSupport.Source
+import akka.stream.scaladsl.{Sink, Source}
 import repositories.dbCommon.Db
 import repositories.model.{User, UsersTable}
 import slick.basic.DatabaseConfig
@@ -35,7 +35,11 @@ class UsersRepository(val config: DatabaseConfig[JdbcProfile]) extends Db with U
     db.run(sql"select user_first_name, user_last_name from users where user_id = #$id"
       .as[(String, String)].headOption)
 
+
   def stream(implicit materializer: Materializer) = Source
-    .fromPublisher(db.stream(users.result.withStatementParameters(fetchSize = 10)))
+    .fromPublisher(db.stream(users.result.withStatementParameters(fetchSize = 10)) )
+    .to(Sink.fold[Seq[User], User](Seq())(_ :+ _))
+    .run()
+
 
 }
